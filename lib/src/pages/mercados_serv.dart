@@ -116,7 +116,7 @@ class MercadosListView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30.0),
                   child: Container(
                     
-                     width: 600.0,
+                     width: 500.0,
                  //   height: 500.0, */
                     child: Column(
                       children: <Widget>[
