@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_login_ui/utilities/constants.dart';
 import 'package:provider/provider.dart';
 
 import '../../login_state.dart';

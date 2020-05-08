@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login_ui/screens/login_screen.dart';
-import 'package:flutter_login_ui/src/pages/home_page.dart';
 import 'package:flutter_login_ui/src/pages/login.dart';
-import 'package:flutter_login_ui/src/pages/login_page.dart';
 import 'package:flutter_login_ui/src/pages/mercado_page.dart';
-import 'package:flutter_login_ui/src/pages/mercados_page.dart';
-import 'package:flutter_login_ui/src/pages/new_account.dart';
+
 import 'package:provider/provider.dart';
 
 import 'login_state.dart';
