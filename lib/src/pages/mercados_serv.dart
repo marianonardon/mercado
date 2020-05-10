@@ -67,6 +67,7 @@ class MercadosListView extends StatelessWidget {
         if (snapshot.hasData) {
           List<Mercado> data = snapshot.data;
           _obtenerToken();
+          _obtenerRubro();
           return _mercadosListView(data);
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
@@ -198,9 +199,27 @@ class MercadosListView extends StatelessWidget {
         print(response.body.toString());
     });
 
+  }
+
+      _obtenerRubro() async {
+
+    String url = "https://apps5.genexus.com/Id416f02b853b108b62b0d308b80154b1b/rest/rubro/2";
+
+    Map<String, String> bodyToken = {
+      "client_id": "cfc1090c9e114f57a5b0fbc3aaa5be0b",
+      "client_secret": "715369e92c824c9fad89f0ae4fef4a4c",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
+    Map<String, String> headers2 = {
+        "Authorization": "OAuth e77a867d-1086-4fa3-b55f-add2ac05595e!a6a51538e020329c54be086958e4e66bbe5ea63ace150eb9a8995802b5c9414e4e7b2a04de10d3"
+    };
+
+    http.get(url, headers: headers2).then((response){
+        print(response.body.toString());
+    });
+      }
+
 }
-
-
-}
-
-
