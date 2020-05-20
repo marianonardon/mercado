@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_fonts/google_fonts.dart';
 
 
 
@@ -66,8 +67,8 @@ class MercadosListView extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Mercado> data = snapshot.data;
-          _obtenerToken();
-          _obtenerRubro();
+/*           _obtenerToken();
+          _obtenerRubro(); */
           return _mercadosListView(data);
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
@@ -100,24 +101,24 @@ class MercadosListView extends StatelessWidget {
         itemCount: data.length,
         itemBuilder: (context, index) {
           return _crearLista(data[index].mercadoNombre, data[index].mercadoDireccion, Icons.location_on,
-                        data[index].mercadoImagen);
+                        data[index].mercadoImagen,context);
         });
   }
 
 
-  Widget _crearLista(String title, String subtitle, IconData icon, String imagen) {
+  Widget _crearLista(String title, String subtitle, IconData icon, String imagen,context) {
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
       child: Container(
         
-          width: 600.0,
+          width: 400.0,
       //   height: 500.0, */
         child: Column(
           children: <Widget>[
           //  _crearTitulo(),
             SizedBox(height: 20.0),
             GestureDetector(
-              onTap: () => print (title),
+              onTap: () {Navigator.pushNamed(context, 'categorias', arguments: title);},
             child:_crearTarjetas(title, subtitle, icon, imagen))
           ],
         ),
@@ -131,10 +132,10 @@ class MercadosListView extends StatelessWidget {
     fit: StackFit.loose,
     children: <Widget> [
       ClipRRect(
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(15.0),
         child: FadeInImage(
         height: 200,
-        width: double.infinity,
+        width: 400,
         fit: BoxFit.fill,
         image: NetworkImage(imagen),
 
@@ -146,25 +147,28 @@ class MercadosListView extends StatelessWidget {
         left: 0,
         right: 0,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20.0), 
+          borderRadius: BorderRadius.circular(15.0), 
           child: Container(
             child: Column(
               children:<Widget>[ 
                 Row(
                   children: <Widget>[
-                    Icon(Icons.local_activity, color: Colors.white,),
+                    SizedBox(width: 20.0),
                     Text(
-                    title, style: TextStyle(color:Colors.white,
-                      fontSize: 25.0, fontWeight: FontWeight.bold),
+                    title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                      fontSize: 25.0, fontWeight: FontWeight.w600,
+                      ))
+                    
               ),
                   ],
                 ),
                 Row(
                   children: <Widget>[
+                    SizedBox(width: 20.0),
                     Icon(icon, color: Colors.white,),
                     Text(
-                    subtitle, style: TextStyle(color:Colors.white,
-                      fontSize: 20.0, fontWeight: FontWeight.bold),
+                    subtitle, style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
+                      fontSize: 20.0, fontWeight: FontWeight.w600)),
               ),
                   ],
                 )

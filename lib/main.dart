@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_ui/src/pages/login.dart';
 import 'package:flutter_login_ui/src/pages/mercado_page.dart';
+import 'package:flutter_login_ui/src/pages/categorias_page.dart';
+import 'package:flutter_login_ui/src/pages/productos_page.dart';
+
 
 import 'package:provider/provider.dart';
 
@@ -26,6 +29,8 @@ class MyApp extends StatelessWidget {
             } else{return LoginPageFinal(
             );}
         },
+        'categorias'   : (BuildContext context) => CategoriasPage(),
+        'productos'    : (BuildContext context) => ProductosPage(),
         },
       ),
     );

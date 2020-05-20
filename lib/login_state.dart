@@ -48,7 +48,7 @@ class LoginState with ChangeNotifier {
   );
 
   final FirebaseUser user = await _auth.signInWithCredential(credential);
-  print("signed in " + user.displayName + user.uid);
+  print("signed in " + user.displayName + user.uid + user.providerId);
   return user;
 }
 }
