@@ -10,7 +10,7 @@ class ProductosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(0, 255, 208, 1),
+        backgroundColor: Color.fromRGBO(29, 233, 182, 1),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.white),
