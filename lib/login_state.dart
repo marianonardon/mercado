@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 
@@ -16,13 +18,15 @@ class LoginState with ChangeNotifier {
 
   bool isLoading() => _loading;
 
+
+
   void login() async{
     _loading = true;
     notifyListeners();
     var user = await handleSignIn();
 
     _loading = false;
-    if (user!= null) {
+    if (user != null) {
       _loggedIn = true;
       notifyListeners();
     } else {
@@ -39,17 +43,20 @@ class LoginState with ChangeNotifier {
   }
 
   Future<FirebaseUser> handleSignIn() async {
-  final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-  print(googleUser.id + googleUser.email + googleUser.displayName);
-  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('usuarioId', googleUser.id);
+    print(googleUser.id + googleUser.email + googleUser.displayName);
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-  final AuthCredential credential = GoogleAuthProvider.getCredential(
-    accessToken: googleAuth.accessToken,
-    idToken: googleAuth.idToken
-  );
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken
 
-  final FirebaseUser user = await _auth.signInWithCredential(credential);
-  print("signed in " + user.displayName +' ' + user.uid + '  ' + user.providerId + ' ' + user.email);
-  return user;
+    );
+
+    final FirebaseUser user = await _auth.signInWithCredential(credential);
+    print("signed in " + user.displayName +' ' + user.uid + '  ' + user.providerId + ' ' + user.email);
+    return user;
 }
 }

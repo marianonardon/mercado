@@ -11,34 +11,30 @@ class LoginPageFinal extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
         backgroundColor: Colors.white,
-        body: SingleChildScrollView(  
-          child: Container(
+        body: Stack(
+        //fit: StackFit.,
+         children: <Widget>[
+           Image(image: AssetImage('assets/img/login.png'),),
+           //fit: BoxFit.fill,),
+            //width: double.infinity,
+            //height: double.infinity,),
+                      
+           Container(
+             padding: EdgeInsets.only(left:20.0),
             child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               SizedBox(
-              height: 50.0),
-              Row(
+              height: 100.0),
+/*                 Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget> [
                 _armarTitulo(),
                 ]
-              ),
+              ), */
               SizedBox(
-              height: 5.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget> [
-                _armarSubTitulo(),
-                ]
-              ),
+              height: 300.0),
               SizedBox(height: 20.0),
-              _inputEmail(),
-              _inputPassword(),
-              _olvidastePassword(),
-              SizedBox(height: 25.0),
-              _iniciarSesion(),
-              _registrate(),
               _iniciarSesionGoogle(context),
               SizedBox(height: 25.0),
               _iniciarSesionFacebook(context),
@@ -46,7 +42,7 @@ class LoginPageFinal extends StatelessWidget {
 
               ]
             )
-          ),
+          ),]
         ),
         
       ),
@@ -56,189 +52,23 @@ class LoginPageFinal extends StatelessWidget {
   Widget _armarTitulo() {
     return Container(
       child: Center(
-        child: Text('Bienvenido', style: TextStyle(color: Colors.black, fontFamily: 'Rubik', fontStyle: FontStyle.normal, fontWeight: FontWeight.bold,
-                    fontSize: 35.0)
+        child: Text('agile', style: TextStyle(color: Colors.black, fontFamily: 'Rubik', fontStyle: FontStyle.normal, fontWeight: FontWeight.bold,
+                    fontSize: 50.0)
         )
         ) ,);
   }
 
-    Widget _armarSubTitulo() {
-    return Container(
-      child: Center(
-        child: Text('Usa tu e-mail y contraseña ' +
-                    'para iniciar sesión', style: TextStyle(color: Colors.black, fontStyle: FontStyle.normal,
-                    fontSize: 15.0)
-        )
-        ) ,);
-  }
-
-    Widget _inputEmail() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(height: 20.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 6.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-          height: 60.0,
-          width: 380.0,
-          child: TextField(
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.email,
-                //color: Colors.black,
-              ),
-              hintText: 'E-mail',
-              hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Rubik',
-                        ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-    Widget _inputPassword() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(height: 20.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 6.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-          height: 60.0,
-          width: 380.0,
-          child: TextField(
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14.0),
-              prefixIcon: Icon(
-                Icons.lock,
-                //color: Colors.white,
-              ),
-              hintText: 'Contraseña',
-              hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'OpenSans',
-                        ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-    Widget _olvidastePassword() {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: FlatButton(
-        onPressed: () => print('Forgot Password Button Pressed'),
-        padding: EdgeInsets.only(right: 18.0),
-        child: Text(
-          'Olvidaste tu contraseña?',
-          style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'OpenSans',
-            ),
-        ),
-      ),
-    );
-  }
-
-    Widget _iniciarSesion() {
-    return Container(
-      width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
-        onPressed: () => print('Login Button Pressed'),
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.cyanAccent[100],
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-                 Text(
-                'Iniciar Sesión',
-                style: TextStyle(
-                  color: Colors.black,
-                  letterSpacing: 1.5,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'OpenSans',
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-    Widget _registrate() {
-    return  Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-              'No tienes cuenta todavía? ',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'OpenSans',
-                ),
-            ),
-          FlatButton(
-            onPressed: () => print('Forgot Password Button Pressed'),
-            padding: EdgeInsets.only(right: 18.0),
-            child: Text(
-              'Registrate.',
-              style: TextStyle(
-                  color: Colors.blue[300],
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'OpenSans',
-                ),
-            ),
-          ),
-        ],
-      );
-  }
 
     Widget _iniciarSesionGoogle(BuildContext context) {
     return Container(
-      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 1.0
+        )
+      ),
+      width: 370.0,
+      height: 55.0,
       child: Consumer<LoginState>(
           builder: (BuildContext context, LoginState value, Widget child) {
           if (value.isLoading()) {
@@ -252,7 +82,7 @@ class LoginPageFinal extends StatelessWidget {
           onPressed: () {Provider.of<LoginState>(context).login();},
           padding: EdgeInsets.all(15.0),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(15.0),
           ),
           color: Colors.white,
           child: Row(
@@ -290,7 +120,14 @@ class LoginPageFinal extends StatelessWidget {
 
       Widget _iniciarSesionFacebook(BuildContext context) {
     return Container(
-      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 1.0
+        )
+      ),
+      width: 370.0,
+      height: 55.0,
       child: Consumer<LoginState>(
           builder: (BuildContext context, LoginState value, Widget child) {
           if (value.isLoading()) {
@@ -304,7 +141,7 @@ class LoginPageFinal extends StatelessWidget {
           onPressed: () {Provider.of<LoginState>(context).login();},
           padding: EdgeInsets.all(15.0),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(15.0),
           ),
           color: Colors.white,
           child: Row(

@@ -9,7 +9,6 @@ import '../../login_state.dart';
 class CategoriasPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    String nombre;
     return Scaffold(
       appBar: AppBar(
         title: Text('Inicio',style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.black, fontWeight: FontWeight.w600))),
@@ -61,6 +60,14 @@ class CategoriasPage extends StatelessWidget {
 
               onTap: () {Provider.of<LoginState>(context).logout();
                          Navigator.pushNamed(context, 'login');},
+            ),
+            ListTile(
+              title: Row(
+                children: [
+                Icon(Icons.store),
+                Text('Ir perfil vendedor'),]),
+
+              onTap: () {Navigator.pushNamed(context, 'altaVendedor');},
             ),
           ],
         ),

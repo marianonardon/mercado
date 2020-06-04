@@ -188,8 +188,8 @@ class CategoriasListView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end ,
                   children: <Widget>[
                     Text(
-                    title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                      fontSize: 25.0, fontWeight: FontWeight.w600,
+                    title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                      fontSize: 25.0, fontWeight: FontWeight.normal,
                       )),
                     ),
                     SizedBox(width: 30.0),
