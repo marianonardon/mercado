@@ -35,11 +35,20 @@ dependencies:
   sqflite:
   path:
   shared_preferences: ^0.5.7+3
+  
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.5
+
+flutter_icons:
+ android: "launcher_icon"
+ ios: true
+ image_path: "assets/icons/icono.png"
+ adaptive_icon_background: "assets/icons/icono.png"
+
 
 
 # For information on the generic Dart part of this file, see the

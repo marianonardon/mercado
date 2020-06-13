@@ -62,14 +62,15 @@ class Puesto {
 }
 
 class PuestoCrear extends StatefulWidget {
-  Widget puesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser ) {
-    BuildContext context;
+  Widget puesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,BuildContext context ) {
+    
     return FutureBuilder<Puesto>(
-      future: createPuesto(nombre, cuit, direccion, telefono, email, puesto, nave, idUser),
+      future: createPuesto(nombre, cuit, direccion, telefono, email, puesto, nave, idUser,context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data.comercioNombre);
         } else if (snapshot.hasError) {
+          Navigator.pushNamed(context, 'errorRegPues');
           return Text("${snapshot.error}");
         }
 
@@ -78,7 +79,7 @@ class PuestoCrear extends StatefulWidget {
     );
   }
 
-Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser) async {
+Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,BuildContext context) async {
 
   
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -137,15 +138,16 @@ Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, pue
         }),
       );
       
-    
       if (response.statusCode == 201) {
+        
       
           final puesto = new Puesto.fromJson(json.decode(response.body));
-          return puesto;
+          Navigator.pushNamed(context, 'altaComOk');
+         
     
         //return Puesto.fromJson(json.decode(response.body));
       } else {
-          throw Exception('Falló la grabación de puesto');
+            Navigator.pushNamed(context, 'errorRegPues');
       }
     }
     

@@ -14,10 +14,18 @@ class _MyStatefulWidgetState extends State<ComboMercado> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData media = MediaQuery.of(context);
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Text('Mercado',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
-        fontWeight: FontWeight.normal, fontSize: 18.0))),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(width: 18.0,),
+            Text('Mercado',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+            fontWeight: FontWeight.normal, fontSize: 12.0))),
+          ],
+        ),
         SizedBox(height: 10.0),
         Container(
                 alignment: Alignment.centerLeft,
@@ -32,8 +40,8 @@ class _MyStatefulWidgetState extends State<ComboMercado> {
                   ),
                 ],
               ),
-          height: 60.0,
-          width: 370.0,
+          height: media.size.height * 0.06,
+          width: media.size.width * 0.90,
           child: DropdownButton<String>(
             value: dropdownValue,
             isExpanded: true,

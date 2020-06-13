@@ -9,8 +9,10 @@ import '../../login_state.dart';
 
 
 class VendedorProductosPage extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
+    final String comercioId = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: null,
@@ -20,7 +22,7 @@ class VendedorProductosPage extends StatelessWidget {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         title: Text('Mi Catálogo',style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                        fontSize: 22.0, fontWeight: FontWeight.w600,
+                        fontSize: 18.0, fontWeight: FontWeight.w600,
                         )),),
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
         actions: <Widget>[
@@ -38,18 +40,18 @@ class VendedorProductosPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                SizedBox(height: 10.0),
+                SizedBox(height: 20.0),
                 Text('  Lista de productos',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                        fontSize: 22.0, fontWeight: FontWeight.w600,
+                        fontSize: 16.0, fontWeight: FontWeight.w600,
                         ))),
-                SizedBox(height: 10.0),
-                Container(child: VendedorProductosListView()),
+                SizedBox(height: 5.0),
+                Container(child: VendedorProductosListView(comercioId)),
               ],
             ),
           ),
       ),
       bottomNavigationBar: _bottomNavigationBar(context),
-       drawer: Drawer(
+      drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical
         // space to fit everything.
@@ -66,28 +68,28 @@ class VendedorProductosPage extends StatelessWidget {
             ListTile(
               title: Row(
                 children: [
+                Icon(Icons.home),
+                Text('Home'),]),
+
+              onTap: () {Navigator.pushNamed(context, 'mercado');},
+            ),
+            ListTile(
+              title: Row(
+                children: [
                 Icon(Icons.search),
                 Text('Buscar productos'),]),
 
               onTap: () {Navigator.pushNamed(context, 'productos');},
             ),
-            ListTile(
+            /* ListTile(
               title: Row(
                 children: [
                 Icon(Icons.local_grocery_store),
                 Text('Carrito'),]),
 
               onTap: () {Navigator.pushNamed(context, 'carrito');},
-            ),
-            ListTile(
-              title: Row(
-                children: [
-                Icon(Icons.local_grocery_store),
-                Text('Logout'),]),
+            ), */
 
-              onTap: () {Provider.of<LoginState>(context).logout();
-                         Navigator.pushNamed(context, 'login');},
-            ),
             ListTile(
               title: Row(
                 children: [
@@ -95,6 +97,15 @@ class VendedorProductosPage extends StatelessWidget {
                 Text('Ir perfil vendedor'),]),
 
               onTap: () {Navigator.pushNamed(context, 'altaVendedor');},
+            ),
+             ListTile(
+              title: Row(
+                children: [
+                Icon(Icons.exit_to_app),
+                Text('Logout'),]),
+
+              onTap: () {Provider.of<LoginState>(context).logout();
+                         Navigator.pushNamed(context, '/');},
             ),
           ],
         ),

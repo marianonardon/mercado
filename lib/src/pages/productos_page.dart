@@ -5,9 +5,17 @@ import 'package:flutter_login_ui/src/pages/productos_serv.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
+
+
+
 class ProductosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final String categoriaId = ModalRoute.of(context).settings.arguments;
+
+    
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
@@ -27,15 +35,15 @@ class ProductosPage extends StatelessWidget {
               children: <Widget>[
                 SizedBox(height: 10.0),
                 Text('  Recomendados',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                        fontSize: 20.0, fontWeight: FontWeight.w600,
+                        fontSize: 16.0, fontWeight: FontWeight.w600,
                         ))),
-                SizedBox(height: 15.0),
-                ProductosListViewHorizontal(),
+                SizedBox(height: 10.0),
+                ProductosListViewHorizontal(categoriaId),
                 Text('  Lista de productos',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                        fontSize: 20.0, fontWeight: FontWeight.w600,
+                        fontSize: 16.0, fontWeight: FontWeight.w600,
                         ))),
 
-                Container(child: ProductosListView()),
+                Container(child: ProductosListView(categoriaId))
               ],
             ),
           ),

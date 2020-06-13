@@ -46,6 +46,8 @@ class LoginState with ChangeNotifier {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('usuarioId', googleUser.id);
+    prefs.setString('nombre', googleUser.displayName);
+    prefs.setString('fotoUser', googleUser.photoUrl);
     print(googleUser.id + googleUser.email + googleUser.displayName);
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 

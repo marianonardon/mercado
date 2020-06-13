@@ -4,25 +4,24 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 
 
 
-class Mercados{
+class Puestos{
 
-  List<Mercado> items = new List();
+  List<Puesto> items = new List();
 
-  Mercados();
+  Puestos();
 
-  Mercados.fromJsonList(List<dynamic> jsonList) {
+  Puestos.fromJsonList(List<dynamic> jsonList) {
 
     if (jsonList == null) return;
 
     for (var item in jsonList) {
-      final mercado = new Mercado.fromJsonMap(item);
-      items.add(mercado);
+      final puesto = new Puesto.fromJson(item);
+      items.add(puesto);
       
     }
 
@@ -34,28 +33,40 @@ class Mercados{
 
 
 
-class Mercado {
+class Puesto {
   final String mercadoId;
   final String mercadoNombre;
-  final String mercadoDireccion;
-  final String mercadoTelefono;
-  final String mercadoFechaAlta;
-  final bool mercadoHabilitado;
-  final String mercadoImagen;
+  final String comercioId;
+  final String comercioNombre;
+  final String comercioTelefono;
+  final String comercioCuit;
+  final String comercioPuesto;
+  final String comercioNumNave;
+  final String comercioFechaAlta;
+  final String comercioExternalId;
+  final String comercioEmail;
 
 
-  Mercado({this.mercadoId, this.mercadoNombre, this.mercadoDireccion, this.mercadoTelefono, this.mercadoFechaAlta,
-          this.mercadoHabilitado, this.mercadoImagen});
+  Puesto({this.mercadoId, this.mercadoNombre,this.comercioId, this.comercioNombre,this.comercioTelefono, this.comercioCuit,
+          this.comercioPuesto,this.comercioNumNave,this.comercioFechaAlta,this.comercioExternalId,this.comercioEmail});
 
-  factory Mercado.fromJsonMap(Map<String, dynamic> parsedJson) {
-    return Mercado(
-      mercadoId: parsedJson['mercadoID'],
-      mercadoNombre: parsedJson['mercadoNombre'],
-      mercadoDireccion: parsedJson['mercadoDireccion'],
-      mercadoTelefono: parsedJson['mercadoTelefono'],
-      mercadoFechaAlta: parsedJson['mercadoFechaAlta'],
-      mercadoHabilitado: parsedJson['mercadoHabilitado'],
-      mercadoImagen: parsedJson['mercadoImagen'],
+  factory Puesto.fromJson(Map<String, dynamic> json) {
+    return Puesto(
+      mercadoId: json['mercadoID'], 
+      mercadoNombre: json['mercadoNombre'],
+      comercioId: json['comercioID'], 
+      comercioNombre: json['comercioNombre'], 
+      comercioTelefono: json['comercioTelefono'], 
+      comercioCuit: json['comercioCuit'], 
+      comercioPuesto: json['comercioPuesto'], 
+      comercioNumNave: json['comercioNumNave'], 
+      comercioFechaAlta: json['comercioFechaAlta'], 
+      comercioExternalId: json['comercioExternalID'], 
+      comercioEmail: json['comercioEmail'], 
+
+      
+      
+      
     );
   }
 }
@@ -80,23 +91,23 @@ class Token {
   }
 }
 
-class MercadosListView extends StatefulWidget {
+class PuestosListView extends StatelessWidget {
+  PuestosListView(this.userId);
+  final String userId;
   @override
-  _MercadosListViewState createState() => _MercadosListViewState();
-}
-
-class _MercadosListViewState extends State<MercadosListView> {
-  @override
-  String idUser;
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Mercado>>(
-      future: _fetchMercados(),
+    return FutureBuilder<List<Puesto>>(
+      future: _fetchPuestos(userId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List<Mercado> data = snapshot.data;
+          if(snapshot.requireData.isEmpty){
+            return Text('no tiene datos');
+          } else {
+          List<Puesto> data = snapshot.data;
 /*           _obtenerToken();
           _obtenerRubro(); */
-          return _mercadosListView(data,idUser);
+          return _puestosListView(data,userId);
+          }
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
@@ -107,19 +118,7 @@ class _MercadosListViewState extends State<MercadosListView> {
     );
   }
 
-  Future<List<Mercado>> _fetchMercados() async {
-
-    if (idUser == null) {    
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-    //Return String
-      String externalId2 = prefs.getString('usuarioId');
-      setState(() {
-        idUser = externalId2;
-      }); 
-    }
-
-
-
+  Future<List<Puesto>> _fetchPuestos(userId) async {
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
 
@@ -146,14 +145,14 @@ class _MercadosListViewState extends State<MercadosListView> {
       "Authorization": "OAuth $token2"
       };
 
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultarMercado/';
-    final mercadosHabilitados = '?habilitado=1';
-    final response = await http.get('$mercadosListAPIUrl$mercadosHabilitados', headers: headers2);
+    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultarComercio';
+    final userPuesto = '?comercioExternalID=$userId';
+    final response = await http.get('$mercadosListAPIUrl$userPuesto', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
-      final mercados = new Mercados.fromJsonList(decodedData['mercados']);
-      return mercados.items;
+      final comercios = new Puestos.fromJsonList(decodedData['comercios']);
+      return comercios.items;
       //List jsonResponse = json.decode(response.body);
       //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));
     } else {
@@ -161,18 +160,18 @@ class _MercadosListViewState extends State<MercadosListView> {
     }
   }
 
-  ListView _mercadosListView(data,idUser) {
+  ListView _puestosListView(data,userId) {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: data.length,
         itemBuilder: (context, index) {
-          return _crearLista(data[index].mercadoNombre, data[index].mercadoDireccion, Icons.location_on,
-                        data[index].mercadoImagen,idUser,context);
+          return _crearLista(data[index].comercioNombre, data[index].mercadoNombre, data[index].comercioPuesto,
+                        data[index].comercioNumNave,data[index].comercioId,context);
         });
   }
 
-  Widget _crearLista(String title, String subtitle, IconData icon, String imagen,String idUser,context) {
-    
+
+  Widget _crearLista(String title, String subtitle, String numPuesto, String numNave,comercioId,context) {
     MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
@@ -185,15 +184,16 @@ class _MercadosListViewState extends State<MercadosListView> {
           //  _crearTitulo(),
             SizedBox(height: 20.0),
             GestureDetector(
-              onTap: () {Navigator.pushNamed(context, 'categorias', arguments: idUser);},
-            child:_crearTarjetas(title, subtitle, icon, imagen,context))
+              onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: comercioId);},
+            child:_crearTarjetas(title, subtitle, numPuesto, numNave,context))
           ],
         ),
       ),
     );
   }
 
-  _crearTarjetas(title, subtitle, icon, imagen,context) {
+
+  _crearTarjetas(title, subtitle, numPuesto, numNave,context) {
     MediaQueryData media = MediaQuery.of(context);
   return Stack(
     fit: StackFit.loose,
@@ -204,7 +204,7 @@ class _MercadosListViewState extends State<MercadosListView> {
         height: media.size.height * 0.25 ,
         width: media.size.width * 0.93,
         fit: BoxFit.fill,
-        image: NetworkImage(imagen),
+        image: NetworkImage('https://imagenes.20minutos.es/files/article_amp/uploads/2020/04/01/puesto-de-frutas-en-el-mercado-central-de-zaragoza.jpeg'),
 
        // placeholder: AssetImage('assets/img/loader.gif')),
       )),
@@ -216,11 +216,7 @@ class _MercadosListViewState extends State<MercadosListView> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15.0), 
           child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [Colors.black45, Colors.black26],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter)
-            ),
+            color: Colors.black26,
             child: Column(
               children:<Widget>[ 
                 Row(
@@ -237,13 +233,23 @@ class _MercadosListViewState extends State<MercadosListView> {
                 Row(
                   children: <Widget>[
                     SizedBox(width: 20.0),
-                    Icon(icon, color: Colors.white,),
+                    Icon(Icons.location_on, color: Colors.white,),
                     Text(
                     subtitle, style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
                       fontSize: 15.0, fontWeight: FontWeight.w600)),
               ),
                   ],
-                )
+                ),
+              Row(
+                children: <Widget>[
+                  SizedBox(width: 20.0),
+                  Icon(Icons.location_on, color: Colors.white,),
+                  Text(
+                  'Puesto: $numPuesto   Nave: $numNave', style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
+                    fontSize: 15.0, fontWeight: FontWeight.w600)),
+                  ),
+                ],
+              )
               ]
             ),
           ),
@@ -255,24 +261,4 @@ class _MercadosListViewState extends State<MercadosListView> {
 
   }
 
-  Future<String> _obtenerRubro() async {
-
-    String url = "https://apps5.genexus.com/Id416f02b853b108b62b0d308b80154b1b/rest/rubro/2";
-
-    Map<String, String> bodyToken = {
-      "client_id": "cfc1090c9e114f57a5b0fbc3aaa5be0b",
-      "client_secret": "715369e92c824c9fad89f0ae4fef4a4c",
-      "scope": "FullControl",
-      "username": "admin",
-      "password": "admin123",
-    };
-
-    Map<String, String> headers2 = {
-        "Authorization": "OAuth e77a867d-1086-4fa3-b55f-add2ac05595e!a6a51538e020329c54be086958e4e66bbe5ea63ace150eb9a8995802b5c9414e4e7b2a04de10d3"
-    };
-
-    http.get(url, headers: headers2).then((response){
-        print(response.body.toString());
-    });
-      }
 }

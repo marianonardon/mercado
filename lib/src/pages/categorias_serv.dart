@@ -80,12 +80,15 @@ class CategoriasListView extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-        return Center(child: CircularProgressIndicator());
+        return Center(child: CircularProgressIndicator(
+          backgroundColor:  Color.fromRGBO(29, 233, 182, 1),
+        ));
       },
     );
   }
 
   Future<List<Categoria>> _fetchCategorias() async {
+    
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
 
@@ -134,25 +137,26 @@ class CategoriasListView extends StatelessWidget {
         itemCount: data.length,
         itemBuilder: (context, index) {
           return _crearLista(data[index].categoriaNombre,
-                        data[index].categoriaImagen,context);
+                        data[index].categoriaImagen,data[index].categoriaID,context);
         });
   }
 
 
-  Widget _crearLista(String title, String imagen,context) {
+  Widget _crearLista(String title, String imagen,String categoriaID,context) {
+    MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
       child: Container(
         
-          width: 600.0,
+          width: media.size.width * 0.95,
       //   height: 500.0, */
         child: Column(
           children: <Widget>[
           //  _crearTitulo(),
             SizedBox(height: 15.0),
             GestureDetector(
-              onTap: () {Navigator.pushNamed(context, 'productos', arguments: title);},
-            child:_crearTarjetas(title, imagen))
+              onTap: () {Navigator.pushNamed(context, 'productos', arguments: categoriaID);},
+            child:_crearTarjetas(title, imagen,context))
           ],
         ),
       ),
@@ -160,20 +164,21 @@ class CategoriasListView extends StatelessWidget {
   }
 
 
-  _crearTarjetas(title,imagen) {
+  _crearTarjetas(title,imagen,context) {
+    MediaQueryData media = MediaQuery.of(context);
   return Stack(
     fit: StackFit.loose,
     children: <Widget> [
       ClipRRect(
         borderRadius: BorderRadius.circular(15.0),
-        child: FadeInImage(
-        height: 180,
-        width: 400,
+        child: Image(
+        height: media.size.height * 0.25,
+        width: media.size.width * 0.93,
         fit: BoxFit.fill,
         image: NetworkImage(imagen),
 
-        placeholder: AssetImage('assets/img/original.gif')),
-      ),
+        //placeholder: AssetImage('assets/img/loader.gif')),
+      )),
 
       Positioned(
         bottom: 10,
@@ -182,6 +187,7 @@ class CategoriasListView extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15.0), 
           child: Container(
+            color: Colors.black26,
             child: Column(
               children:<Widget>[ 
                 Row(
@@ -189,7 +195,7 @@ class CategoriasListView extends StatelessWidget {
                   children: <Widget>[
                     Text(
                     title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                      fontSize: 25.0, fontWeight: FontWeight.normal,
+                      fontSize: 21.0, fontWeight: FontWeight.normal,
                       )),
                     ),
                     SizedBox(width: 30.0),

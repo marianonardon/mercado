@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_ui/src/pages/alta_vendedor.dart';
+import 'package:flutter_login_ui/src/pages/alta_vendedor_ok.dart';
 import 'package:flutter_login_ui/src/pages/carrito_page.dart';
 import 'package:flutter_login_ui/src/pages/confirmoReserva.dart';
+import 'package:flutter_login_ui/src/pages/error_registrar_puesto.dart';
 import 'package:flutter_login_ui/src/pages/login.dart';
 import 'package:flutter_login_ui/src/pages/mercado_page.dart';
 import 'package:flutter_login_ui/src/pages/categorias_page.dart';
 import 'package:flutter_login_ui/src/pages/productos_page.dart';
+import 'package:flutter_login_ui/src/pages/puestos_page.dart';
 import 'package:flutter_login_ui/src/pages/vendedor_prod_page.dart';
 
 
@@ -34,12 +37,16 @@ class MyApp extends StatelessWidget {
             );}
         },
         'categorias'   : (BuildContext context) => CategoriasPage(),
+        'mercado'      : (BuildContext context) => MercadosPage(),
         'productos'    : (BuildContext context) => ProductosPage(),
         'carrito'      : (BuildContext context) => CarritoPage(),
         'confRes'      : (BuildContext context) => ConfirmoReserva(),
         'login'        : (BuildContext context) => LoginPageFinal(),
         'altaVendedor' : (BuildContext context) => AltaVendedor(),
         'vendedorProd' : (BuildContext context) => VendedorProductosPage(),
+        'errorRegPues' : (BuildContext context) => ErrorRegistrarPuesto(),
+        'altaComOk'    : (BuildContext context) => AltaComercioOk(),
+        'puestos'      : (BuildContext context) => PuestosPage(),
         },
       ),
     );

@@ -106,20 +106,21 @@ class Precio {
 
 }
 
-class ProductosListView extends StatefulWidget {
-  @override
-  _ProductosListViewState createState() => _ProductosListViewState();
-}
 
-class _ProductosListViewState extends State<ProductosListView> {
+
+class ProductosListView extends StatelessWidget {
+  ProductosListView(this.categoriaId);
+  final String categoriaId;
   @override
   Widget build(BuildContext context){
+    
+    
     return FutureBuilder<List<Producto>>(
-      future: fetchProductos(),
+      future: fetchProductos(categoriaId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Producto> data = snapshot.data;
-          return _productosListView(data);
+          return _productosListView(data,context);
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
@@ -128,7 +129,8 @@ class _ProductosListViewState extends State<ProductosListView> {
     );
   }
 
-     ListView _productosListView(data) {
+     ListView _productosListView(data,context) {
+       MediaQueryData media = MediaQuery.of(context,);
       return ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
@@ -189,11 +191,12 @@ class _ProductosListViewState extends State<ProductosListView> {
   }
 
     Widget _crearLista(String title, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd, context) {
+    MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
       child: Container(
         
-          width: 600.0,
+          width: media.size.height * 95.0,
       //   height: 500.0, */
         child: Column(
           children: <Widget>[
@@ -207,6 +210,7 @@ class _ProductosListViewState extends State<ProductosListView> {
   }
 
   Widget _crearTarjetas(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,context) {
+   MediaQueryData media = MediaQuery.of(context); 
   String unidad2;
   String unidad3;
   String speso2;
@@ -226,132 +230,143 @@ class _ProductosListViewState extends State<ProductosListView> {
     speso3 = '\$';
   }
   return Container(
-    padding: EdgeInsets.only(left:5.0),
-     child: Row(
-       mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+    padding: EdgeInsets.only(left:15.0),
+     child: Column(
+       children: <Widget>[
+        Divider(
+           color: Colors.black,
+           endIndent: 15.0,
+           height: 1.0,
+           thickness: 0.5,
+         ),
+         Row(
+           mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
-                child: FadeInImage(
-                height: 80  ,
-                width: 80,
-                fit: BoxFit.fill,
-                image: NetworkImage(imagen),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image(
+                    height: 55  ,
+                    width: 55,
+                    fit: BoxFit.fill,
+                    image: NetworkImage(imagen),
 
-                placeholder: AssetImage('assets/img/original.gif')),
+                   // placeholder: AssetImage('assets/img/original.gif')),
+                  )),
+                ],
               ),
-            ],
-          ),
-          SizedBox(width: 15.0),
-          Container(
-            width: 240.0,
-            alignment: AlignmentDirectional.bottomStart,
-            padding: EdgeInsets.all(6.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children:<Widget>[ 
-                SizedBox(height: 10.0),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      child: Text(
-                      title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                        fontSize: 20.0, fontWeight: FontWeight.bold,
-                        ))
-                      ),
-                    ),
-                  SizedBox(width: 10.0),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(5.0),
-                                              child: Container(
-                          color: Color.fromRGBO(0, 255, 208, 1),
-                          child: Row(
-                            children: <Widget>[
-                              SizedBox(width: 2.0),
-                              Text(
-                                ratingProd.toString(), style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                                  fontSize: 15.0, fontWeight: FontWeight.w500
-                    ))),
-                    SizedBox(width: 5.0),
-                    Icon(Icons.star, color:Colors.white, size: 15.0 )
-                            ],
+              SizedBox(width: 15.0),
+              Container(
+                width: media.size.width * 0.50 ,
+                alignment: AlignmentDirectional.bottomStart,
+                padding: EdgeInsets.all(6.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children:<Widget>[ 
+                    SizedBox(height: 10.0),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          child: Text(
+                          title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                            fontSize: 16.0, fontWeight: FontWeight.bold,
+                            ))
                           ),
                         ),
-                      ),
-                    
-                  ],
-                ),
-                SizedBox(height:6.0),
-                Row(
-                  children: <Widget>[
-                    Text(
-                        comercio, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                          fontSize: 16.0, fontWeight: FontWeight.w400,
-                    ))),
-                    
-                  ],
-                ),
-                SizedBox(height:6.0),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 100.00,
-                      child: Text(
-                          '\$$precio1', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                            fontSize: 20.0, fontWeight: FontWeight.w600,
-                      ))),
+                      SizedBox(width: 10.0),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(5.0),
+                                                  child: Container(
+                              color: Color.fromRGBO(29, 233, 182, 1),
+                              child: Row(
+                                children: <Widget>[
+                                  SizedBox(width: 4.0),
+                                  Text(
+                                    ratingProd.toString(), style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                      fontSize: 12.0, fontWeight: FontWeight.w500
+                        ))),
+                        SizedBox(width: 5.0),
+                        Icon(Icons.star, color:Colors.white, size: 15.0 ),
+                        SizedBox(width: 4.0),
+                                ],
+                              ),
+                            ),
+                          ),
+                        
+                      ],
                     ),
-                    Text(
-                        '$cantidad1 $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                          fontSize: 18.0, fontWeight: FontWeight.w400,
-                    ))),
-                    
+                    SizedBox(height:6.0),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                            comercio, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                              fontSize: 12.0, fontWeight: FontWeight.w400,
+                        ))),
+                        
+                      ],
+                    ),
+                    SizedBox(height:6.0),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          width: 80.00,
+                          child: Text(
+                              '\$$precio1', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                fontSize: 14.0, fontWeight: FontWeight.w600,
+                          ))),
+                        ),
+                        Text(
+                            '$cantidad1 $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                              fontSize: 12.0, fontWeight: FontWeight.w400,
+                        ))),
+                        
 
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 100.00,
-                      child: Text(
-                          '$speso2$precio2', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                            fontSize: 20.0, fontWeight: FontWeight.w600,
-                      ))),
+                      ],
                     ),
-                    Text(
-                        '$cantidad2 $unidad2 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                          fontSize: 18.0, fontWeight: FontWeight.w400,
-                    ))),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 100.00,
-                      child: Text(
-                          '$speso3$precio3', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                            fontSize: 20.0, fontWeight: FontWeight.w600,
-                      ))),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          width: 80.00,
+                          child: Text(
+                              '$speso2$precio2', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                fontSize: 14.0, fontWeight: FontWeight.w600,
+                          ))),
+                        ),
+                        Text(
+                            '$cantidad2 $unidad2 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                              fontSize: 12.0, fontWeight: FontWeight.w400,
+                        ))),
+                      ],
                     ),
-                    Text(
-                        '$cantidad3 $unidad3 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                          fontSize: 18.0, fontWeight: FontWeight.w400,
-                    ))),
-                  ],
-                )
-              ]
-            ),
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          width: 80.00,
+                          child: Text(
+                              '$speso3$precio3', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                fontSize: 14.0, fontWeight: FontWeight.w600,
+                          ))),
+                        ),
+                        Text(
+                            '$cantidad3 $unidad3 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                              fontSize: 12.0, fontWeight: FontWeight.w400,
+                        ))),
+                      ],
+                    )
+                  ]
+                ),
+              ),
+              /* Expanded(child: GestureDetector(
+                onTap: () {_showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,context);},
+                child: Icon(Icons.add_box,size: 35.0, color:Color.fromRGBO(0, 255, 208, 1)))) */
+            ],
           ),
-          Expanded(child: GestureDetector(
-            onTap: () {_showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,context);},
-            child: Icon(Icons.add_box,size: 45.0, color:Color.fromRGBO(0, 255, 208, 1))))
-        ],
-      ),
+       ],
+     ),
   );
   }
 
@@ -565,7 +580,7 @@ class _ProductosListViewState extends State<ProductosListView> {
           });
   }
 
-  Future<List<Producto>> fetchProductos() async { 
+  Future<List<Producto>> fetchProductos(categoriaId) async { 
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
 
@@ -593,8 +608,8 @@ class _ProductosListViewState extends State<ProductosListView> {
       };
 
 
-
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?destacado=2';
+    int categoria = int.parse(categoriaId);
+    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?categoriaID=$categoria&destacado=2';
     final response = await http.get('$mercadosListAPIUrl', headers: headers2);
 
     if (response.statusCode == 200) {
@@ -610,25 +625,34 @@ class _ProductosListViewState extends State<ProductosListView> {
 }
 
 class ProductosListViewHorizontal extends StatelessWidget {
+  ProductosListViewHorizontal(this.categoriaId);
+  final String categoriaId;
   @override
   Widget build(BuildContext context) {
+  //  Widget productosHorizontal(){
+    MediaQueryData media = MediaQuery.of(context);
     return FutureBuilder<List<Producto>>(
-      future: fetchProductos(),
+      future: fetchProductos(categoriaId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          if(snapshot.requireData.isEmpty){
+            return Text('no tiene datos');
+          } else {
           List<Producto> data = snapshot.data;
-          return _crearProductoPageView(data);
+          return _crearProductoPageView(data,context);
+          }
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
         return Center(child: CircularProgressIndicator());
       },
     );
+   // };
   }
 
 
 
-  Future<List<Producto>> fetchProductos() async {
+  Future<List<Producto>> fetchProductos(categoriaId) async {
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
 
@@ -657,7 +681,8 @@ class ProductosListViewHorizontal extends StatelessWidget {
 
 
 
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?destacado=1';
+    int categoria = int.parse(categoriaId);
+    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?categoriaID=$categoria&destacado=1';
     final response = await http.get('$mercadosListAPIUrl', headers: headers2);
 
     if (response.statusCode == 200) {
@@ -676,13 +701,14 @@ class ProductosListViewHorizontal extends StatelessWidget {
 
 
 
-  Widget _crearProductoPageView(List<Producto> productos) {
+  Widget _crearProductoPageView(List<Producto> productos,context) {
     
+    MediaQueryData media = MediaQuery.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         SizedBox(
-          height: 210.0,
+          height: media.size.height * 0.24,
           child: PageView.builder(
             pageSnapping: true,
             dragStartBehavior: DragStartBehavior.down,
@@ -727,21 +753,22 @@ class ProductosListViewHorizontal extends StatelessWidget {
             child: FadeInImage(
             placeholder: AssetImage('assets/img/no-image.jpg'),
             image: NetworkImage(foto),
-            height: 120.0,
+            height: 88.0,
+            width: 100.0,
             fit: BoxFit.cover,
             ),
         ),
         SizedBox(height: 8.0),
         Text(
-          producto.productoNombre, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-            fontSize: 16.0, fontWeight: FontWeight.w600,
+          producto.productoNombre, style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+            fontSize: 12.0, fontWeight: FontWeight.normal,
             )),
             overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height:3.0),
           Text(
               '\$$precio $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
-                fontSize: 18.0, fontWeight: FontWeight.w600,
+                fontSize: 12.0, fontWeight: FontWeight.w600,
           )),
           overflow: TextOverflow.ellipsis,)
       ],

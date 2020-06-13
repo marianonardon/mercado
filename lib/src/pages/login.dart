@@ -7,6 +7,7 @@ import '../../login_state.dart';
 class LoginPageFinal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    MediaQueryData media = MediaQuery.of(context);
   
     return SafeArea(
         child: Scaffold(
@@ -18,7 +19,10 @@ class LoginPageFinal extends StatelessWidget {
            //fit: BoxFit.fill,),
             //width: double.infinity,
             //height: double.infinity,),
-                      
+           Padding(
+             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.33),
+             child: Image(image: AssetImage('assets/img/logo.png'),),
+           ),           
            Container(
              padding: EdgeInsets.only(left:20.0),
             child: Column(
@@ -33,11 +37,11 @@ class LoginPageFinal extends StatelessWidget {
                 ]
               ), */
               SizedBox(
-              height: 300.0),
+              height: media.size.height * 0.50),
               SizedBox(height: 20.0),
               _iniciarSesionGoogle(context),
               SizedBox(height: 25.0),
-              _iniciarSesionFacebook(context),
+              //_iniciarSesionFacebook(context),
               SizedBox(height: 25.0),
 
               ]
@@ -50,6 +54,7 @@ class LoginPageFinal extends StatelessWidget {
   }
 
   Widget _armarTitulo() {
+    
     return Container(
       child: Center(
         child: Text('agile', style: TextStyle(color: Colors.black, fontFamily: 'Rubik', fontStyle: FontStyle.normal, fontWeight: FontWeight.bold,
@@ -60,58 +65,81 @@ class LoginPageFinal extends StatelessWidget {
 
 
     Widget _iniciarSesionGoogle(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-          width: 1.0
-        )
-      ),
-      width: 370.0,
-      height: 55.0,
-      child: Consumer<LoginState>(
-          builder: (BuildContext context, LoginState value, Widget child) {
-          if (value.isLoading()) {
-            return CircularProgressIndicator();
-          } else {
-            return child;
-          }
-          },
-          child: RaisedButton(
-          elevation: 5.0,
-          onPressed: () {Provider.of<LoginState>(context).login();},
-          padding: EdgeInsets.all(15.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-             // SizedBox(width: 53.0),
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: Container(
-                  color: Colors.transparent,
-                  //padding: EdgeInsets.all(10.0),
-                  child: Image.asset('assets/logos/google.jpg',
-                          fit: BoxFit.scaleDown,
-                          scale: 17.0,),
+      MediaQueryData media = MediaQuery.of(context);
+    return ClipRRect(
+      clipBehavior: Clip.hardEdge,
+        borderRadius: BorderRadius.circular(10.0),
+        child: Container(
+        decoration: BoxDecoration(
+          border: Border.all()
+/*           border: Border.all(
+            color: Colors.black,
+            width: 1.0,
+            style: BorderStyle.solid
+          ) */
+        ),
+        width: media.size.width * 0.90,
+        height: media.size.height * 0.09,
+        child: Consumer<LoginState>(
+            builder: (BuildContext context, LoginState value, Widget child) {
+            if (value.isLoading()) {
+              return  Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Center(
+                      child: Container(
+                        width: media.size.width * 0.05,
+                        height: media.size.height * 0.03,
+                        margin: EdgeInsets.all(5),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.0,
+                          valueColor : AlwaysStoppedAnimation(Color.fromRGBO(29, 233, 182, 1),),
+                        ),
+                      ),
+                    ),
+                  ],
+              );
+            } else {
+              return child;
+            }
+            },
+            child: RaisedButton(
+            elevation: 5.0,
+            onPressed: () {Provider.of<LoginState>(context).login();},
+            padding: EdgeInsets.all(15.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0.0),
+            ),
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+               // SizedBox(width: 53.0),
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Container(
+                    color: Colors.transparent,
+                    //padding: EdgeInsets.all(10.0),
+                    child: Image.asset('assets/logos/google.jpg',
+                            fit: BoxFit.scaleDown,
+                            scale: 17.0,),
+                  ),
                 ),
-              ),
-              SizedBox(width: 30.0,),
-              Text(
-                'Iniciar con Google',
-                style: TextStyle(
-                  color: Colors.black,
-                  letterSpacing: 1.5,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'OpenSans',
+                SizedBox(width: 30.0,),
+                Text(
+                  'Iniciar con Google',
+                  style: TextStyle(
+                    color: Colors.black,
+                    letterSpacing: 1.5,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'OpenSans',
+                  ),
                 ),
-              ),
-              SizedBox(width: 30.0,)
-            ],
+                SizedBox(width: 30.0,)
+              ],
+            ),
           ),
         ),
       ),
@@ -119,6 +147,7 @@ class LoginPageFinal extends StatelessWidget {
   }
 
       Widget _iniciarSesionFacebook(BuildContext context) {
+        MediaQueryData media = MediaQuery.of(context);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
@@ -126,12 +155,28 @@ class LoginPageFinal extends StatelessWidget {
           width: 1.0
         )
       ),
-      width: 370.0,
-      height: 55.0,
+      width: media.size.width * 0.90,
+      height: media.size.height * 0.08,
       child: Consumer<LoginState>(
           builder: (BuildContext context, LoginState value, Widget child) {
           if (value.isLoading()) {
-            return CircularProgressIndicator();
+            return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      width: media.size.width * 0.05,
+                      height: media.size.height * 0.03,
+                      margin: EdgeInsets.all(5),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                        valueColor : AlwaysStoppedAnimation(Color.fromRGBO(29, 233, 182, 1),),
+                      ),
+                    ),
+                  ),
+                ],
+              );
           } else {
             return child;
           }
@@ -141,7 +186,7 @@ class LoginPageFinal extends StatelessWidget {
           onPressed: () {Provider.of<LoginState>(context).login();},
           padding: EdgeInsets.all(15.0),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(0.0),
           ),
           color: Colors.white,
           child: Row(
