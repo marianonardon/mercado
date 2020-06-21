@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_ui/src/pages/alta_producto.dart';
 import 'package:flutter_login_ui/src/pages/alta_vendedor.dart';
 import 'package:flutter_login_ui/src/pages/alta_vendedor_ok.dart';
 import 'package:flutter_login_ui/src/pages/carrito_page.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         'errorRegPues' : (BuildContext context) => ErrorRegistrarPuesto(),
         'altaComOk'    : (BuildContext context) => AltaComercioOk(),
         'puestos'      : (BuildContext context) => PuestosPage(),
+        'altaProd'     : (BuildContext context) => AltaProducto(),
         },
       ),
     );

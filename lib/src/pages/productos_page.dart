@@ -4,15 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_ui/src/pages/productos_serv.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'categorias_serv.dart';
 
 
 
 
-class ProductosPage extends StatelessWidget {
+
+class ProductosPage extends StatefulWidget {
+  @override
+  _ProductosPageState createState() => _ProductosPageState();
+}
+
+class _ProductosPageState extends State<ProductosPage> {
   @override
   Widget build(BuildContext context) {
 
-    final String categoriaId = ModalRoute.of(context).settings.arguments;
+
+    final ProductosArguments args = ModalRoute.of(context).settings.arguments;
 
     
 
@@ -33,25 +41,18 @@ class ProductosPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                SizedBox(height: 10.0),
-                Text('  Recomendados',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                        fontSize: 16.0, fontWeight: FontWeight.w600,
-                        ))),
-                SizedBox(height: 10.0),
-                ProductosListViewHorizontal(categoriaId),
-                Text('  Lista de productos',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                        fontSize: 16.0, fontWeight: FontWeight.w600,
-                        ))),
+                
+                ProductosListViewHorizontal(args.categoriaId,args.mercadoId),
+                
 
-                Container(child: ProductosListView(categoriaId))
+                Container(child: ProductosListView(args.categoriaId,args.mercadoId))
               ],
             ),
           ),
       ),
-      bottomNavigationBar: _bottomNavigationBar(context)
+     // bottomNavigationBar: _bottomNavigationBar(context)
     );
   }
-
 
     Widget _bottomNavigationBar(BuildContext context) {
     return new Theme(
@@ -79,6 +80,4 @@ class ProductosPage extends StatelessWidget {
 
       
   }
-
-  
 }

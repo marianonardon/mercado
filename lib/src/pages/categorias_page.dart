@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:flutter_login_ui/src/pages/mercados_serv.dart'; 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_login_ui/src/pages/categorias_serv.dart';
 import 'package:provider/provider.dart';
@@ -17,8 +18,10 @@ class _CategoriasPageState extends State<CategoriasPage> {
   
   @override
   Widget build(BuildContext context) {
+
+     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     
-    final String userId = ModalRoute.of(context).settings.arguments;
+   // final String userId = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       appBar: AppBar(
@@ -30,7 +33,7 @@ class _CategoriasPageState extends State<CategoriasPage> {
       body: Container(
         
       
-         child: CategoriasListView()
+         child: CategoriasListView(args.mercadoId)
       ),
 
       drawer: Drawer(
@@ -42,16 +45,36 @@ class _CategoriasPageState extends State<CategoriasPage> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text('Fernando' , style: TextStyle(color:Colors.white,)),
+              child: Row(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius:BorderRadius.circular(50.0),
+                    child: Container(
+                      child: Image(image: NetworkImage(args.foto),),
+                    )
+                  ),
+                  SizedBox(width:15.0),
+                  Text(
+                    args.nombre, style: GoogleFonts.roboto(textStyle:TextStyle(color:Colors.white,
+                      fontSize: 16.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                  
+
+                ],
+              ),
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: Color.fromRGBO(16, 32, 39, 1),
               ),
             ),
             ListTile(
               title: Row(
                 children: [
                 Icon(Icons.home),
-                Text('Home'),]),
+                SizedBox(width:10.0),
+                Text('Home',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                      fontSize: 14.0, fontWeight: FontWeight.w600,
+                      ))),]),
 
               onTap: () {Navigator.pushNamed(context, 'mercado');},
             ),
@@ -59,7 +82,10 @@ class _CategoriasPageState extends State<CategoriasPage> {
               title: Row(
                 children: [
                 Icon(Icons.search),
-                Text('Buscar productos'),]),
+                SizedBox(width:10.0),
+                Text('Buscar productos',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                      fontSize: 14.0, fontWeight: FontWeight.w600,
+                      ))),]),
 
               onTap: () {Navigator.pushNamed(context, 'categorias');},
             ),
@@ -76,15 +102,21 @@ class _CategoriasPageState extends State<CategoriasPage> {
               title: Row(
                 children: [
                 Icon(Icons.store),
-                Text('Ir perfil vendedor'),]),
+                SizedBox(width:10.0),
+                Text('Ir perfil vendedor',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                      fontSize: 14.0, fontWeight: FontWeight.w600,
+                      ))),]),
 
-              onTap: () {Navigator.pushNamed(context, 'puestos',arguments: userId);},
+              onTap: () {Navigator.pushNamed(context, 'puestos',arguments: args);},
             ),
              ListTile(
               title: Row(
                 children: [
                 Icon(Icons.exit_to_app),
-                Text('Logout'),]),
+                SizedBox(width:10.0),
+                Text('Logout',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                      fontSize: 14.0, fontWeight: FontWeight.w600,
+                      ))),]),
 
               onTap: () {Provider.of<LoginState>(context).logout();
                          Navigator.pushNamed(context, '/');},
@@ -102,6 +134,8 @@ class _CategoriasPageState extends State<CategoriasPage> {
   
   }
 
+  
+
      Widget datosUsuario() {
 
       SharedPreferences.getInstance().then((prefs) {
@@ -113,3 +147,4 @@ class _CategoriasPageState extends State<CategoriasPage> {
        }
 
 }
+

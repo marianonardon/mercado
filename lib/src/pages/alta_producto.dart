@@ -1,26 +1,36 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_login_ui/src/pages/comboMercado.dart';
+import 'package:flutter_login_ui/src/pages/comboMercado2.dart';
 import 'package:flutter_login_ui/src/pages/registrar_serv_serv.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AltaVendedor extends StatefulWidget {
+import 'combo_categoria.dart';
+
+class AltaProducto extends StatefulWidget {
   @override
-  _AltaVendedorState createState() => _AltaVendedorState();
+  _AltaProductoState createState() => _AltaProductoState();
 }
 
-class _AltaVendedorState extends State<AltaVendedor> {
+class _AltaProductoState extends State<AltaProducto> {
 
 
   String comercio;
   String cuit;
 
-  final comercioController = TextEditingController();
-  final cuitController = TextEditingController();
-  final naveController = TextEditingController();
-  final puestoController = TextEditingController();
-  final telefonoController = TextEditingController();
-  final emailController = TextEditingController();
-
+  final nombreController = TextEditingController();
+  final descripcionController = TextEditingController();
+  final categoriaController = TextEditingController();
+  final unidadController = TextEditingController();
+  final stockController = TextEditingController();
+  final precio1Controller = TextEditingController();
+  final cantidad1Controller = TextEditingController();
+  final precio2Controller = TextEditingController();
+  final cantidad2Controller = TextEditingController();
+  final precio3Controller = TextEditingController();
+  final cantidad3Controller = TextEditingController();
   String externalId;
   final _formKey = GlobalKey<FormState>();
 
@@ -29,12 +39,17 @@ class _AltaVendedorState extends State<AltaVendedor> {
   @override
   void dispose() {
     // Limpia el controlador cuando el Widget se descarte
-    comercioController.dispose();
-    cuitController.dispose();
-    naveController.dispose();
-    puestoController.dispose();
-    telefonoController.dispose();
-    emailController.dispose();
+    nombreController.dispose();
+    descripcionController.dispose();
+    categoriaController.dispose();
+    unidadController.dispose();
+    stockController.dispose();
+    precio1Controller.dispose();
+    cantidad1Controller.dispose();
+    precio2Controller.dispose();
+    cantidad2Controller.dispose();
+    precio3Controller.dispose();
+    cantidad3Controller.dispose();
     super.dispose();
   }
 
@@ -46,7 +61,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registro de puesto',style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.black, fontWeight: FontWeight.w600))),
+        title: Text('Agregar producto',style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.black, fontWeight: FontWeight.w600))),
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
 
       ),
@@ -58,17 +73,25 @@ class _AltaVendedorState extends State<AltaVendedor> {
           children: <Widget>[
             SizedBox(
             height: 30.0),
-            _inputNombreComercio(),
+            _inputNombreProducto(),
              SizedBox(height: 10.0),
-            _inputCuit(context),
+            _inputDescripcionProducto(),
             SizedBox(height: 10.0),
-            _inputNavePuesto(),
-            SizedBox(height: 10.0),
-            _inputTelefono(),
-            SizedBox(height: 10.0),
-            _inputEmail(),
+            ComboCategoria(),
             SizedBox(height: 10.0),
             ComboMercado(),
+            SizedBox(height: 10.0),
+            _inputCalidad(context),
+            SizedBox(height: 10.0),
+            _inputStock(),
+             SizedBox(height: 10.0),
+            _inputPrecioCantidad1(),
+            SizedBox(height: 10.0),
+            _inputPrecioCantidad2(),
+            SizedBox(height: 10.0),
+            _inputPrecioCantidad3(),
+
+            
             SizedBox(height: 25.0),
               
             _botonConfirmar(context),
@@ -85,13 +108,13 @@ class _AltaVendedorState extends State<AltaVendedor> {
 
 
 
-  Widget _inputNombreComercio() {
+  Widget _inputNombreProducto() {
     MediaQueryData media = MediaQuery.of(context);
-    comercio = comercioController.text;
+    comercio = nombreController.text;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Nombre de tu puesto',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+        Text('Nombre de producto',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                 fontWeight: FontWeight.normal, fontSize: 12.0))),
         SizedBox(height: 10.0),
         Container(
@@ -110,10 +133,10 @@ class _AltaVendedorState extends State<AltaVendedor> {
           height: media.size.height * 0.06,
           width: media.size.width * 0.90,
           child: TextFormField(
-            validator: (comercioController) {if (comercioController.isEmpty) {
+            validator: (nombreController) {if (nombreController.isEmpty) {
                           return 'El campo Email no puede estar vacío!';
                           }},
-            controller: comercioController,
+            controller: nombreController,
             keyboardType: TextInputType.text,
             style: TextStyle(
               color: Colors.black,
@@ -121,13 +144,8 @@ class _AltaVendedorState extends State<AltaVendedor> {
             ),
             decoration: InputDecoration(
               border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 5.0),
-              prefixIcon: Icon(
-                Icons.store,
-                size: 25.0,
-                //color: Colors.black,
-              ),
-              hintText: 'ej: Lo de Juan',
+              contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
+              hintText: 'ej: Frutillas',
               hintStyle: TextStyle(
                           color: Colors.black,
                           fontFamily: 'OpenSans',
@@ -139,14 +157,91 @@ class _AltaVendedorState extends State<AltaVendedor> {
     );
   }
 
-    Widget _inputCuit(context) {
+
+    Widget _inputDescripcionProducto() {
     MediaQueryData media = MediaQuery.of(context);
-    cuit = cuitController.text;
+    comercio = descripcionController.text;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text('Descripción',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                fontWeight: FontWeight.normal, fontSize: 12.0))),
+        SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+                color: Color.fromRGBO(240, 241, 246, 1),
+                borderRadius: BorderRadius.circular(10.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 3.0,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+          height: media.size.height * 0.06,
+          width: media.size.width * 0.90,
+          child: TextFormField(
+            validator: (descripcionController) {if (descripcionController.isEmpty) {
+                          return 'El campo Email no puede estar vacío!';
+                          }},
+            controller: descripcionController,
+            keyboardType: TextInputType.multiline,
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'OpenSans',
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+    Widget _inputCalidad(context) {
+    MediaQueryData media = MediaQuery.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Número de CUIT',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+        Text('Calidad',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                fontWeight: FontWeight.normal, fontSize: 12.0))),
+        SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          height: media.size.height * 0.06,
+          width: media.size.width * 0.90,
+          child: RatingBar(
+              initialRating: 3,
+              minRating: 1,
+              direction: Axis.horizontal,
+              allowHalfRating: true,
+              itemCount: 5,
+              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+              itemBuilder: (context, _) => Icon(
+                Icons.star,
+                color: Colors.amber,
+              ),
+              onRatingUpdate: (rating) {
+                print(rating);
+              },
+            )
+          ),
+      ],
+    );
+  }
+
+
+    Widget _inputStock() {
+    MediaQueryData media = MediaQuery.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text('Stock',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                 fontWeight: FontWeight.normal, fontSize: 12.0))),
         SizedBox(height: 10.0),
         Container(
@@ -165,7 +260,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
           height: media.size.height * 0.06,
           width: media.size.width * 0.90,
           child: TextField(
-            controller: cuitController,
+            controller: stockController,
             keyboardType: TextInputType.number,
             style: TextStyle(
               color: Colors.black,
@@ -173,13 +268,8 @@ class _AltaVendedorState extends State<AltaVendedor> {
             ),
             decoration: InputDecoration(
               border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 5.0),
-              prefixIcon: Icon(
-                Icons.perm_identity,
-                size: 25.0,
-                //color: Colors.black,
-              ),
-              hintText: 'ej: 20386325462',
+              contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
+              hintText: 'ej: 100',
               hintStyle: TextStyle(
                           color: Colors.black,
                           fontFamily: 'OpenSans',
@@ -192,107 +282,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
   }
 
 
-    Widget _inputTelefono() {
-    MediaQueryData media = MediaQuery.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text('Teléfono',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
-                fontWeight: FontWeight.normal, fontSize: 12.0))),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-                color: Color.fromRGBO(240, 241, 246, 1),
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 3.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-          height: media.size.height * 0.06,
-          width: media.size.width * 0.90,
-          child: TextField(
-            controller: telefonoController,
-            keyboardType: TextInputType.number,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 5.0),
-              prefixIcon: Icon(
-                Icons.phone,
-                size: 25.0,
-                //color: Colors.black,
-              ),
-              hintText: 'ej: 3512654599',
-              hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'OpenSans',
-                        ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _inputEmail() {
-    MediaQueryData media = MediaQuery.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text('E-mail',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
-                fontWeight: FontWeight.normal, fontSize: 12.0))),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-                color: Color.fromRGBO(240, 241, 246, 1),
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 3.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-          height: media.size.height * 0.06,
-          width: media.size.width * 0.90,
-          child: TextField(
-            controller: emailController,
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 5.0),
-              prefixIcon: Icon(
-                Icons.mail,
-                size: 25.0,
-                //color: Colors.black,
-              ),
-              hintText: 'ej: mercado@mercado.com',
-              hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'OpenSans',
-                        ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _inputNavePuesto() { 
+  Widget _inputPrecioCantidad1() { 
     MediaQueryData media = MediaQuery.of(context);
     return Row(
       children: <Widget>[
@@ -300,7 +290,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Nave',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+            Text('Precio',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                     fontWeight: FontWeight.normal, fontSize: 12.0))),
             SizedBox(height: 10.0),
             Container(
@@ -319,7 +309,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
               height: media.size.height * 0.06,
               width: media.size.width * 0.43,
               child: TextField(
-                controller: naveController,
+                controller: precio1Controller,
                 keyboardType: TextInputType.number,
                 style: TextStyle(
                   color: Colors.black,
@@ -329,15 +319,10 @@ class _AltaVendedorState extends State<AltaVendedor> {
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: 5.0),
                   prefixIcon: Icon(
-                    Icons.location_on,
+                    Icons.attach_money,
                     size: 25.0,
                     //color: Colors.black,
                   ),
-                  hintText: 'ej: 109',
-                  hintStyle: TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'OpenSans',
-                            ),
                 ),
               ),
             ),
@@ -347,7 +332,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
          Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Puesto',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+            Text('Cantidad',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                     fontWeight: FontWeight.normal, fontSize: 12.0))),
             SizedBox(height: 10.0),
             Container(
@@ -366,7 +351,52 @@ class _AltaVendedorState extends State<AltaVendedor> {
               height: media.size.height * 0.06,
               width: media.size.width * 0.43,
               child: TextField(
-                controller: puestoController,
+                controller: cantidad1Controller,
+                keyboardType: TextInputType.number,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'OpenSans',
+                ),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+    Widget _inputPrecioCantidad2() { 
+    MediaQueryData media = MediaQuery.of(context);
+    return Row(
+      children: <Widget>[
+        SizedBox(width:20.0),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('Precio 2',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                    fontWeight: FontWeight.normal, fontSize: 12.0))),
+            SizedBox(height: 10.0),
+            Container(
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                    color: Color.fromRGBO(240, 241, 246, 1),
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 3.0,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+              height: media.size.height * 0.06,
+              width: media.size.width * 0.43,
+              child: TextField(
+                controller: precio2Controller,
                 keyboardType: TextInputType.number,
                 style: TextStyle(
                   color: Colors.black,
@@ -376,15 +406,134 @@ class _AltaVendedorState extends State<AltaVendedor> {
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.only(top: 5.0),
                   prefixIcon: Icon(
-                    Icons.location_on,
+                    Icons.attach_money,
                     size: 25.0,
                     //color: Colors.black,
                   ),
-                  hintText: 'ej: 45',
-                  hintStyle: TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'OpenSans',
-                            ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(width:20.0),
+         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('Cantidad 2',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                    fontWeight: FontWeight.normal, fontSize: 12.0))),
+            SizedBox(height: 10.0),
+            Container(
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                    color: Color.fromRGBO(240, 241, 246, 1),
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 3.0,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+              height: media.size.height * 0.06,
+              width: media.size.width * 0.43,
+              child: TextField(
+                controller: cantidad2Controller,
+                keyboardType: TextInputType.number,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'OpenSans',
+                ),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+    Widget _inputPrecioCantidad3() { 
+    MediaQueryData media = MediaQuery.of(context);
+    return Row(
+      children: <Widget>[
+        SizedBox(width:20.0),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('Precio 3',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                    fontWeight: FontWeight.normal, fontSize: 12.0))),
+            SizedBox(height: 10.0),
+            Container(
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                    color: Color.fromRGBO(240, 241, 246, 1),
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 3.0,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+              height: media.size.height * 0.06,
+              width: media.size.width * 0.43,
+              child: TextField(
+                controller: precio3Controller,
+                keyboardType: TextInputType.number,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'OpenSans',
+                ),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.only(top: 5.0),
+                  prefixIcon: Icon(
+                    Icons.attach_money,
+                    size: 25.0,
+                    //color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(width:20.0),
+         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('Cantidad 3',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                    fontWeight: FontWeight.normal, fontSize: 12.0))),
+            SizedBox(height: 10.0),
+            Container(
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                    color: Color.fromRGBO(240, 241, 246, 1),
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 3.0,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+              height: media.size.height * 0.06,
+              width: media.size.width * 0.43,
+              child: TextField(
+                controller: cantidad3Controller,
+                keyboardType: TextInputType.number,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'OpenSans',
+                ),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
                 ),
               ),
             ),
@@ -399,11 +548,12 @@ class _AltaVendedorState extends State<AltaVendedor> {
   Widget _botonConfirmar(context) {
     MediaQueryData media = MediaQuery.of(context);
     return GestureDetector(
-      onTap: (){
+      onTap: null,
+       /* (){
          PuestoCrear().puesto(comercioController.text, cuitController.text, comercioController.text, telefonoController.text,
                                             emailController.text ,puestoController.text, naveController.text, externalId,context);
         // Navigator.pushNamed(context, 'vendedorProd');
-                  },
+                  }, */
                                           
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
@@ -415,7 +565,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Center(child: 
-                Text('Registrar mi puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                Text('Agregar producto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                                             fontSize: 14.0, fontWeight: FontWeight.w500,
                                       ))),
               )

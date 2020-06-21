@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_ui/src/pages/comboMercado.dart';
+import 'package:flutter_login_ui/src/pages/comboMercado2.dart';
 import 'package:flutter_login_ui/src/pages/registrar_serv_serv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -71,7 +72,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
             SizedBox(height: 10.0),
             _inputEmail(),
             SizedBox(height: 10.0),
-            ComboMercado(),
+            ComboMercado2(),
             SizedBox(height: 25.0),
               
             _botonConfirmar(context),

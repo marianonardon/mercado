@@ -69,6 +69,8 @@ class Categoria {
 }
 
 class CategoriasListView extends StatelessWidget {
+  CategoriasListView(this.mercadoId);
+  final String mercadoId;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Categoria>>(
@@ -90,11 +92,11 @@ class CategoriasListView extends StatelessWidget {
   Future<List<Categoria>> _fetchCategorias() async {
     
 
-    String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String url = "https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token";
 
     Map<String, String> bodyToken = {
-      "client_id": "d6471aff30e64770bd9da53caccc4cc4",
-      "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "client_id": "32936ed0b05f48859057b6a2dd5aee6f",
+      "client_secret": "915b06d26cdf44f7b832c66fe6e58743",
       "scope": "FullControl",
       "username": "admin",
       "password": "admin123",
@@ -118,7 +120,8 @@ class CategoriasListView extends StatelessWidget {
 
 
     final categoriasListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultarCategoria';
-    final response = await http.get('$categoriasListAPIUrl',headers: headers2);
+    final categoriasListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarCategoria';
+    final response = await http.get('$categoriasListAPIUrlQA',headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
@@ -155,7 +158,7 @@ class CategoriasListView extends StatelessWidget {
           //  _crearTitulo(),
             SizedBox(height: 15.0),
             GestureDetector(
-              onTap: () {Navigator.pushNamed(context, 'productos', arguments: categoriaID);},
+              onTap: () {Navigator.pushNamed(context, 'productos', arguments: ProductosArguments(categoriaID, mercadoId));},
             child:_crearTarjetas(title, imagen,context))
           ],
         ),
@@ -212,4 +215,13 @@ class CategoriasListView extends StatelessWidget {
 
   }
 
+}
+
+
+class ProductosArguments {
+  final String categoriaId;
+  final String mercadoId;
+
+
+  ProductosArguments(this.categoriaId, this.mercadoId);
 }

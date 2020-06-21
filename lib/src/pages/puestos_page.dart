@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 
+import 'mercados_serv.dart';
+
 class PuestosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final String userId = ModalRoute.of(context).settings.arguments;
+    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: (){Navigator.pushNamed(context, 'altaVendedor');},
@@ -17,15 +19,15 @@ class PuestosPage extends StatelessWidget {
 
       ),
       backgroundColor: Colors.white,
-      body:  _puestoLista(userId));
+      body:  _puestoLista(args));
           
   }
 
 
-  Widget _puestoLista(userId) {
+  Widget _puestoLista(args) {
     return Container(
       
-      child: PuestosListView(userId),);
+      child: PuestosListView(args),);
   }
 
 }

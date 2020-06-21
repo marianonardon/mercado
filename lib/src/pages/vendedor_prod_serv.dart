@@ -246,13 +246,12 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
                 children: <Widget>[
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
-                    child: FadeInImage(
+                    child: Image(
                     height: 55  ,
                     width: 55,
                     fit: BoxFit.fill,
                     image: NetworkImage(imagen),
-
-                    placeholder: AssetImage('assets/img/original.gif')),
+                    ),
                   ),
                 ],
               ),

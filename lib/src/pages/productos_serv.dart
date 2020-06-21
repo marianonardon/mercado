@@ -105,26 +105,69 @@ class Precio {
 
 
 }
-
-
+ bool productoValidacion = true;
 
 class ProductosListView extends StatelessWidget {
-  ProductosListView(this.categoriaId);
+  ProductosListView(this.categoriaId, this.mercadoId);
   final String categoriaId;
+  final String mercadoId;
+
   @override
   Widget build(BuildContext context){
     
     
     return FutureBuilder<List<Producto>>(
-      future: fetchProductos(categoriaId),
+      future: fetchProductos(categoriaId,mercadoId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          if(snapshot.requireData.isEmpty){
+/*             if (productoValidacion == true) {
+              return Container();
+            } else { */
+            return Center(
+              child: Container(
+                child: Column(
+                   children: <Widget>[
+                     Image(
+                       image: AssetImage('assets/img/puesto.gif'),
+                     ),
+                    Text(
+                    'No existen productos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                    Text(
+                    'para estos filtros', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                     
+
+                  ]
+                )
+                
+                ),
+            );
+            //}
+          } else {
           List<Producto> data = snapshot.data;
-          return _productosListView(data,context);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              
+              Text('  Lista de productos',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                fontSize: 16.0, fontWeight: FontWeight.w600,
+                ))),
+              _productosListView(data,context),
+            ],
+          );}
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-        return Center(child: CircularProgressIndicator());
+        MediaQueryData media = MediaQuery.of(context,);
+        return Center(
+          heightFactor: media.size.height * 0.025,
+          child: CircularProgressIndicator());
       },
     );
   }
@@ -192,20 +235,27 @@ class ProductosListView extends StatelessWidget {
 
     Widget _crearLista(String title, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd, context) {
     MediaQueryData media = MediaQuery.of(context);
-    return  ClipRRect(
-      borderRadius: BorderRadius.circular(30.0),
-      child: Container(
-        
-          width: media.size.height * 95.0,
-      //   height: 500.0, */
-        child: Column(
-          children: <Widget>[
-          //  _crearTitulo(),
-            SizedBox(height: 8.0),
-           _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,context)
-          ],
+    return  Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+
+        ClipRRect(
+          borderRadius: BorderRadius.circular(30.0),
+          child: Container(
+            
+              width: media.size.height * 95.0,
+          //   height: 500.0, */
+            child: Column(
+              children: <Widget>[
+                
+              //  _crearTitulo(),
+                SizedBox(height: 8.0),
+               _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,context)
+              ],
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -580,13 +630,22 @@ class ProductosListView extends StatelessWidget {
           });
   }
 
-  Future<List<Producto>> fetchProductos(categoriaId) async { 
+  Future<List<Producto>> fetchProductos(categoriaId,mercadoId) async { 
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
 
     Map<String, String> bodyToken = {
       "client_id": "d6471aff30e64770bd9da53caccc4cc4",
       "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
+        Map<String, String> bodyTokenQA = {
+      "client_id": "32936ed0b05f48859057b6a2dd5aee6f",
+      "client_secret": "915b06d26cdf44f7b832c66fe6e58743",
       "scope": "FullControl",
       "username": "admin",
       "password": "admin123",
@@ -597,7 +656,7 @@ class ProductosListView extends StatelessWidget {
     };
 
 
-    final responseToken = await http.post(url, body: bodyToken, headers: headers);
+    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -609,8 +668,11 @@ class ProductosListView extends StatelessWidget {
 
 
     int categoria = int.parse(categoriaId);
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?categoriaID=$categoria&destacado=2';
-    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
+    int mercado   = int.parse(mercadoId);
+    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado';
+
+    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
@@ -625,26 +687,34 @@ class ProductosListView extends StatelessWidget {
 }
 
 class ProductosListViewHorizontal extends StatelessWidget {
-  ProductosListViewHorizontal(this.categoriaId);
+  ProductosListViewHorizontal(this.categoriaId,this.mercadoId);
   final String categoriaId;
+  final String mercadoId;
+
   @override
   Widget build(BuildContext context) {
   //  Widget productosHorizontal(){
     MediaQueryData media = MediaQuery.of(context);
     return FutureBuilder<List<Producto>>(
-      future: fetchProductos(categoriaId),
+      future: fetchProductos(categoriaId,mercadoId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if(snapshot.requireData.isEmpty){
-            return Text('no tiene datos');
+            
+              productoValidacion = false;
+            
+            return Text('');
+            
+            
           } else {
+              productoValidacion = true;
           List<Producto> data = snapshot.data;
           return _crearProductoPageView(data,context);
           }
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-        return Center(child: CircularProgressIndicator());
+        return Container();
       },
     );
    // };
@@ -652,9 +722,10 @@ class ProductosListViewHorizontal extends StatelessWidget {
 
 
 
-  Future<List<Producto>> fetchProductos(categoriaId) async {
+  Future<List<Producto>> fetchProductos(categoriaId,mercadoId) async {
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
 
     Map<String, String> bodyToken = {
       "client_id": "d6471aff30e64770bd9da53caccc4cc4",
@@ -668,8 +739,17 @@ class ProductosListViewHorizontal extends StatelessWidget {
         "Content-Type": "application/x-www-form-urlencoded"
     };
 
+      Map<String, String> bodyTokenQA = {
+      "client_id": "32936ed0b05f48859057b6a2dd5aee6f",
+      "client_secret": "915b06d26cdf44f7b832c66fe6e58743",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
 
-    final responseToken = await http.post(url, body: bodyToken, headers: headers);
+
+
+    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -682,8 +762,11 @@ class ProductosListViewHorizontal extends StatelessWidget {
 
 
     int categoria = int.parse(categoriaId);
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?categoriaID=$categoria&destacado=1';
-    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
+    int mercado = int.parse(mercadoId);
+    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?categoriaID=$categoria&destacado=1&mercadoID=$mercado';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=1&mercadoID=$mercado';
+    
+    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
@@ -707,6 +790,11 @@ class ProductosListViewHorizontal extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        SizedBox(height: 10.0),
+        Text('  Recomendados',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                fontSize: 16.0, fontWeight: FontWeight.w600,
+                ))),
+        SizedBox(height: 10.0),
         SizedBox(
           height: media.size.height * 0.24,
           child: PageView.builder(

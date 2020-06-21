@@ -15,7 +15,7 @@ class VendedorProductosPage extends StatelessWidget {
     final String comercioId = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: () {Navigator.pushNamed(context, 'altaProd');},
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
         child: Icon(Icons.add, color: Colors.black, size: 35.0,),
         ),

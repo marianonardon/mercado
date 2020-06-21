@@ -87,7 +87,7 @@ class MercadosListView extends StatefulWidget {
 
 class _MercadosListViewState extends State<MercadosListView> {
   @override
-  String idUser;
+  String idUser,nombreUsuario,fotoUsuario;
   Widget build(BuildContext context) {
     return FutureBuilder<List<Mercado>>(
       future: _fetchMercados(),
@@ -113,8 +113,12 @@ class _MercadosListViewState extends State<MercadosListView> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
     //Return String
       String externalId2 = prefs.getString('usuarioId');
+      String nombreUser = prefs.getString('nombre');
+      String fotoUser = prefs.getString('fotoUser'); 
       setState(() {
         idUser = externalId2;
+        nombreUsuario = nombreUser;
+        fotoUsuario = fotoUser;
       }); 
     }
 
@@ -122,10 +126,19 @@ class _MercadosListViewState extends State<MercadosListView> {
 
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
 
     Map<String, String> bodyToken = {
       "client_id": "d6471aff30e64770bd9da53caccc4cc4",
       "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
+        Map<String, String> bodyTokenQA = {
+      "client_id": "32936ed0b05f48859057b6a2dd5aee6f",
+      "client_secret": "915b06d26cdf44f7b832c66fe6e58743",
       "scope": "FullControl",
       "username": "admin",
       "password": "admin123",
@@ -136,7 +149,7 @@ class _MercadosListViewState extends State<MercadosListView> {
     };
 
 
-    final responseToken = await http.post(url, body: bodyToken, headers: headers);
+    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -147,8 +160,10 @@ class _MercadosListViewState extends State<MercadosListView> {
       };
 
     final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultarMercado/';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarMercado/';
+
     final mercadosHabilitados = '?habilitado=1';
-    final response = await http.get('$mercadosListAPIUrl$mercadosHabilitados', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
@@ -167,11 +182,11 @@ class _MercadosListViewState extends State<MercadosListView> {
         itemCount: data.length,
         itemBuilder: (context, index) {
           return _crearLista(data[index].mercadoNombre, data[index].mercadoDireccion, Icons.location_on,
-                        data[index].mercadoImagen,idUser,context);
+                        data[index].mercadoImagen,idUser,data[index].mercadoId,context);
         });
   }
 
-  Widget _crearLista(String title, String subtitle, IconData icon, String imagen,String idUser,context) {
+  Widget _crearLista(String title, String subtitle, IconData icon, String imagen,String idUser, String mercadoId, context) {
     
     MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
@@ -185,7 +200,7 @@ class _MercadosListViewState extends State<MercadosListView> {
           //  _crearTitulo(),
             SizedBox(height: 20.0),
             GestureDetector(
-              onTap: () {Navigator.pushNamed(context, 'categorias', arguments: idUser);},
+              onTap: () {Navigator.pushNamed(context, 'categorias', arguments: ScreenArguments(idUser, nombreUsuario, fotoUsuario,mercadoId));},
             child:_crearTarjetas(title, subtitle, icon, imagen,context))
           ],
         ),
@@ -275,4 +290,14 @@ class _MercadosListViewState extends State<MercadosListView> {
         print(response.body.toString());
     });
       }
+}
+
+class ScreenArguments {
+  final String userId;
+  final String nombre;
+  final String foto;
+  final String mercadoId;
+
+
+  ScreenArguments(this.userId, this.nombre,this.foto,this.mercadoId);
 }

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 
+import 'mercados_serv.dart';
+
 
 
 
@@ -92,21 +94,44 @@ class Token {
 }
 
 class PuestosListView extends StatelessWidget {
-  PuestosListView(this.userId);
-  final String userId;
+  PuestosListView(this.args);
+  final ScreenArguments args;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Puesto>>(
-      future: _fetchPuestos(userId),
+      future: _fetchPuestos(args.userId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if(snapshot.requireData.isEmpty){
-            return Text('no tiene datos');
+            return Center(
+              child: Container(
+                child: Column(
+                   children: <Widget>[
+                     Image(
+                       image: AssetImage('assets/img/puesto.gif'),
+                     ),
+                    Text(
+                    'Debes crear un mercado', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                    Text(
+                    'para comenzar!', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                     
+
+                  ]
+                )
+                
+                ),
+            );
           } else {
           List<Puesto> data = snapshot.data;
 /*           _obtenerToken();
           _obtenerRubro(); */
-          return _puestosListView(data,userId);
+          return _puestosListView(data,args.userId);
           }
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
@@ -227,7 +252,7 @@ class PuestosListView extends StatelessWidget {
                       fontSize: 21.0, fontWeight: FontWeight.w600,
                       ))
                     
-              ),
+                    ),
                   ],
                 ),
                 Row(
