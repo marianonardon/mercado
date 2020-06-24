@@ -16,6 +16,7 @@ class PuestosPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text('Seleccionar Puesto', style: TextStyle(color: Colors.blueGrey, fontSize: 20.0, fontWeight: FontWeight.bold),),
+        iconTheme: IconThemeData(color: Colors.black),
 
       ),
       backgroundColor: Colors.white,

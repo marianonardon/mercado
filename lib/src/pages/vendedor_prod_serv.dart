@@ -118,8 +118,48 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
       future: fetchProductos(comercioId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          if(snapshot.requireData.isEmpty){
+/*             if (productoValidacion == true) {
+              return Container();
+            } else { */
+            return Center(
+              child: Container(
+                child: Column(
+                   children: <Widget>[
+                     Image(
+                       image: AssetImage('assets/img/puesto.gif'),
+                     ),
+                    Text(
+                    'Cree un producto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                    Text(
+                    'para su puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                     
+
+                  ]
+                )
+                
+                ),
+            );
+            //}
+          } else {
           List<Producto> data = snapshot.data;
-          return _productosListView(data,comercioId);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              
+              Text('  Lista de productos',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                fontSize: 16.0, fontWeight: FontWeight.w600,
+                ))),
+           _productosListView(data,comercioId)
+            ]
+          );
+          }
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
@@ -370,10 +410,19 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
   Future<List<Producto>> fetchProductos(comercioId) async { 
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
 
     Map<String, String> bodyToken = {
       "client_id": "d6471aff30e64770bd9da53caccc4cc4",
       "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
+        Map<String, String> bodyTokenQA = {
+      "client_id": "32936ed0b05f48859057b6a2dd5aee6f",
+      "client_secret": "915b06d26cdf44f7b832c66fe6e58743",
       "scope": "FullControl",
       "username": "admin",
       "password": "admin123",
@@ -384,7 +433,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
     };
 
 
-    final responseToken = await http.post(url, body: bodyToken, headers: headers);
+    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -397,7 +446,8 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
 
 
     final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?comercioID=$comercioId';
-    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?comercioID=$comercioId';
+    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);

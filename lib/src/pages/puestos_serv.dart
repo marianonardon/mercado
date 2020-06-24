@@ -111,7 +111,7 @@ class PuestosListView extends StatelessWidget {
                        image: AssetImage('assets/img/puesto.gif'),
                      ),
                     Text(
-                    'Debes crear un mercado', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                    'Debes crear un puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
                       fontSize: 24.0, fontWeight: FontWeight.w600,
                       ))                 
                     ),
@@ -146,10 +146,19 @@ class PuestosListView extends StatelessWidget {
   Future<List<Puesto>> _fetchPuestos(userId) async {
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
 
     Map<String, String> bodyToken = {
       "client_id": "d6471aff30e64770bd9da53caccc4cc4",
       "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
+        Map<String, String> bodyTokenQA = {
+      "client_id": "32936ed0b05f48859057b6a2dd5aee6f",
+      "client_secret": "915b06d26cdf44f7b832c66fe6e58743",
       "scope": "FullControl",
       "username": "admin",
       "password": "admin123",
@@ -160,7 +169,7 @@ class PuestosListView extends StatelessWidget {
     };
 
 
-    final responseToken = await http.post(url, body: bodyToken, headers: headers);
+    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -171,8 +180,9 @@ class PuestosListView extends StatelessWidget {
       };
 
     final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultarComercio';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarComercio';
     final userPuesto = '?comercioExternalID=$userId';
-    final response = await http.get('$mercadosListAPIUrl$userPuesto', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrlQA$userPuesto', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);

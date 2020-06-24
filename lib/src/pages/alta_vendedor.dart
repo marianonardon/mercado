@@ -17,6 +17,11 @@ class _AltaVendedorState extends State<AltaVendedor> {
 
   String comercio;
   String cuit;
+  String telefono;
+  String mail;
+  String nave;
+  String puesto;
+
 
   final comercioController = TextEditingController();
   final cuitController = TextEditingController();
@@ -26,7 +31,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
   final emailController = TextEditingController();
 
   String externalId;
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
 
 
@@ -57,28 +62,40 @@ class _AltaVendedorState extends State<AltaVendedor> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.only(left: 1.0),
-          child: Column(
-          children: <Widget>[
-            SizedBox(
-            height: 30.0),
-            _inputNombreComercio(),
-             SizedBox(height: 10.0),
-            _inputCuit(context),
-            SizedBox(height: 10.0),
-            _inputNavePuesto(),
-            SizedBox(height: 10.0),
-            _inputTelefono(),
-            SizedBox(height: 10.0),
-            _inputEmail(),
-            SizedBox(height: 10.0),
-            ComboMercado2(),
-            SizedBox(height: 25.0),
-              
-            _botonConfirmar(context),
-            SizedBox(height: 10.0),
+          padding: EdgeInsets.only(left: 15.0),
+          child: Form(
+            key: formKey,
+           child: Column(
+             crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+              height: 30.0),
+              Text('Mi puesto',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                fontWeight: FontWeight.bold, fontSize: 18.0))), 
+              SizedBox(
+              height: 10.0),
+              _inputNombreComercio(),
+               SizedBox(height: 10.0),
+              _inputCuit(context),
+              SizedBox(height: 10.0),
+              _inputNavePuesto(),
+              SizedBox(height: 15.0),
+              Text('Datos de contacto',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                fontWeight: FontWeight.bold, fontSize: 18.0))), 
+              SizedBox(
+              height: 10.0),
+              _inputTelefono(),
+              SizedBox(height: 10.0),
+              _inputEmail(),
+              SizedBox(height: 10.0),
+              ComboMercado2(),
+              SizedBox(height: 25.0),
+                
+              _botonConfirmar(context),
+              SizedBox(height: 10.0),
 
-            ]
+              ]
+            ),
           )
         ),
       ),
@@ -155,10 +172,10 @@ class _AltaVendedorState extends State<AltaVendedor> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Nombre de tu puesto',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
-                fontWeight: FontWeight.normal, fontSize: 12.0))),
+/*         Text('Nombre de tu puesto',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                fontWeight: FontWeight.normal, fontSize: 12.0))), */
         SizedBox(height: 10.0),
-        Container(
+/*         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
                 color: Color.fromRGBO(240, 241, 246, 1),
@@ -173,32 +190,53 @@ class _AltaVendedorState extends State<AltaVendedor> {
               ),
           height: media.size.height * 0.06,
           width: media.size.width * 0.90,
-          child: TextFormField(
-            validator: (comercioController) {if (comercioController.isEmpty) {
-                          return 'El campo Email no puede estar vacío!';
-                          }},
-            controller: comercioController,
-            keyboardType: TextInputType.text,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'OpenSans',
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 5.0),
-              prefixIcon: Icon(
-                Icons.store,
-                size: 25.0,
-                //color: Colors.black,
+          child:  */
+          Container(
+            alignment: Alignment.centerLeft,
+            width: media.size.width * 0.90,
+            child: TextFormField(
+              validator: (comercio) {if (comercio.isEmpty) {
+                return 'El campo Puesto no puede estar vacío!';
+                }else {
+                  return null;
+                }},
+              controller: comercioController,
+              keyboardType: TextInputType.text,
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'OpenSans',
               ),
-              hintText: 'ej: Lo de Juan',
-              hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'OpenSans',
-                        ),
+              decoration: InputDecoration(
+                fillColor: Color.fromRGBO(240, 241, 246, 1),
+                filled: true,
+                border: 
+                
+                new OutlineInputBorder(
+
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none),
+           /*       borderSide: new BorderSide(
+                    color: Colors.greenAccent,
+                    width: 1.0,
+                  ), */
+                labelText: 'Nombre de tu puesto',
+                labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                  fontWeight: FontWeight.bold, fontSize: 14.0),
+                contentPadding: EdgeInsets.only(top: 5.0),
+                prefixIcon: Icon(
+                  Icons.store,
+                  size: 25.0,
+                  //color: Colors.black,
+                ),
+                hintText: 'ej: Lo de Juan',
+                hintStyle: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'OpenSans',
+                          ),
+              ),
             ),
           ),
-        ),
+/*         ), */
       ],
     );
   }
@@ -210,34 +248,37 @@ class _AltaVendedorState extends State<AltaVendedor> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Número de CUIT',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
-                fontWeight: FontWeight.normal, fontSize: 12.0))),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-                color: Color.fromRGBO(240, 241, 246, 1),
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 3.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-          height: media.size.height * 0.06,
           width: media.size.width * 0.90,
-          child: TextField(
+          child: TextFormField(
+            validator: (cuit) {if (cuit.isEmpty) {
+              return 'El campo Cuit no puede estar vacío!';
+              }else {
+                return null;
+              }},
             controller: cuitController,
             keyboardType: TextInputType.number,
             style: TextStyle(
               color: Colors.black,
               fontFamily: 'OpenSans',
             ),
+            maxLengthEnforced: true,
+            maxLength: 11,
             decoration: InputDecoration(
-              border: InputBorder.none,
+              fillColor: Color.fromRGBO(240, 241, 246, 1),
+                filled: true,
+                border: 
+                
+                new OutlineInputBorder(
+
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none),
               contentPadding: EdgeInsets.only(top: 5.0),
+              labelText: 'Número de CUIT',
+              labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                  fontWeight: FontWeight.bold, fontSize: 14.0),
               prefixIcon: Icon(
                 Icons.perm_identity,
                 size: 25.0,
@@ -258,36 +299,44 @@ class _AltaVendedorState extends State<AltaVendedor> {
 
     Widget _inputTelefono() {
     MediaQueryData media = MediaQuery.of(context);
+    telefono = telefonoController.text;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Teléfono',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
-                fontWeight: FontWeight.normal, fontSize: 12.0))),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-                color: Color.fromRGBO(240, 241, 246, 1),
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 3.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-          height: media.size.height * 0.06,
           width: media.size.width * 0.90,
-          child: TextField(
+          child: TextFormField(
+            validator: (telefono) {if (telefono.isEmpty) {
+                return 'El campo Teléfono no puede estar vacío!';
+                }else {
+                  return null;
+                }},
             controller: telefonoController,
             keyboardType: TextInputType.number,
             style: TextStyle(
               color: Colors.black,
               fontFamily: 'OpenSans',
             ),
+            maxLength: 10,
+            maxLengthEnforced: true,
             decoration: InputDecoration(
-              border: InputBorder.none,
+              fillColor: Color.fromRGBO(240, 241, 246, 1),
+                filled: true,
+                border: 
+                
+                new OutlineInputBorder(
+
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none),
+           /*       borderSide: new BorderSide(
+                    color: Colors.greenAccent,
+                    width: 1.0,
+                  ), */
+                labelText: 'Teléfono (sin 0 y sin 15)',
+                labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                  fontWeight: FontWeight.bold, fontSize: 14.0),
               contentPadding: EdgeInsets.only(top: 5.0),
               prefixIcon: Icon(
                 Icons.phone,
@@ -311,25 +360,16 @@ class _AltaVendedorState extends State<AltaVendedor> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('E-mail',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
-                fontWeight: FontWeight.normal, fontSize: 12.0))),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-                color: Color.fromRGBO(240, 241, 246, 1),
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 3.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-          height: media.size.height * 0.06,
           width: media.size.width * 0.90,
-          child: TextField(
+          child: TextFormField(
+            validator: (mail) {if (mail.isEmpty) {
+                return 'El campo E-mail no puede estar vacío!';
+                }else {
+                  return null;
+                }},
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
@@ -337,7 +377,21 @@ class _AltaVendedorState extends State<AltaVendedor> {
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
-              border: InputBorder.none,
+              fillColor: Color.fromRGBO(240, 241, 246, 1),
+                filled: true,
+                border: 
+                
+                new OutlineInputBorder(
+
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none),
+           /*       borderSide: new BorderSide(
+                    color: Colors.greenAccent,
+                    width: 1.0,
+                  ), */
+                labelText: 'E-mail',
+                labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                  fontWeight: FontWeight.bold, fontSize: 14.0),
               contentPadding: EdgeInsets.only(top: 5.0),
               prefixIcon: Icon(
                 Icons.mail,
@@ -360,29 +414,19 @@ class _AltaVendedorState extends State<AltaVendedor> {
     MediaQueryData media = MediaQuery.of(context);
     return Row(
       children: <Widget>[
-        SizedBox(width:20.0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Nave',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
-                    fontWeight: FontWeight.normal, fontSize: 12.0))),
             SizedBox(height: 10.0),
             Container(
               alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(
-                    color: Color.fromRGBO(240, 241, 246, 1),
-                    borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 3.0,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-              height: media.size.height * 0.06,
               width: media.size.width * 0.43,
-              child: TextField(
+              child: TextFormField(
+                validator: (nave) {if (nave.isEmpty) {
+                return 'Nave no puede estar vacío!';
+                }else {
+                  return null;
+                }},
                 controller: naveController,
                 keyboardType: TextInputType.number,
                 style: TextStyle(
@@ -390,7 +434,21 @@ class _AltaVendedorState extends State<AltaVendedor> {
                   fontFamily: 'OpenSans',
                 ),
                 decoration: InputDecoration(
-                  border: InputBorder.none,
+                  fillColor: Color.fromRGBO(240, 241, 246, 1),
+                filled: true,
+                border: 
+                
+                new OutlineInputBorder(
+
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none),
+           /*       borderSide: new BorderSide(
+                    color: Colors.greenAccent,
+                    width: 1.0,
+                  ), */
+                labelText: 'Nave',
+                labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6),
+                fontWeight: FontWeight.bold, fontSize: 14.0),
                   contentPadding: EdgeInsets.only(top: 5.0),
                   prefixIcon: Icon(
                     Icons.location_on,
@@ -411,25 +469,16 @@ class _AltaVendedorState extends State<AltaVendedor> {
          Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Puesto',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
-                    fontWeight: FontWeight.normal, fontSize: 12.0))),
             SizedBox(height: 10.0),
             Container(
               alignment: Alignment.centerLeft,
-              decoration: BoxDecoration(
-                    color: Color.fromRGBO(240, 241, 246, 1),
-                    borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 3.0,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-              height: media.size.height * 0.06,
               width: media.size.width * 0.43,
-              child: TextField(
+              child: TextFormField(
+                validator: (puesto) {if (puesto.isEmpty) {
+                return 'Puesto no puede estar vacío!';
+                }else {
+                  return null;
+                }},
                 controller: puestoController,
                 keyboardType: TextInputType.number,
                 style: TextStyle(
@@ -437,7 +486,21 @@ class _AltaVendedorState extends State<AltaVendedor> {
                   fontFamily: 'OpenSans',
                 ),
                 decoration: InputDecoration(
-                  border: InputBorder.none,
+                  fillColor: Color.fromRGBO(240, 241, 246, 1),
+                filled: true,
+                border: 
+                
+                new OutlineInputBorder(
+
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none),
+           /*       borderSide: new BorderSide(
+                    color: Colors.greenAccent,
+                    width: 1.0,
+                  ), */
+                labelText: 'Puesto',
+                labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                  fontWeight: FontWeight.bold, fontSize: 14.0),
                   contentPadding: EdgeInsets.only(top: 5.0),
                   prefixIcon: Icon(
                     Icons.location_on,
@@ -464,7 +527,13 @@ class _AltaVendedorState extends State<AltaVendedor> {
     MediaQueryData media = MediaQuery.of(context);
     return GestureDetector(
       onTap: (){
-        Column(
+
+        if (formKey.currentState.validate()) {
+            PuestoCrear().puesto(comercioController.text, cuitController.text, comercioController.text, telefonoController.text,
+                                            emailController.text ,puestoController.text, naveController.text, externalId,context); 
+
+        }
+/*         Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -482,7 +551,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
                   ],
               );
          PuestoCrear().puesto(comercioController.text, cuitController.text, comercioController.text, telefonoController.text,
-                                            emailController.text ,puestoController.text, naveController.text, externalId,context);
+                                            emailController.text ,puestoController.text, naveController.text, externalId,context); */
         // Navigator.pushNamed(context, 'vendedorProd');
                   },
                                           

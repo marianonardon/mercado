@@ -41,17 +41,14 @@ class VendedorProductosPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 SizedBox(height: 20.0),
-                Text('  Lista de productos',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                        fontSize: 16.0, fontWeight: FontWeight.w600,
-                        ))),
-                SizedBox(height: 5.0),
                 Container(child: VendedorProductosListView(comercioId)),
               ],
             ),
           ),
       ),
-      bottomNavigationBar: _bottomNavigationBar(context),
-      drawer: Drawer(
+      //bottomNavigationBar: _bottomNavigationBar(context),
+      /* drawer: 
+      Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical
         // space to fit everything.
@@ -109,7 +106,7 @@ class VendedorProductosPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
+      ), */
     );
   }
 

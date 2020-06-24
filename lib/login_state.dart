@@ -28,6 +28,7 @@ class LoginState with ChangeNotifier {
     _loading = false;
     if (user != null) {
       _loggedIn = true;
+      _googleSignIn.signOut();
       notifyListeners();
     } else {
       _loggedIn = false;
@@ -43,9 +44,22 @@ class LoginState with ChangeNotifier {
   }
 
   Future<FirebaseUser> handleSignIn() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn().catchError((onError) => 
+    print('maro'));             
+      test: GoogleSignIn.kSignInCanceledError.isNotEmpty;
+
+
+
+/*       _loading = false;
+      _loggedIn = false;
+      notifyListeners();
+
+    }); */
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('usuarioId', googleUser.id);
+    prefs.setString('usuarioId', googleUser.id).catchError((onError) =>
+          print("Error $onError")
+        );
     prefs.setString('nombre', googleUser.displayName);
     prefs.setString('fotoUser', googleUser.photoUrl);
     print(googleUser.id + googleUser.email + googleUser.displayName);
@@ -61,4 +75,10 @@ class LoginState with ChangeNotifier {
     print("signed in " + user.displayName +' ' + user.uid + '  ' + user.providerId + ' ' + user.email);
     return user;
 }
+
+    Widget loginCancelado() {
+      _loading = false;
+                _loggedIn = false;
+                notifyListeners();
+    }
 }

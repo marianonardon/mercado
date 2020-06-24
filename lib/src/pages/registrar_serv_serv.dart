@@ -90,25 +90,34 @@ Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, pue
     }); 
     
     
-        String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
-    
-        Map<String, String> bodyToken = {
-          "client_id": "d6471aff30e64770bd9da53caccc4cc4",
-          "client_secret": "7dae40626f4f45378b22bb47aa750024",
-          "scope": "FullControl",
-          "username": "admin",
-          "password": "admin123",
-        };
-    
-        Map<String, String> headers = {
-            "Content-Type": "application/x-www-form-urlencoded"
-        };
-    
-    
-        final responseToken = await http.post(url, body: bodyToken, headers: headers);
-        final decodedData = json.decode(responseToken.body);
-        final token = new Token.fromJsonMap(decodedData);
-        String token2 = token.accessToken.toString();
+    String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
+
+    Map<String, String> bodyToken = {
+      "client_id": "d6471aff30e64770bd9da53caccc4cc4",
+      "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
+        Map<String, String> bodyTokenQA = {
+      "client_id": "32936ed0b05f48859057b6a2dd5aee6f",
+      "client_secret": "915b06d26cdf44f7b832c66fe6e58743",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
+    Map<String, String> headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    };
+
+
+    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
+    final decodedData = json.decode(responseToken.body);
+    final token = new Token.fromJsonMap(decodedData);
+    String token2 = token.accessToken.toString();
     
     
         Map<String, String> headers2 = {
@@ -120,9 +129,12 @@ Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, pue
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "OAuth $token2"
         };
+
+    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/comercio/2,0,$idUser';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/comercio/2,0,$idUser';
     
       final http.Response response = await http.post(
-        'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/comercio/3,0,$idUser',
+        '$mercadosListAPIUrlQA',
     
         headers: headers3,
         body: jsonEncode(<String, String>{
