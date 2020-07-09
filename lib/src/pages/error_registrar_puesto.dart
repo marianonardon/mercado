@@ -43,7 +43,7 @@ class ErrorRegistrarPuesto extends StatelessWidget {
                 fontSize: 16.0, fontWeight: FontWeight.w600,))),
           SizedBox(height: 50.0,),
           GestureDetector(
-           onTap: () {Navigator.pushNamed(context, 'altaVendedor');},
+           onTap: () {Navigator.pop(context);},
            child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0) ,
               child:Container(

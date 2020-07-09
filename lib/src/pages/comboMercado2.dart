@@ -6,11 +6,15 @@ import 'package:http/http.dart' as http;
 
 
 class ComboMercado2 extends StatefulWidget {
+   String mercadoId;
+   ComboMercado2(this.mercadoId,);
   @override
   _ComboMercado2 createState() => _ComboMercado2();
 }
 
 class _ComboMercado2 extends State<ComboMercado2> {
+  String mercadoId;
+  _ComboMercado2({this.mercadoId});
   String _mySelection;
 
 
@@ -82,6 +86,7 @@ class _ComboMercado2 extends State<ComboMercado2> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
+    mercadoId = _mySelection;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -121,6 +126,8 @@ class _ComboMercado2 extends State<ComboMercado2> {
            onChanged: (newVal) {
             setState(() {
               _mySelection = newVal;
+              mercadoId = newVal;
+
             });
           },
           value: _mySelection,
@@ -128,6 +135,11 @@ class _ComboMercado2 extends State<ComboMercado2> {
         )
       ]
       );
+  }
+
+  retornarMercado(mercadoId){
+    mercadoId = _mySelection;
+    return mercadoId;
   }
   
 }

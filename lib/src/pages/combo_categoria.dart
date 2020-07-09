@@ -3,14 +3,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ComboCategoria extends StatefulWidget {
+    ComboCategoria(this.categoriaId);
+  final String categoriaId;
   @override
-  _ComboCategoria createState() => _ComboCategoria();
+  _ComboCategoria createState() => _ComboCategoria(categoriaId);
 }
 
 class _ComboCategoria extends State<ComboCategoria> {
+  _ComboCategoria(this.categoriaId);
+  final String categoriaId;
   String _mySelection;
 
 
@@ -19,10 +24,19 @@ class _ComboCategoria extends State<ComboCategoria> {
   Future<String> _fetchCategorias() async {
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
 
     Map<String, String> bodyToken = {
       "client_id": "d6471aff30e64770bd9da53caccc4cc4",
       "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
+     Map<String, String> bodyTokenQA = {
+      "client_id": "32936ed0b05f48859057b6a2dd5aee6f",
+      "client_secret": "915b06d26cdf44f7b832c66fe6e58743",
       "scope": "FullControl",
       "username": "admin",
       "password": "admin123",
@@ -33,7 +47,7 @@ class _ComboCategoria extends State<ComboCategoria> {
     };
 
 
-    final responseToken = await http.post(url, body: bodyToken, headers: headers);
+    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -44,7 +58,8 @@ class _ComboCategoria extends State<ComboCategoria> {
       };
 
     final categoriasListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultarCategoria';
-    final response = await http.get('$categoriasListAPIUrl',headers: headers2);
+    final categoriasListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarCategoria';
+    final response = await http.get('$categoriasListAPIUrlQA',headers: headers2);
 
 
 
@@ -72,6 +87,9 @@ class _ComboCategoria extends State<ComboCategoria> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
+    if (_mySelection == null) {
+      _mySelection = categoriaId;
+    }
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -108,7 +126,9 @@ class _ComboCategoria extends State<ComboCategoria> {
               value: item['categoriaID'].toString(),
             );
             }).toList(),
-           onChanged: (newVal) {
+           onChanged: (newVal) async {
+             SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setString('idCategoria', newVal );
             setState(() {
               _mySelection = newVal;
             });

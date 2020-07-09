@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login_ui/src/pages/registrar_serv_serv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 
-class AltaComercioOk extends StatelessWidget {
+class AltaProductoOk extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ScreensArguments args = ModalRoute.of(context).settings.arguments;
+    final PuestoArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(    
@@ -33,20 +32,18 @@ class AltaComercioOk extends StatelessWidget {
             ),
           ),
           SizedBox(height: 50,),
-          Text('Tu puesto ha sido', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+          Text('Tu producto ha sido', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                 fontSize: 24.0, fontWeight: FontWeight.bold,))),
           Text('creado con éxito', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                 fontSize: 24.0, fontWeight: FontWeight.bold,))),
           SizedBox(height: 20.0,),
-          Text('Entra en "Mis puestos"', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
+          Text('Entra en "Mis productos"', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
                 fontSize: 16.0, fontWeight: FontWeight.normal,))),
-          Text('para visualizar ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
-                fontSize: 16.0, fontWeight: FontWeight.normal,))),
-          Text('todos tus puestos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
+          Text('para visualizarlo ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
                 fontSize: 16.0, fontWeight: FontWeight.normal,))),
           SizedBox(height: 50.0,),
           GestureDetector(
-           onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId, args.comercioId));},
+           onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio));},
            child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0) ,
               child:Container(

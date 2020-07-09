@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
-
 import 'mercados_serv.dart';
 
 class PuestosPage extends StatelessWidget {
@@ -9,7 +8,7 @@ class PuestosPage extends StatelessWidget {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: (){Navigator.pushNamed(context, 'altaVendedor');},
+        onPressed: (){Navigator.pushNamed(context, 'altaVendedor', arguments: ScreenArguments(args.userId,args.nombre,args.foto,args.mercadoId));},
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
         child: Icon(Icons.add, color: Colors.black, size: 40.0,),
         ),
@@ -32,4 +31,3 @@ class PuestosPage extends StatelessWidget {
   }
 
 }
-

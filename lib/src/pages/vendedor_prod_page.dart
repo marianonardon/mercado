@@ -2,20 +2,29 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
+import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_login_ui/src/pages/mercados_serv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../login_state.dart';
 
 
-class VendedorProductosPage extends StatelessWidget {
+class VendedorProductosPage extends StatefulWidget {
+  
+  @override
+  _VendedorProductosPageState createState() => _VendedorProductosPageState();
+}
+
+class _VendedorProductosPageState extends State<VendedorProductosPage> {
   
   @override
   Widget build(BuildContext context) {
-    final String comercioId = ModalRoute.of(context).settings.arguments;
+        final PuestoArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {Navigator.pushNamed(context, 'altaProd');},
+        onPressed: () {Navigator.pushNamed(context, 'altaProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio));},
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
         child: Icon(Icons.add, color: Colors.black, size: 35.0,),
         ),
@@ -25,12 +34,13 @@ class VendedorProductosPage extends StatelessWidget {
                         fontSize: 18.0, fontWeight: FontWeight.w600,
                         )),),
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
-        actions: <Widget>[
+/*         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.white),
             onPressed: () {}
           )
-        ],),
+        ], */
+        ),
       backgroundColor: Colors.white,
       body: Container(
           padding: EdgeInsets.only(left:10.0),
@@ -41,13 +51,13 @@ class VendedorProductosPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 SizedBox(height: 20.0),
-                Container(child: VendedorProductosListView(comercioId)),
+                Container(child: VendedorProductosListView(args.idComercio,args.mercadoId,args.userId)),
               ],
             ),
           ),
       ),
       //bottomNavigationBar: _bottomNavigationBar(context),
-      /* drawer: 
+     drawer: 
       Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical
@@ -57,7 +67,24 @@ class VendedorProductosPage extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text('Fernando' , style: TextStyle(color:Colors.white,)),
+              child: Row(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius:BorderRadius.circular(50.0),
+                    child: Container(
+                      child: Image(image: NetworkImage(args.foto),),
+                    )
+                  ),
+                  SizedBox(width:15.0),
+                  Text(
+                    args.nombre, style: GoogleFonts.roboto(textStyle:TextStyle(color:Colors.white,
+                      fontSize: 16.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                  
+
+                ],
+              ),
               decoration: BoxDecoration(
                 color: Colors.black,
               ),
@@ -73,27 +100,10 @@ class VendedorProductosPage extends StatelessWidget {
             ListTile(
               title: Row(
                 children: [
-                Icon(Icons.search),
-                Text('Buscar productos'),]),
-
-              onTap: () {Navigator.pushNamed(context, 'productos');},
-            ),
-            /* ListTile(
-              title: Row(
-                children: [
-                Icon(Icons.local_grocery_store),
-                Text('Carrito'),]),
-
-              onTap: () {Navigator.pushNamed(context, 'carrito');},
-            ), */
-
-            ListTile(
-              title: Row(
-                children: [
                 Icon(Icons.store),
-                Text('Ir perfil vendedor'),]),
+                Text('Mis puestos'),]),
 
-              onTap: () {Navigator.pushNamed(context, 'altaVendedor');},
+              onTap: () {Navigator.pushNamed(context, 'puestos',arguments: ScreenArguments(args.userId,args.nombre,args.foto,args.mercadoId));},
             ),
              ListTile(
               title: Row(
@@ -106,13 +116,13 @@ class VendedorProductosPage extends StatelessWidget {
             ),
           ],
         ),
-      ), */
+      ), 
     );
   }
 
-
-    Widget _bottomNavigationBar(BuildContext context) {
-    return new Theme(
+    Future<Widget> _bottomNavigationBar(BuildContext context) async {
+       
+      return new Theme(
       data: Theme.of(context).copyWith(
         canvasColor: Colors.white,
         primaryColor: Colors.black,
@@ -138,5 +148,5 @@ class VendedorProductosPage extends StatelessWidget {
       
   }
 
-  
+
 }

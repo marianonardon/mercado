@@ -78,17 +78,6 @@ class _CategoriasPageState extends State<CategoriasPage> {
 
               onTap: () {Navigator.pushNamed(context, 'mercado');},
             ),
-            ListTile(
-              title: Row(
-                children: [
-                Icon(Icons.search),
-                SizedBox(width:10.0),
-                Text('Buscar productos',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                      fontSize: 14.0, fontWeight: FontWeight.w600,
-                      ))),]),
-
-              onTap: () {Navigator.pushNamed(context, 'categorias');},
-            ),
             /* ListTile(
               title: Row(
                 children: [

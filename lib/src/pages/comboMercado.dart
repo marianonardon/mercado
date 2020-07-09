@@ -3,13 +3,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 
 class ComboMercado extends StatefulWidget {
-  ComboMercado({Key key}) : super(key: key);
+ ComboMercado(this.mercadoId,);
+  final String mercadoId;
 
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
 
 class _MyStatefulWidgetState extends State<ComboMercado> {
+  
   String dropdownValue = 'Mercado Norte';
 
   @override

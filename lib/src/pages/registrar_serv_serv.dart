@@ -30,6 +30,7 @@ class Token {
 
 
 class Puesto {
+  final String idComercio;
   final String id;
   final String comercioNombre;
   final String comercioCuit;
@@ -40,20 +41,21 @@ class Puesto {
   final String comercioPuesto;
   final String comercioNumNave;
 
-  Puesto({this.id, this.comercioNombre,this.comercioCuit, this.comercioDireccion,this.comercioDireccionEntrega,
+  Puesto({this.idComercio,this.id, this.comercioNombre,this.comercioCuit, this.comercioDireccion,this.comercioDireccionEntrega,
          this.comercioTelefono,this.comercioEmail, this.comercioPuesto,this.comercioNumNave});
 
-  factory Puesto.fromJson(Map<String, dynamic> json) {
+  factory Puesto.fromJsonMap(Map<String, dynamic> parsedJson) {
     return Puesto(
-      id: json['ComercioExternalID'], 
-      comercioNombre: json['comercioNombre'], 
-      comercioCuit: json['comercioCuit'], 
-      comercioDireccion: json['comercioDireccion'], 
-      comercioDireccionEntrega: json['comercioDireccionEntrega'], 
-      comercioTelefono: json['comercioTelefono'], 
-      comercioEmail: json['comercioEmail'], 
-      comercioPuesto: json['comercioPuesto'], 
-      comercioNumNave: json['comercioNumNave'], 
+      idComercio: parsedJson['ComercioID'],
+      id: parsedJson['ComercioExternalID'], 
+      comercioNombre: parsedJson['ComercioNombre'], 
+      comercioCuit: parsedJson['ComercioCuit'], 
+      comercioDireccion: parsedJson['ComercioDireccion'], 
+      comercioDireccionEntrega: parsedJson['ComercioDireccionEntrega'], 
+      comercioTelefono: parsedJson['ComercioTelefono'], 
+      comercioEmail: parsedJson['ComercioEmail'], 
+      comercioPuesto: parsedJson['ComercioPuesto'], 
+      comercioNumNave: parsedJson['ComercioNumNave'], 
       
       
       
@@ -62,10 +64,10 @@ class Puesto {
 }
 
 class PuestoCrear extends StatefulWidget {
-  Widget puesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,BuildContext context ) {
+  Widget puesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,BuildContext context ) {
     
     return FutureBuilder<Puesto>(
-      future: createPuesto(nombre, cuit, direccion, telefono, email, puesto, nave, idUser,context),
+      future: createPuesto(nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data.comercioNombre);
@@ -79,7 +81,7 @@ class PuestoCrear extends StatefulWidget {
     );
   }
 
-Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,BuildContext context) async {
+Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,userNombre,fotoUser,BuildContext context) async {
 
   
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -131,7 +133,7 @@ Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, pue
         };
 
     final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/comercio/2,0,$idUser';
-    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/comercio/2,0,$idUser';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/comercio/$mercadoId,0,$idUser';
     
       final http.Response response = await http.post(
         '$mercadosListAPIUrlQA',
@@ -150,16 +152,18 @@ Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, pue
         }),
       );
       
-      if (response.statusCode == 201) {
-        
-      
-          final puesto = new Puesto.fromJson(json.decode(response.body));
-          Navigator.pushNamed(context, 'altaComOk');
+      if (response.statusCode == 201) { 
+          Navigator.pop(context);
+          final decodedData2 = json.decode(response.body);
+          final puesto =  Puesto.fromJsonMap(decodedData2);
+          String comercio = puesto.idComercio;
+          Navigator.pushNamed(context, 'altaComOk' ,arguments: ScreensArguments(userId,userNombre,fotoUser, mercadoId, comercio));
          
     
         //return Puesto.fromJson(json.decode(response.body));
       } else {
-            Navigator.pushNamed(context, 'errorRegPues');
+        Navigator.pop(context);
+        Navigator.pushNamed(context, 'errorRegPues');
       }
     }
     
@@ -172,4 +176,15 @@ Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, pue
 
 
 
+}
+
+class ScreensArguments {
+  final String userId;
+  final String nombre;
+  final String foto;
+  final String mercadoId;
+  final String comercioId;
+
+
+  ScreensArguments(this.userId, this.nombre,this.foto,this.mercadoId,this.comercioId);
 }

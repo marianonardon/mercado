@@ -13,18 +13,17 @@ import 'package:mime_type/mime_type.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
+import 'package:flutter_login_ui/src/pages/actualizar_producto_serv.dart';
+import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
 
 import 'combo_categoria.dart';
 
-class AltaProducto extends StatefulWidget {
+class ActualizarProducto extends StatefulWidget {
   @override
-  _AltaProductoState createState() => _AltaProductoState();
+  _ActualizarProductoState createState() => _ActualizarProductoState();
 }
 
-class _AltaProductoState extends State<AltaProducto> {
-
-
+class _ActualizarProductoState extends State<ActualizarProducto> {
   String nombre;
   String descripcion;
   String categoria;
@@ -36,7 +35,8 @@ class _AltaProductoState extends State<AltaProducto> {
   String cantidad2;
   String precio3;
   String cantidad3;
-
+  String fotoUrl;
+  String urlFoto;
   File foto;
 
   bool isNumeric(String s) {
@@ -62,10 +62,6 @@ class _AltaProductoState extends State<AltaProducto> {
   int calidad;
 
 
-
-
-
-
   @override
   void dispose() {
     // Limpia el controlador cuando el Widget se descarte
@@ -87,12 +83,14 @@ class _AltaProductoState extends State<AltaProducto> {
 
   @override
   Widget build(BuildContext context) {
-    final PuestoArguments args = ModalRoute.of(context).settings.arguments;
+
+    
+    final ProductoDetalleArg args = ModalRoute.of(context).settings.arguments;
     MediaQueryData media = MediaQuery.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Agregar producto',style: GoogleFonts.rubik(textStyle: TextStyle(color:Color.fromRGBO(55, 71, 79, 1), fontWeight: FontWeight.w600,fontSize: 18))),
+        title: Text('Actualizar producto',style: GoogleFonts.rubik(textStyle: TextStyle(color:Color.fromRGBO(55, 71, 79, 1), fontWeight: FontWeight.w600,fontSize: 18))),
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
         iconTheme: IconThemeData(color: Colors.black),
 
@@ -107,30 +105,30 @@ class _AltaProductoState extends State<AltaProducto> {
             children: <Widget>[
               SizedBox(
               height: 30.0),
-              _inputNombreProducto(),
+              _inputNombreProducto(args.nombre),
                SizedBox(height: 10.0),
-              _inputFotoProducto(),
+              _inputFotoProducto(args.foto),
               SizedBox(height: 10.0),
-              _inputDescripcionProducto(),
+              _inputDescripcionProducto(args.descripcion),
               SizedBox(height: 10.0),
-              ComboCategoria('1'),
+              ComboCategoria(args.categoria),
               SizedBox(height: 10.0),
-              ComboUnidad('1'),
+              ComboUnidad(args.unidadId),
               SizedBox(height: 10.0),
-              _inputCalidad(context),
+              _inputCalidad(context,args.calidad),
               SizedBox(height: 10.0),
-              _inputStock(),
+              _inputStock(args.stock),
                SizedBox(height: 10.0),
-              _inputPrecioCantidad1(),
+              _inputPrecioCantidad1(args.precio1,args.cantidad1),
               SizedBox(height: 10.0),
-              _inputPrecioCantidad2(),
+              _inputPrecioCantidad2(args.precio2,args.cantidad2),
               SizedBox(height: 10.0),
-              _inputPrecioCantidad3(),
+              _inputPrecioCantidad3(args.precio3,args.cantidad3),
 
               
               SizedBox(height: 25.0),
                 
-              _botonConfirmar(context,args.idComercio,args.mercadoId,args.foto,args.nombre,args.userId),
+              _botonConfirmar(context,args.comercioId,args.mercadoId,args.foto,args.nombre,args.userId,args.idProducto),
               SizedBox(height: 10.0),
 
               ]
@@ -145,9 +143,18 @@ class _AltaProductoState extends State<AltaProducto> {
 
 
 
-  Widget _inputNombreProducto() {
+  Widget _inputNombreProducto(nombreProd) {
     MediaQueryData media = MediaQuery.of(context);
     nombre = nombreController.text;
+    if (nombreProd != nombre) {
+      if (nombre == ''){
+        nombreController.text = nombreProd;
+      } else {
+        nombreController.text = nombre;}
+      }else {
+        nombreController.text = nombreProd;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -191,9 +198,17 @@ class _AltaProductoState extends State<AltaProducto> {
   }
 
 
-    Widget _inputDescripcionProducto() {
+    Widget _inputDescripcionProducto(descripcionProd) {
     MediaQueryData media = MediaQuery.of(context);
     descripcion = descripcionController.text;
+    if (descripcionProd != descripcion) {
+       if (descripcion == ''){
+         descripcionController.text = descripcionProd;
+       }else {
+        descripcionController.text = descripcion;}
+      }else {
+        descripcionController.text = descripcionProd;
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -237,8 +252,12 @@ class _AltaProductoState extends State<AltaProducto> {
     );
   }
 
-    Widget _inputCalidad(context) {
+    Widget _inputCalidad(context,calidadRating) {
     MediaQueryData media = MediaQuery.of(context);
+    int ratingInicial = calidadRating.round();
+    if (calidad == null) {
+      calidad = calidadRating.round();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,7 +270,7 @@ class _AltaProductoState extends State<AltaProducto> {
           height: media.size.height * 0.06,
           width: media.size.width * 0.90,
           child: RatingBar(
-              initialRating: 0,
+              initialRating: ratingInicial.toDouble(),
               minRating: 1,
               direction: Axis.horizontal,
               allowHalfRating: true,
@@ -273,9 +292,18 @@ class _AltaProductoState extends State<AltaProducto> {
   }
 
 
-    Widget _inputStock() {
+    Widget _inputStock(stockProd) {
     MediaQueryData media = MediaQuery.of(context);
     stock = stockController.text;
+
+    if (stockProd != stock) {
+      if (stock == '') {
+        stockController.text = stockProd;
+      } else {
+        stockController.text = stock;}
+      }else {
+        stockController.text = stockProd;
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -332,10 +360,26 @@ class _AltaProductoState extends State<AltaProducto> {
   }
 
 
-  Widget _inputPrecioCantidad1() { 
+  Widget _inputPrecioCantidad1(precio1Prod,cantidad1Prod) { 
     MediaQueryData media = MediaQuery.of(context);
     precio = precio1Controller.text;
+    if (precio1Prod != precio) {
+      if (precio == '') {
+        precio1Controller.text = precio1Prod;
+      } else {
+        precio1Controller.text = precio;}
+      }else {
+        precio1Controller.text = precio1Prod;
+    }
     cantidad = cantidad1Controller.text;
+    if (cantidad1Prod != cantidad) {
+      if (cantidad == '') {
+        cantidad1Controller.text = cantidad1Prod;
+      } else {
+        cantidad1Controller.text = cantidad;}
+      }else {
+        cantidad1Controller.text = cantidad1Prod;
+    }
     return Row(
       children: <Widget>[
         SizedBox(width:20.0),
@@ -438,10 +482,27 @@ class _AltaProductoState extends State<AltaProducto> {
     );
   }
 
-    Widget _inputPrecioCantidad2() { 
+    Widget _inputPrecioCantidad2(precio2Prod,cantidad2Prod) { 
     MediaQueryData media = MediaQuery.of(context);
     precio2 = precio2Controller.text;
+
+   if (precio2Prod != precio2) {
+     if (precio2 == '') {
+        precio2Controller.text = precio2Prod;
+      } else {
+        precio2Controller.text = precio2;}
+      }else {
+        precio2Controller.text = precio2Prod;
+    }
     cantidad2 = cantidad2Controller.text;
+    if (cantidad2Prod != cantidad2) {
+      if (cantidad2 == '') {
+        cantidad2Controller.text = cantidad2Prod;
+      } else {
+        cantidad2Controller.text = cantidad2;}
+      }else {
+        cantidad2Controller.text = cantidad2Prod;
+    }
     return Row(
       children: <Widget>[
         SizedBox(width:20.0),
@@ -545,10 +606,27 @@ class _AltaProductoState extends State<AltaProducto> {
     );
   }
 
-    Widget _inputPrecioCantidad3() { 
+    Widget _inputPrecioCantidad3(precio3Prod,cantidad3Prod) { 
     MediaQueryData media = MediaQuery.of(context);
     precio3 = precio3Controller.text;
+    if (precio3Prod != precio3) {
+      if (precio3 == '') {
+        precio3Controller.text = precio3Prod;
+      } else {
+        precio3Controller.text = precio3;}
+      }else {
+        precio3Controller.text = precio3Prod;
+    }
     cantidad3 = cantidad3Controller.text;
+    if (cantidad3Prod != cantidad3) {
+      if (cantidad3 == '') {
+        cantidad3Controller.text = cantidad3Prod;
+      } else {
+        cantidad3Controller.text = cantidad3;}
+      }else {
+        cantidad3Controller.text = cantidad3Prod;
+    }
+    
     return Row(
       children: <Widget>[
         SizedBox(width:20.0),
@@ -654,7 +732,7 @@ class _AltaProductoState extends State<AltaProducto> {
 
 
 
-  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user) {
+  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user,productoId) {
     MediaQueryData media = MediaQuery.of(context);
     return GestureDetector(
       onTap: () async {
@@ -666,7 +744,7 @@ class _AltaProductoState extends State<AltaProducto> {
        
        String tipoUnidadId = prefs.getString('idTipoUnidad');
       
-       String urlFoto;
+       
 
 
 
@@ -675,7 +753,7 @@ class _AltaProductoState extends State<AltaProducto> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Center(child: Text('Cargando producto')),
+            title: Center(child: Text('Actualizando producto')),
             content:  SizedBox(
                       width: media.size.width * 0.005,
                       height: media.size.height * 0.05,
@@ -693,16 +771,16 @@ class _AltaProductoState extends State<AltaProducto> {
           ).then((_) => setState((){})); 
 
         if (foto != null) {
-         String fotoUrl;
+         
          fotoUrl = await subirImagen(foto);
          urlFoto = fotoUrl;
        }
 
         
-         ProductoCrear().producto(nombreController.text, descripcionController.text, categoriaId, stockController.text,
+         ProductoActualizar().producto(nombreController.text, descripcionController.text, categoriaId, stockController.text,
                                   calidad, urlFoto , tipoUnidadId, comercioId, precio1Controller.text, cantidad1Controller.text,
                                   precio2Controller.text,cantidad2Controller.text,precio3Controller.text,cantidad3Controller.text,mercado,
-                                  fotoUser,nombreUser,user,context);
+                                  fotoUser,nombreUser,user,productoId,context);
        }
       },
         
@@ -717,7 +795,7 @@ class _AltaProductoState extends State<AltaProducto> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Center(child: 
-                Text('Agregar producto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                Text('Actualizar producto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                                             fontSize: 14.0, fontWeight: FontWeight.w500,
                                       ))),
               )
@@ -730,7 +808,7 @@ class _AltaProductoState extends State<AltaProducto> {
     
   }
 
-  Widget _inputFotoProducto() {
+  Widget _inputFotoProducto(fotoAnt) {
   MediaQueryData media = MediaQuery.of(context);
 
     if (foto != null) {
@@ -753,23 +831,27 @@ class _AltaProductoState extends State<AltaProducto> {
         ]
       );
 
-    }
-
-    return GestureDetector(
-      onTap: () {
-        _cargarFoto();
-        
-       // _tomarFoto();
-      },
-      child: Container(
-        width: media.size.width * 0.90,
-        height: media.size.height * 0.17,
-        color: Colors.grey[100],
-        child: Center(
-          child: Icon(Icons.add_a_photo, size: 40,)
+    } else {
+      imageCache.clear();
+      urlFoto = fotoAnt;
+      return  Stack(
+         alignment: Alignment.topRight,
+        children:<Widget>[Container(
+          width: media.size.width * 0.90,
+          height: media.size.height * 0.17,
+          color: Colors.grey[100],
+          child: Image(
+            image: NetworkImage(fotoAnt),
+          )
         ),
-      )
-    );
+        GestureDetector(
+          onTap: () { _cargarFoto();},
+          child: Icon(Icons.edit, color: Colors.black, size: 30.0)
+        )
+        ]
+      );
+
+    }
 
 
 

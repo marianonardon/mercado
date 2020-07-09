@@ -201,12 +201,12 @@ class PuestosListView extends StatelessWidget {
         itemCount: data.length,
         itemBuilder: (context, index) {
           return _crearLista(data[index].comercioNombre, data[index].mercadoNombre, data[index].comercioPuesto,
-                        data[index].comercioNumNave,data[index].comercioId,context);
+                        data[index].comercioNumNave,data[index].comercioId,data[index].mercadoId,context);
         });
   }
 
 
-  Widget _crearLista(String title, String subtitle, String numPuesto, String numNave,comercioId,context) {
+  Widget _crearLista(String title, String subtitle, String numPuesto, String numNave,comercioId,mercadoId,context) {
     MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
@@ -219,7 +219,7 @@ class PuestosListView extends StatelessWidget {
           //  _crearTitulo(),
             SizedBox(height: 20.0),
             GestureDetector(
-              onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: comercioId);},
+              onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId, args.nombre, args.foto, mercadoId, comercioId));},
             child:_crearTarjetas(title, subtitle, numPuesto, numNave,context))
           ],
         ),
@@ -296,4 +296,15 @@ class PuestosListView extends StatelessWidget {
 
   }
 
+}
+
+class PuestoArguments {
+  final String userId;
+  final String nombre;
+  final String foto;
+  final String mercadoId;
+  final String idComercio;
+
+
+  PuestoArguments(this.userId, this.nombre,this.foto,this.mercadoId,this.idComercio);
 }

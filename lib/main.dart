@@ -4,6 +4,7 @@ import 'package:flutter_login_ui/src/pages/alta_vendedor.dart';
 import 'package:flutter_login_ui/src/pages/alta_vendedor_ok.dart';
 import 'package:flutter_login_ui/src/pages/carrito_page.dart';
 import 'package:flutter_login_ui/src/pages/confirmoReserva.dart';
+import 'package:flutter_login_ui/src/pages/detalle_producto.dart';
 import 'package:flutter_login_ui/src/pages/error_registrar_puesto.dart';
 import 'package:flutter_login_ui/src/pages/login.dart';
 import 'package:flutter_login_ui/src/pages/mercado_page.dart';
@@ -11,6 +12,9 @@ import 'package:flutter_login_ui/src/pages/categorias_page.dart';
 import 'package:flutter_login_ui/src/pages/productos_page.dart';
 import 'package:flutter_login_ui/src/pages/puestos_page.dart';
 import 'package:flutter_login_ui/src/pages/vendedor_prod_page.dart';
+import 'package:flutter_login_ui/src/pages/alta_producto_ok.dart';
+import 'package:flutter_login_ui/src/pages/alta_producto_err.dart';
+import 'package:flutter_login_ui/src/pages/actualizar_producto.dart';
 
 
 import 'package:provider/provider.dart';
@@ -49,6 +53,10 @@ class MyApp extends StatelessWidget {
         'altaComOk'    : (BuildContext context) => AltaComercioOk(),
         'puestos'      : (BuildContext context) => PuestosPage(),
         'altaProd'     : (BuildContext context) => AltaProducto(),
+        'detalleProd'  : (BuildContext context) => DetalleProducto(),
+        'altaProdOk'    : (BuildContext context) => AltaProductoOk(),
+        'errorRegProd' : (BuildContext context) => ErrorRegistrarProducto(),
+        'actProd'    : (BuildContext context) => ActualizarProducto(),
         },
       ),
     );

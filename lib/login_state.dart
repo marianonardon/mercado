@@ -23,12 +23,12 @@ class LoginState with ChangeNotifier {
   void login() async{
     _loading = true;
     notifyListeners();
+    _googleSignIn.signOut();
     var user = await handleSignIn();
 
     _loading = false;
     if (user != null) {
-      _loggedIn = true;
-      _googleSignIn.signOut();
+      _loggedIn = true;   
       notifyListeners();
     } else {
       _loggedIn = false;
