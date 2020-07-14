@@ -5,7 +5,7 @@ import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 class ErrorRegistrarProducto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final PuestoArguments args = ModalRoute.of(context).settings.arguments;
+   // final PuestoArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(    

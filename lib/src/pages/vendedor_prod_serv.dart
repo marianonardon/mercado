@@ -103,19 +103,23 @@ class Precio {
 }
 
 class VendedorProductosListView extends StatefulWidget {
-  VendedorProductosListView(this.comercioId,this.mercadoId,this.userId);
+  VendedorProductosListView(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser);
   final String comercioId;
   final String mercadoId;
   final String userId;
+  final String fotoUser;
+  final String nombreUser;
   @override
-  _ProductosListViewState createState() => _ProductosListViewState(comercioId,mercadoId,userId);
+  _ProductosListViewState createState() => _ProductosListViewState(comercioId,mercadoId,userId,fotoUser,nombreUser);
 }
 
 class _ProductosListViewState extends State<VendedorProductosListView> {
-   _ProductosListViewState(this.comercioId,this.mercadoId,this.userId);
+   _ProductosListViewState(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser);
   final String comercioId;
   final String mercadoId;
   final String userId;
+  final String fotoUser;
+  final String nombreUser;
   @override
   Widget build(BuildContext context){
     return FutureBuilder<List<Producto>>(
@@ -275,7 +279,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
   return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, 'detalleProd', arguments: ProductoDetalleArg(productoID, title,prodDesc,imagen,precio1,cantidad1,precio2,cantidad2,
-                          precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,mercadoId,userId,ratingProd,categoriaId,unidadId));
+                          precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,mercadoId,userId,ratingProd,categoriaId,unidadId,fotoUser,nombreUser));
       },
       child: Container(
       padding: EdgeInsets.only(left:12.0),
@@ -306,7 +310,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
                 ),
                 SizedBox(width: 15.0),
                 Container(
-                  width: media.size.width * 0.50 ,
+                  width: media.size.width * 0.70 ,
                   alignment: AlignmentDirectional.bottomStart,
                   padding: EdgeInsets.all(6.0),
                   child: Column(
@@ -512,10 +516,12 @@ class ProductoDetalleArg {
   final double calidad;
   final String categoria;
   final String unidadId;
+  final String fotoUser;
+  final String nombreUser;
 
   
 
 
   ProductoDetalleArg(this.idProducto, this.nombre,this.descripcion,this.foto,this.precio1,this.cantidad1,this.precio2,this.cantidad2,this.precio3,this.cantidad3,
-  this.stock,this.unidad,this.unidad2,this.unidad3,this.comercioId,this.mercadoId,this.userId,this.calidad,this.categoria,this.unidadId);
+  this.stock,this.unidad,this.unidad2,this.unidad3,this.comercioId,this.mercadoId,this.userId,this.calidad,this.categoria,this.unidadId,this.fotoUser,this.nombreUser);
 }

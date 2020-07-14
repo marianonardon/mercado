@@ -128,7 +128,7 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
               
               SizedBox(height: 25.0),
                 
-              _botonConfirmar(context,args.comercioId,args.mercadoId,args.foto,args.nombre,args.userId,args.idProducto),
+              _botonConfirmar(context,args.comercioId,args.mercadoId,args.fotoUser,args.nombreUser,args.userId,args.idProducto),
               SizedBox(height: 10.0),
 
               ]

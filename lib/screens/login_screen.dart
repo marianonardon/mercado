@@ -173,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildSocialBtn(Function onTap, AssetImage logo) {
     return GestureDetector(
-      onTap:() {Provider.of<LoginState>(context).login();},
+      onTap:() {},
       child: Container(
         height: 60.0,
         width: 60.0,

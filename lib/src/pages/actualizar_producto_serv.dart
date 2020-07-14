@@ -287,7 +287,9 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, in
           //return Puesto.fromJson(json.decode(response.body));
         } else {
               Navigator.of(context).pop();
-              Navigator.pushNamed(context, 'errorRegProd', arguments: PuestoArguments(user,nombreUser,foto,mercado,comercioId));
+              Navigator.pushNamed(context, 'errorRegProd'
+              //, arguments: PuestoArguments(user,nombreUser,foto,mercado,comercioId)
+              );
         }
 
 

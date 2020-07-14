@@ -29,6 +29,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   provider: ^2.0.1+1
   google_sign_in: ^4.4.4
+  flutter_facebook_login: ^3.0.0
   firebase_auth: ^0.11.1
   firebase_core: ^0.4.0
   flutter_rating_bar: ^3.0.1+1
@@ -38,6 +39,7 @@ dependencies:
   flutter_svg: ^0.17.4
   image_picker: ^0.6.7+2
   mime_type: ^0.3.2
+  
   
 
 

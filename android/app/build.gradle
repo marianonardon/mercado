@@ -25,6 +25,7 @@ apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    buildToolsVersion "28.0.2"
     compileSdkVersion 28
 
     lintOptions {
@@ -61,6 +62,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     apply plugin: 'com.google.gms.google-services'
     compile 'com.google.guava:guava:27.0.1-android'
+    compile 'com.android.support:appcompat-v7:25.0.0'
 
 }
 

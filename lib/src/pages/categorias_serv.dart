@@ -175,7 +175,7 @@ class CategoriasListView extends StatelessWidget {
       ClipRRect(
         borderRadius: BorderRadius.circular(15.0),
         child: Image(
-        height: media.size.height * 0.25,
+        height: media.size.height * 0.23,
         width: media.size.width * 0.93,
         fit: BoxFit.fill,
         image: NetworkImage(imagen),
@@ -185,8 +185,8 @@ class CategoriasListView extends StatelessWidget {
 
       Positioned(
         bottom: 10,
-        left: 0,
-        right: 0,
+        left: 3,
+        right: 3,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15.0), 
           child: Container(

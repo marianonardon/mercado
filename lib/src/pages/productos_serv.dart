@@ -309,7 +309,7 @@ class ProductosListView extends StatelessWidget {
               ),
               SizedBox(width: 15.0),
               Container(
-                width: media.size.width * 0.50 ,
+                width: media.size.width * 0.70 ,
                 alignment: AlignmentDirectional.bottomStart,
                 padding: EdgeInsets.all(6.0),
                 child: Column(

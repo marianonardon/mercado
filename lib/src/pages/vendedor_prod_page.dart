@@ -51,7 +51,7 @@ class _VendedorProductosPageState extends State<VendedorProductosPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 SizedBox(height: 20.0),
-                Container(child: VendedorProductosListView(args.idComercio,args.mercadoId,args.userId)),
+                Container(child: VendedorProductosListView(args.idComercio,args.mercadoId,args.userId,args.foto,args.nombre)),
               ],
             ),
           ),

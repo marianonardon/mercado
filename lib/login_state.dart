@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:provider/provider.dart';
 
+
+
+
+enum LoginProvider{
+  google,
+  facebook,
+}
 
 
 
@@ -18,16 +27,27 @@ class LoginState with ChangeNotifier {
 
   bool isLoading() => _loading;
 
+  FirebaseUser _user;
 
 
-  void login() async{
+
+  void login(LoginProvider loginProvider) async{
     _loading = true;
     notifyListeners();
-    _googleSignIn.signOut();
-    var user = await handleSignIn();
+
+    switch(loginProvider) {
+      case LoginProvider.google:
+        _user = await handleSignIn();
+        break;
+      case LoginProvider.facebook:
+        _user = await handleFacebookSignIn();
+        break;
+
+    }
+    
 
     _loading = false;
-    if (user != null) {
+    if (_user != null) {
       _loggedIn = true;   
       notifyListeners();
     } else {
@@ -39,6 +59,7 @@ class LoginState with ChangeNotifier {
 
   void logout() {
     _googleSignIn.signOut();
+    FacebookLogin().logOut();
     _loggedIn = false;
     notifyListeners();
   }
@@ -73,6 +94,39 @@ class LoginState with ChangeNotifier {
 
     final FirebaseUser user = await _auth.signInWithCredential(credential);
     print("signed in " + user.displayName +' ' + user.uid + '  ' + user.providerId + ' ' + user.email);
+    return user;
+}
+
+  Future<FirebaseUser> handleFacebookSignIn() async {
+    final facebookLogin = FacebookLogin();
+    final result = await facebookLogin.logIn(['email']);
+    if (result.status != FacebookLoginStatus.loggedIn) {
+      return null;
+    }
+
+/*       _loading = false;
+      _loggedIn = false;
+      notifyListeners();
+
+    }); */
+
+
+
+
+    final AuthCredential credential = FacebookAuthProvider.getCredential(
+      accessToken: result.accessToken.token,
+    );
+
+    final FirebaseUser user = await _auth.signInWithCredential(credential);
+    print("signed in " + user.displayName +' ' + user.uid + '  ' + user.providerId + ' ' + user.email);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('usuarioId', user.uid).catchError((onError) =>
+          print("Error $onError")
+        );
+    prefs.setString('nombre', user.  displayName);
+    prefs.setString('fotoUser', user.photoUrl);
+    print(user.uid + user.email + user.displayName);
+    
     return user;
 }
 
