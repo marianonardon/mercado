@@ -108,7 +108,7 @@ class PuestosListView extends StatelessWidget {
                 child: Column(
                    children: <Widget>[
                      Image(
-                       image: AssetImage('assets/img/puesto.gif'),
+                       image: AssetImage('assets/img/Puesto.gif'),
                      ),
                     Text(
                     'Debes crear un puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
@@ -201,12 +201,14 @@ class PuestosListView extends StatelessWidget {
         itemCount: data.length,
         itemBuilder: (context, index) {
           return _crearLista(data[index].comercioNombre, data[index].mercadoNombre, data[index].comercioPuesto,
-                        data[index].comercioNumNave,data[index].comercioId,data[index].mercadoId,context);
+                        data[index].comercioNumNave,data[index].comercioId,data[index].mercadoId,
+                        data[index].comercioCuit,data[index].comercioTelefono, data[index].comercioEmail,data[index].comercioPuesto,context);
         });
   }
 
 
-  Widget _crearLista(String title, String subtitle, String numPuesto, String numNave,comercioId,mercadoId,context) {
+
+  Widget _crearLista(String title, String subtitle, String numPuesto, String numNave,comercioId,mercadoId,comercioCuit,comercioTelefono,comercioMail,comercioPuesto,context) {
     MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
@@ -219,15 +221,14 @@ class PuestosListView extends StatelessWidget {
           //  _crearTitulo(),
             SizedBox(height: 20.0),
             GestureDetector(
-              onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId, args.nombre, args.foto, mercadoId, comercioId));},
+              onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId, args.nombre, args.foto, mercadoId, comercioId,numNave,comercioPuesto,
+              comercioCuit,comercioTelefono,comercioMail,title));},
             child:_crearTarjetas(title, subtitle, numPuesto, numNave,context))
           ],
         ),
       ),
     );
   }
-
-
   _crearTarjetas(title, subtitle, numPuesto, numNave,context) {
     MediaQueryData media = MediaQuery.of(context);
   return Stack(
@@ -236,10 +237,10 @@ class PuestosListView extends StatelessWidget {
       ClipRRect(
         borderRadius: BorderRadius.circular(15.0),
         child: Image(
-        height: media.size.height * 0.25 ,
+        height: media.size.height * 0.22 ,
         width: media.size.width * 0.93,
         fit: BoxFit.fill,
-        image: NetworkImage('https://imagenes.20minutos.es/files/article_amp/uploads/2020/04/01/puesto-de-frutas-en-el-mercado-central-de-zaragoza.jpeg'),
+        image: AssetImage('assets/img/PuestoImg.png'),
 
        // placeholder: AssetImage('assets/img/loader.gif')),
       )),
@@ -248,11 +249,10 @@ class PuestosListView extends StatelessWidget {
         bottom: 10,
         left: 0,
         right: 0,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15.0), 
-          child: Container(
-            color: Colors.black26,
-            child: Column(
+        child: Container(
+          color: Colors.black12,
+          //borderRadius: BorderRadius.circular(15.0), 
+          child: Column(
               children:<Widget>[ 
                 Row(
                   children: <Widget>[
@@ -287,7 +287,7 @@ class PuestosListView extends StatelessWidget {
               )
               ]
             ),
-          ),
+          
         ),
       ),
       SizedBox(height: 20.0),
@@ -304,7 +304,13 @@ class PuestoArguments {
   final String foto;
   final String mercadoId;
   final String idComercio;
+  final String numNave;
+  final String comercioPuesto;
+  final String comercioCuit;
+  final String comercioTelefono;
+  final String comercioMail;
+  final String comercioNombre;
 
 
-  PuestoArguments(this.userId, this.nombre,this.foto,this.mercadoId,this.idComercio);
+  PuestoArguments(this.userId, this.nombre,this.foto,this.mercadoId,this.idComercio,this.numNave,this.comercioPuesto,this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre);
 }

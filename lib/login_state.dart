@@ -99,6 +99,8 @@ class LoginState with ChangeNotifier {
 
   Future<FirebaseUser> handleFacebookSignIn() async {
     final facebookLogin = FacebookLogin();
+    facebookLogin.loginBehavior = FacebookLoginBehavior.webViewOnly;
+
     final result = await facebookLogin.logIn(['email']);
     if (result.status != FacebookLoginStatus.loggedIn) {
       return null;

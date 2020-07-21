@@ -42,10 +42,12 @@ class Mercado {
   final String mercadoFechaAlta;
   final bool mercadoHabilitado;
   final String mercadoImagen;
+  final String mercadoHoraInicio;
+  final String mercadoHoraFin;
 
 
   Mercado({this.mercadoId, this.mercadoNombre, this.mercadoDireccion, this.mercadoTelefono, this.mercadoFechaAlta,
-          this.mercadoHabilitado, this.mercadoImagen});
+          this.mercadoHabilitado, this.mercadoImagen, this.mercadoHoraInicio,this.mercadoHoraFin});
 
   factory Mercado.fromJsonMap(Map<String, dynamic> parsedJson) {
     return Mercado(
@@ -56,6 +58,8 @@ class Mercado {
       mercadoFechaAlta: parsedJson['mercadoFechaAlta'],
       mercadoHabilitado: parsedJson['mercadoHabilitado'],
       mercadoImagen: parsedJson['mercadoImagen'],
+      mercadoHoraInicio: parsedJson['mercadoHoraInicio'],
+      mercadoHoraFin: parsedJson['mercadoHoraFin'],
     );
   }
 }
@@ -182,11 +186,11 @@ class _MercadosListViewState extends State<MercadosListView> {
         itemCount: data.length,
         itemBuilder: (context, index) {
           return _crearLista(data[index].mercadoNombre, data[index].mercadoDireccion, Icons.location_on,
-                        data[index].mercadoImagen,idUser,data[index].mercadoId,context);
+                        data[index].mercadoImagen,idUser,data[index].mercadoId,data[index].mercadoHoraInicio, data[index].mercadoHoraFin,context);
         });
   }
 
-  Widget _crearLista(String title, String subtitle, IconData icon, String imagen,String idUser, String mercadoId, context) {
+  Widget _crearLista(String title, String subtitle, IconData icon, String imagen,String idUser, String mercadoId,String mercadoHoraInicio,String mercadoHoraFin, context) {
     
     MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
@@ -201,22 +205,36 @@ class _MercadosListViewState extends State<MercadosListView> {
             SizedBox(height: 20.0),
             GestureDetector(
               onTap: () {Navigator.pushNamed(context, 'categorias', arguments: ScreenArguments(idUser, nombreUsuario, fotoUsuario,mercadoId));},
-            child:_crearTarjetas(title, subtitle, icon, imagen,context))
+            child:_crearTarjetas(title, subtitle, icon, imagen, mercadoHoraInicio,mercadoHoraFin,context))
           ],
         ),
       ),
     );
   }
 
-  _crearTarjetas(title, subtitle, icon, imagen,context) {
+  _crearTarjetas(title, subtitle, icon, imagen, horaInicio,horaFin,context) {
     MediaQueryData media = MediaQuery.of(context);
+    DateTime horarioFin = DateTime.parse(horaFin);
+    String hourFin = horarioFin.hour.toString();
+    String minFin  = horarioFin.minute.toString();
+    if (int.parse(minFin) < 10) {
+      minFin = '0$minFin';
+    }
+
+    DateTime horarioInicio = DateTime.parse(horaInicio);
+    String hourIni = horarioInicio.hour.toString();
+    String minIni  = horarioInicio.minute.toString();
+    if (int.parse(minIni) < 10) {
+      minIni = '0$minIni';
+    }
+    
   return Stack(
     fit: StackFit.loose,
     children: <Widget> [
       ClipRRect(
         borderRadius: BorderRadius.circular(15.0),
         child: Image(
-        height: media.size.height * 0.25 ,
+        height: media.size.height * 0.23 ,
         width: media.size.width * 0.93,
         fit: BoxFit.fill,
         image: NetworkImage(imagen),
@@ -253,12 +271,26 @@ class _MercadosListViewState extends State<MercadosListView> {
                   children: <Widget>[
                     SizedBox(width: 20.0),
                     Icon(icon, color: Colors.white,),
+
+                    SizedBox(width: 5.0),
                     Text(
                     subtitle, style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
                       fontSize: 15.0, fontWeight: FontWeight.w600)),
               ),
+                  ]
+                ),
+              Row(
+                  children: <Widget>[
+                    SizedBox(width: 20.0),
+                    Icon(Icons.access_time, color: Colors.white,size: 20.0,),
+                    SizedBox(width: 5.0),
+                    Text(
+                    'De $hourIni:$minIni a $hourFin:$minFin', style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
+                      fontSize: 15.0, fontWeight: FontWeight.w600)),
+              ),
                   ],
                 )
+                
               ]
             ),
           ),

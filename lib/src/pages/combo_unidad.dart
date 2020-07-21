@@ -23,6 +23,9 @@ class _ComboUnidad extends State<ComboUnidad> {
 
   Future<String> _fetchUnidad() async {
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setString('idTipoUnidad', unidadId );
+
 
      String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
      String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';

@@ -24,13 +24,15 @@ class _VendedorProductosPageState extends State<VendedorProductosPage> {
         final PuestoArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {Navigator.pushNamed(context, 'altaProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio));},
+        onPressed: () {Navigator.pushNamed(context, 'altaProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio,args.numNave,
+        args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));},
+
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
         child: Icon(Icons.add, color: Colors.black, size: 35.0,),
         ),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
-        title: Text('Mi Catálogo',style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+        title: Text('Mi Puesto',style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
                         fontSize: 18.0, fontWeight: FontWeight.w600,
                         )),),
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
@@ -43,15 +45,16 @@ class _VendedorProductosPageState extends State<VendedorProductosPage> {
         ),
       backgroundColor: Colors.white,
       body: Container(
-          padding: EdgeInsets.only(left:10.0),
+          padding: EdgeInsets.only(left:0.0),
           child: SingleChildScrollView(
               child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                SizedBox(height: 20.0),
-                Container(child: VendedorProductosListView(args.idComercio,args.mercadoId,args.userId,args.foto,args.nombre)),
+               // SizedBox(height: 20.0),
+                Container(child: VendedorProductosListView(args.idComercio,args.mercadoId,args.userId,args.foto,args.nombre,args.numNave,args.comercioPuesto,args.comercioCuit,
+                args.comercioTelefono,args.comercioMail,args.comercioNombre)),
               ],
             ),
           ),

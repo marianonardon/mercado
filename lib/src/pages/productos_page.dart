@@ -27,12 +27,13 @@ class _ProductosPageState extends State<ProductosPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
-        actions: <Widget>[
+        /* actions: <Widget>[
           IconButton(
             icon: Icon(Icons.notifications, color: Colors.white),
             onPressed: () {}
           )
-        ],),
+        ], */
+        ),
       backgroundColor: Colors.white,
       body: Container(
           child: SingleChildScrollView(

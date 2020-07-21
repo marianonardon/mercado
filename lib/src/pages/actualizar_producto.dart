@@ -128,7 +128,9 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
               
               SizedBox(height: 25.0),
                 
-              _botonConfirmar(context,args.comercioId,args.mercadoId,args.fotoUser,args.nombreUser,args.userId,args.idProducto),
+              _botonConfirmar(context,args.comercioId,args.mercadoId,args.fotoUser,args.nombreUser,args.userId,args.idProducto,args.numNave,args.comercioPuesto,args.comercioCuit,
+              args.comercioTelefono,args.comercioMail,args.comercioNombre),
+  
               SizedBox(height: 10.0),
 
               ]
@@ -732,7 +734,7 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
 
 
 
-  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user,productoId) {
+  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre) {
     MediaQueryData media = MediaQuery.of(context);
     return GestureDetector(
       onTap: () async {
@@ -780,7 +782,7 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
          ProductoActualizar().producto(nombreController.text, descripcionController.text, categoriaId, stockController.text,
                                   calidad, urlFoto , tipoUnidadId, comercioId, precio1Controller.text, cantidad1Controller.text,
                                   precio2Controller.text,cantidad2Controller.text,precio3Controller.text,cantidad3Controller.text,mercado,
-                                  fotoUser,nombreUser,user,productoId,context);
+                                  fotoUser,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context);
        }
       },
         

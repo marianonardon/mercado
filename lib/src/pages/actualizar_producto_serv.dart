@@ -102,11 +102,11 @@ class Precio {
 
 class ProductoActualizar extends StatefulWidget {
   Widget producto(String nombre, descripcion, categoria, stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,BuildContext context ) {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,BuildContext context ) {
     
     return FutureBuilder<Producto>(
       future: updateProducto( nombre, descripcion, categoria, stock, calidad, urlFoto, tipoUnidadId, comercioId,precio1,cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,context),
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data.comercioNombre);
@@ -121,7 +121,7 @@ class ProductoActualizar extends StatefulWidget {
   }
 
 Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,BuildContext context) async {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,BuildContext context) async {
     
     
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
@@ -282,7 +282,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, in
             final decodedData2 = json.decode(response2.body);
             final producto =  Producto.fromJsonMap(decodedData2);
             String comercio = producto.comercioID;
-            Navigator.pushNamed(context, 'altaProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio));
+            Navigator.pushNamed(context, 'altaProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre));
       
           //return Puesto.fromJson(json.decode(response.body));
         } else {
@@ -297,7 +297,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, in
       //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));
     } else {
       Navigator.of(context).pop();
-      Navigator.pushNamed(context, 'errorRegProd', arguments: PuestoArguments(user,nombreUser,foto,mercado,comercioId));
+      Navigator.pushNamed(context, 'errorRegProd', arguments: PuestoArguments(user,nombreUser,foto,mercado,comercioId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre));
     }
 
     }

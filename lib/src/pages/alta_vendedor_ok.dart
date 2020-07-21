@@ -6,7 +6,7 @@ import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 class AltaComercioOk extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ScreensArguments args = ModalRoute.of(context).settings.arguments;
+    final PuestoArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(    
@@ -46,7 +46,8 @@ class AltaComercioOk extends StatelessWidget {
                 fontSize: 16.0, fontWeight: FontWeight.normal,))),
           SizedBox(height: 50.0,),
           GestureDetector(
-           onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId, args.comercioId));},
+           onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId, args.idComercio,args.numNave,args.comercioPuesto,
+           args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));},
            child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0) ,
               child:Container(

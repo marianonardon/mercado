@@ -11,7 +11,66 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 
 
+class Puestos{
 
+  List<Puesto> items = new List();
+
+  Puestos();
+
+  Puestos.fromJsonList(List<dynamic> jsonList) {
+
+    if (jsonList == null) return;
+
+    for (var item in jsonList) {
+      final puesto = new Puesto.fromJson(item);
+      items.add(puesto);
+      
+    }
+
+  }
+
+
+
+}
+
+
+class Puesto {
+  final String mercadoId;
+  final String mercadoNombre;
+  final String comercioId;
+  final String comercioNombre;
+  final String comercioTelefono;
+  final String comercioCuit;
+  final String comercioPuesto;
+  final String comercioNumNave;
+  final String comercioFechaAlta;
+  final String comercioExternalId;
+  final String comercioEmail;
+
+
+  Puesto({this.mercadoId, this.mercadoNombre,this.comercioId, this.comercioNombre,this.comercioTelefono, this.comercioCuit,
+          this.comercioPuesto,this.comercioNumNave,this.comercioFechaAlta,this.comercioExternalId,this.comercioEmail});
+
+  factory Puesto.fromJson(Map<String, dynamic> json) {
+    return Puesto(
+      mercadoId: json['mercadoID'], 
+      mercadoNombre: json['mercadoNombre'],
+      comercioId: json['comercioID'], 
+      comercioNombre: json['comercioNombre'], 
+      comercioTelefono: json['comercioTelefono'], 
+      comercioCuit: json['comercioCuit'], 
+      comercioPuesto: json['comercioPuesto'], 
+      comercioNumNave: json['comercioNumNave'], 
+      comercioFechaAlta: json['comercioFechaAlta'], 
+      comercioExternalId: json['comercioExternalID'], 
+      comercioEmail: json['comercioEmail'], 
+
+      
+      
+      
+    );
+  }
+}
 
 
 class Productos{
@@ -106,6 +165,8 @@ class Precio {
 
 }
  bool productoValidacion = true;
+ String puestoNave;
+ String puestoPuesto;
 
 class ProductosListView extends StatelessWidget {
   ProductosListView(this.categoriaId, this.mercadoId);
@@ -129,7 +190,7 @@ class ProductosListView extends StatelessWidget {
                 child: Column(
                    children: <Widget>[
                      Image(
-                       image: AssetImage('assets/img/puesto.gif'),
+                       image: AssetImage('assets/img/SinProductos.gif'),
                      ),
                     Text(
                     'No existen productos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
@@ -172,14 +233,18 @@ class ProductosListView extends StatelessWidget {
     );
   }
 
-     ListView _productosListView(data,context) {
+     ListView _productosListView(data,context)  {
        MediaQueryData media = MediaQuery.of(context,);
       return ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         physics: NeverScrollableScrollPhysics(),
         itemCount: data.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (context, index)   {
+          
+
+         
+          
           String preciox1;
           String preciox2;
           String preciox3;
@@ -224,16 +289,17 @@ class ProductosListView extends StatelessWidget {
           if(data[index].productoFoto == '') {
             foto = 'https://uy.emedemujer.com/wp-content/uploads/sites/4/2015/10/674262.jpg';
           }else{
+            
             foto = data[index].productoFoto;}
           return _crearLista(data[index].productoNombre,
                         foto,preciox1,preciox2,preciox3,cantidad1,cantidad2,cantidad3,
                         data[index].comercioNombre,
-                        data[index].tipoUnidadNombre, data[index].productoCalidad,
+                        data[index].tipoUnidadNombre, data[index].productoCalidad,data[index].comercioID,
                         context);
         });
   }
 
-    Widget _crearLista(String title, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd, context) {
+    Widget _crearLista(String title, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,String comercioId, context) {
     MediaQueryData media = MediaQuery.of(context);
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +316,7 @@ class ProductosListView extends StatelessWidget {
                 
               //  _crearTitulo(),
                 SizedBox(height: 8.0),
-               _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,context)
+               _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,context)
               ],
             ),
           ),
@@ -259,7 +325,25 @@ class ProductosListView extends StatelessWidget {
     );
   }
 
-  Widget _crearTarjetas(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,context) {
+   _crearTarjetas(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,context) {
+
+/*     String puestos;
+    List<Puesto> data;
+    Widget obtenerPuesto(){
+   // puestos = await _fetchPuestos(comercioId);
+    FutureBuilder<List<Puesto>>(
+       future: _fetchPuestos(comercioId),
+       builder: (context, snapshot){
+         if(snapshot.hasData) {
+          List<Puesto> data = snapshot.data;
+           return Container();
+           }
+       }
+      );}
+
+      obtenerPuesto(); */
+
+/*    puestos = data[0].comercioPuesto;    */
    MediaQueryData media = MediaQuery.of(context); 
   String unidad2;
   String unidad3;
@@ -328,6 +412,7 @@ class ProductosListView extends StatelessWidget {
                           ),
                         ),
                       SizedBox(width: 10.0),
+                      
                           ClipRRect(
                             borderRadius: BorderRadius.circular(5.0),
                                                   child: Container(
@@ -419,6 +504,7 @@ class ProductosListView extends StatelessWidget {
      ),
   );
   }
+
 
   Future<void> _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,context) async {
 
@@ -678,6 +764,61 @@ class ProductosListView extends StatelessWidget {
       final decodedData = json.decode(response.body);
       final productos = new Productos.fromJsonList(decodedData);
       return productos.items;
+      //List jsonResponse = json.decode(response.body);
+      //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));
+    } else {
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+    Future<List<Puesto>> _fetchPuestos(comercioId) async {
+
+    String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
+
+    Map<String, String> bodyToken = {
+      "client_id": "d6471aff30e64770bd9da53caccc4cc4",
+      "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
+        Map<String, String> bodyTokenQA = {
+      "client_id": "32936ed0b05f48859057b6a2dd5aee6f",
+      "client_secret": "915b06d26cdf44f7b832c66fe6e58743",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
+    Map<String, String> headers = {
+        "Content-Type": "application/x-www-form-urlencoded"
+    };
+
+
+    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
+    final decodedData = json.decode(responseToken.body);
+    final token = new Token.fromJsonMap(decodedData);
+    String token2 = token.accessToken.toString();
+
+
+    Map<String, String> headers2 = {
+      "Authorization": "OAuth $token2"
+      };
+
+    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultarComercio';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarComercio';
+    final userPuesto = '?comercioID=$comercioId';
+    final response = await http.get('$mercadosListAPIUrlQA$userPuesto', headers: headers2);
+
+    if (response.statusCode == 200) {
+      final decodedData = json.decode(response.body);
+      final puestos = new Puestos.fromJsonList(decodedData['comercios']);
+      
+/*       Puesto puesto = puestos.items[0]; */
+      return puestos.items;
+      
       //List jsonResponse = json.decode(response.body);
       //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));
     } else {

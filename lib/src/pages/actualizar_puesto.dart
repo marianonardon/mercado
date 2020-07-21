@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_ui/src/pages/actualizar_puesto_serv.dart';
 import 'package:flutter_login_ui/src/pages/comboMercado.dart';
 import 'package:flutter_login_ui/src/pages/comboMercado2.dart';
 import 'package:flutter_login_ui/src/pages/registrar_serv_serv.dart';
-import 'package:flutter_login_ui/src/pages/mercados_serv.dart';
+import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
@@ -18,12 +19,12 @@ String mercadoId;
 
 
 
-class AltaVendedor extends StatefulWidget {
+class ActualizarPuesto extends StatefulWidget {
   @override
-  _AltaVendedorState createState() => _AltaVendedorState();
+  _ActualizarPuestoState createState() => _ActualizarPuestoState();
 }
 
-class _AltaVendedorState extends State<AltaVendedor> {
+class _ActualizarPuestoState extends State<ActualizarPuesto> {
 
 
   String comercio;
@@ -63,12 +64,12 @@ class _AltaVendedorState extends State<AltaVendedor> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
-    final ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    final PuestoArguments args = ModalRoute.of(context).settings.arguments;
     
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registro de puesto',style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.black, fontWeight: FontWeight.w600))),
+        title: Text('Actualización de puesto',style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.black, fontWeight: FontWeight.w600))),
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
         iconTheme: IconThemeData(color: Colors.black),
 
@@ -88,24 +89,22 @@ class _AltaVendedorState extends State<AltaVendedor> {
                 fontWeight: FontWeight.bold, fontSize: 18.0))), 
               SizedBox(
               height: 10.0),
-              _inputNombreComercio(),
+              _inputNombreComercio(args.comercioNombre),
                SizedBox(height: 10.0),
-              _inputCuit(context),
+              _inputCuit(context,args.comercioCuit),
               SizedBox(height: 10.0),
-              _inputNavePuesto(),
-              SizedBox(height: 10.0),
-              ComboMercado3(),
+              _inputNavePuesto(args.numNave,args.comercioPuesto),
               SizedBox(height: 15.0),
               Text('Datos de contacto',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                 fontWeight: FontWeight.bold, fontSize: 18.0))), 
               SizedBox(
               height: 10.0),
-              _inputTelefono(),
+              _inputTelefono(args.comercioTelefono),
               SizedBox(height: 10.0),
-              _inputEmail(),
+              _inputEmail(args.comercioMail),
               SizedBox(height: 25.0),
                 
-              _botonConfirmar(context,mercadoId,args.nombre,args.userId,args.foto),
+              _botonConfirmar(context,args.mercadoId,args.nombre,args.userId,args.foto,args.idComercio),
               SizedBox(height: 10.0),
 
               ]
@@ -180,9 +179,17 @@ class _AltaVendedorState extends State<AltaVendedor> {
 
 
 
-  Widget _inputNombreComercio() {
+  Widget _inputNombreComercio(comercioNombre) {
     MediaQueryData media = MediaQuery.of(context);
     comercio = comercioController.text;
+    if (comercioNombre != comercio) {
+      if (comercio == ''){
+        comercioController.text = comercioNombre;
+      } else {
+        comercioController.text = comercio;}
+      }else {
+        comercioController.text = comercioNombre;
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -209,6 +216,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
             alignment: Alignment.centerLeft,
             width: media.size.width * 0.90,
             child: TextFormField(
+              readOnly: true,
               validator: (comercio) {if (comercio.isEmpty) {
                 return 'El campo Puesto no puede estar vacío!';
                 }else {
@@ -255,9 +263,17 @@ class _AltaVendedorState extends State<AltaVendedor> {
     );
   }
 
-    Widget _inputCuit(context) {
+    Widget _inputCuit(context,comercioCuit) {
     MediaQueryData media = MediaQuery.of(context);
     cuit = cuitController.text;
+    if (comercioCuit != cuit) {
+      if (cuit == ''){
+        cuitController.text = comercioCuit;
+      } else {
+        cuitController.text = cuit;}
+      }else {
+        cuitController.text = comercioCuit;
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,10 +286,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
             validator: (cuit) {if (cuit.isEmpty) {
               return 'El campo Cuit no puede estar vacío!';
               }else {
-                if(cuit.length < 11) {
-                  return 'El campo Cuit está incompleto!';
-                } else {
-                return null;}
+                return null;
               }},
             controller: cuitController,
             keyboardType: TextInputType.number,
@@ -314,9 +327,18 @@ class _AltaVendedorState extends State<AltaVendedor> {
   }
 
 
-    Widget _inputTelefono() {
+    Widget _inputTelefono(comercioTelefono) {
     MediaQueryData media = MediaQuery.of(context);
     telefono = telefonoController.text;
+    if (comercioTelefono != telefono) {
+      if (telefono == ''){
+        telefonoController.text = comercioTelefono;
+      } else {
+        telefonoController.text = telefono;}
+      }else {
+        telefonoController.text = comercioTelefono;
+    }
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -328,10 +350,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
             validator: (telefono) {if (telefono.isEmpty) {
                 return 'El campo Teléfono no puede estar vacío!';
                 }else {
-                  if(telefono.length < 10) {
-                    return 'El campo Teléfono está incompleto!';
-                  }else {
-                  return null;}
+                  return null;
                 }},
             controller: telefonoController,
             keyboardType: TextInputType.number,
@@ -375,8 +394,18 @@ class _AltaVendedorState extends State<AltaVendedor> {
     );
   }
 
-  Widget _inputEmail() {
+  Widget _inputEmail(comercioMail) {
     MediaQueryData media = MediaQuery.of(context);
+    mail = emailController.text;
+    if (comercioMail != mail) {
+      if (mail == ''){
+        emailController.text = comercioMail;
+      } else {
+        emailController.text = mail;}
+      }else {
+        emailController.text = comercioMail;
+    }
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -430,8 +459,26 @@ class _AltaVendedorState extends State<AltaVendedor> {
     );
   }
 
-  Widget _inputNavePuesto() { 
+  Widget _inputNavePuesto(nunNave,comercioPuesto) { 
     MediaQueryData media = MediaQuery.of(context);
+        nave =  naveController.text;
+    if (nunNave != nave) {
+      if (nave == ''){
+        naveController.text = nunNave;
+      } else {
+        naveController.text = nave;}
+      }else {
+        naveController.text = nunNave;
+    }
+    puesto =  puestoController.text;
+    if (comercioPuesto != puesto) {
+      if (puesto == ''){
+        puestoController.text = comercioPuesto;
+      } else {
+        puestoController.text = puesto;}
+      }else {
+        puestoController.text = comercioPuesto;
+    }
     return Row(
       children: <Widget>[
         Column(
@@ -442,6 +489,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
               alignment: Alignment.centerLeft,
               width: media.size.width * 0.43,
               child: TextFormField(
+                readOnly: true,
                 validator: (nave) {if (nave.isEmpty) {
                 return 'Nave no puede estar vacío!';
                 }else {
@@ -494,6 +542,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
               alignment: Alignment.centerLeft,
               width: media.size.width * 0.43,
               child: TextFormField(
+                readOnly: true,
                 validator: (puesto) {if (puesto.isEmpty) {
                 return 'Puesto no puede estar vacío!';
                 }else {
@@ -543,14 +592,10 @@ class _AltaVendedorState extends State<AltaVendedor> {
 
 
 
-  Widget _botonConfirmar(context,mercadoId,nombreUser,userId,fotoUser) {
+  Widget _botonConfirmar(context,mercadoId,nombreUser,userId,fotoUser,idComercio) {
     MediaQueryData media = MediaQuery.of(context);
     return GestureDetector(
       onTap: () async {
-
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-    //Return String
-       String mercadoId = prefs.getString('idMercado');
         
 
         if (formKey.currentState.validate()) {
@@ -558,7 +603,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
           showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Center(child: Text('Cargando puesto')),
+            title: Center(child: Text('Actualizando puesto')),
             content:  SizedBox(
                       width: media.size.width * 0.005,
                       height: media.size.height * 0.05,
@@ -575,8 +620,8 @@ class _AltaVendedorState extends State<AltaVendedor> {
         barrierDismissible: false,
           ).then((_) => setState((){})); 
 
-            PuestoCrear().puesto(comercioController.text, cuitController.text, comercioController.text, telefonoController.text,
-                                            emailController.text ,puestoController.text, naveController.text, externalId,mercadoId,userId,nombreUser,fotoUser,context); 
+            PuestoActualizar().puesto(comercioController.text, cuitController.text, comercioController.text, telefonoController.text,
+                                            emailController.text ,puestoController.text, naveController.text, externalId,mercadoId,userId,nombreUser,fotoUser,idComercio,context); 
 
         }
 /*         Column(
@@ -611,7 +656,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Center(child: 
-                Text('Registrar mi puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                Text('Actualizar mi puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                                             fontSize: 14.0, fontWeight: FontWeight.w500,
                                       ))),
               )
@@ -631,15 +676,11 @@ class ComboMercado3 extends StatefulWidget {
 
 class _ComboMercado3 extends State<ComboMercado3> {
   String _mySelection;
-  String idMercado = '1';
 
 
   List data = List(); //edited line
 
   Future<String> _fetchMercados() async {
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.setString('idMercado', idMercado );
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
     String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';     
@@ -706,9 +747,6 @@ class _ComboMercado3 extends State<ComboMercado3> {
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
     mercadoId = _mySelection;
-    if (_mySelection == null) {
-      _mySelection = idMercado;
-    }
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[

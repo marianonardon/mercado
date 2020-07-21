@@ -17,14 +17,17 @@ class LoginPageFinal extends StatelessWidget {
         body: Stack(
         //fit: StackFit.,
          children: <Widget>[
-           Image(image: AssetImage('assets/img/login.png'),),
+           Image(image: AssetImage('assets/img/Login2.png'),
+           fit: BoxFit.cover,
+           width: double.infinity,
+           height: double.infinity,),
            //fit: BoxFit.fill,),
             //width: double.infinity,
             //height: double.infinity,),
-           Padding(
+           /* Padding(
              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.33),
              child: Image(image: AssetImage('assets/img/logo.png'),),
-           ),           
+           ),  */          
            Container(
              padding: EdgeInsets.only(left:20.0),
             child: Column(

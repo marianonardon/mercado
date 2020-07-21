@@ -41,9 +41,10 @@ class Puesto {
   final String comercioEmail;
   final String comercioPuesto;
   final String comercioNumNave;
+  final String gx;
 
   Puesto({this.idComercio,this.id, this.comercioNombre,this.comercioCuit, this.comercioDireccion,this.comercioDireccionEntrega,
-         this.comercioTelefono,this.comercioEmail, this.comercioPuesto,this.comercioNumNave});
+         this.comercioTelefono,this.comercioEmail, this.comercioPuesto,this.comercioNumNave,this.gx});
 
   factory Puesto.fromJsonMap(Map<String, dynamic> parsedJson) {
     return Puesto(
@@ -57,6 +58,7 @@ class Puesto {
       comercioEmail: parsedJson['ComercioEmail'], 
       comercioPuesto: parsedJson['ComercioPuesto'], 
       comercioNumNave: parsedJson['ComercioNumNave'], 
+      gx: parsedJson['gx_md5_hash']
       
       
       
@@ -64,11 +66,11 @@ class Puesto {
   }
 }
 
-class PuestoCrear extends StatefulWidget {
-  Widget puesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,BuildContext context ) {
+class PuestoActualizar extends StatefulWidget {
+  Widget puesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,idComercio,BuildContext context ) {
     
     return FutureBuilder<Puesto>(
-      future: createPuesto(nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,context),
+      future: updatePuesto(nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,idComercio,context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data.comercioNombre);
@@ -82,7 +84,7 @@ class PuestoCrear extends StatefulWidget {
     );
   }
 
-Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,userNombre,fotoUser,BuildContext context) async {
+Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,userNombre,fotoUser,idComercio,BuildContext context) async {
 
   
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -134,40 +136,48 @@ Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, pue
         };
 
     final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/comercio/2,0,$idUser';
-    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/comercio/$mercadoId,0,$idUser';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/comercio/$mercadoId,$idComercio';
+
+    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
+
+    if (response.statusCode == 200) {
+      final decodedData2 = json.decode(response.body);
+      final puesto2 =  Puesto.fromJsonMap(decodedData2);
     
-      final http.Response response = await http.post(
+      final http.Response response2 = await http.put(
         '$mercadosListAPIUrlQA',
     
         headers: headers3,
         body: jsonEncode(<String, String>{
+          'MercadoID': mercadoId,
+          'ComercioID': idComercio,
           'ComercioExternalID': externalId2,
           'ComercioNombre': nombre,
           'ComercioCuit': cuit,
-          'ComercioDireccion': direccion,
-          'ComercioDireccionEntrega': direccion,
           'ComercioTelefono': telefono,
           'ComercioEmail': email,
           'ComercioPuesto': puesto,
           'ComercioNumNave': nave,
+          "gx_md5_hash": puesto2.gx
         }),
       );
       
-      if (response.statusCode == 201) { 
+      if (response2.statusCode == 200) { 
           Navigator.pop(context);
-          final decodedData2 = json.decode(response.body);
+          final decodedData3 = json.decode(response.body);
           final puesto =  Puesto.fromJsonMap(decodedData2);
           String comercio = puesto.idComercio;
-          Navigator.pushNamed(context, 'altaComOk' ,arguments: PuestoArguments(userId,userNombre,fotoUser, mercadoId, comercio,puesto.comercioNumNave,puesto.comercioPuesto,
+          Navigator.pushNamed(context, 'actPuesOk' ,arguments: PuestoArguments(userId,userNombre,fotoUser, mercadoId, comercio,puesto.comercioNumNave,puesto.comercioPuesto,
           puesto.comercioCuit,puesto.comercioTelefono,puesto.comercioEmail,puesto.comercioNombre));
          
     
         //return Puesto.fromJson(json.decode(response.body));
       } else {
         Navigator.pop(context);
-        Navigator.pushNamed(context, 'errorRegPues');
+        Navigator.pushNamed(context, 'errorActPues');
       }
     }
+}
     
       @override
       State<StatefulWidget> createState() {

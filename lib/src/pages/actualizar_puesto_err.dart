@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 
-class AltaProductoOk extends StatelessWidget {
+class ErrorActualizarPuesto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final PuestoArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(    
@@ -20,11 +18,11 @@ class AltaProductoOk extends StatelessWidget {
               child: Container(
                 height: 150.0,
                 width: 150.0,
-                color: Color.fromRGBO(29, 233, 182, 1),
+                color: Colors.red,
                 
                 child: Center(
                   child: Icon(
-                    Icons.thumb_up,
+                    Icons.thumb_down,
                     color: Colors.white,
                     size: 50.0,),
                 ),
@@ -32,19 +30,20 @@ class AltaProductoOk extends StatelessWidget {
             ),
           ),
           SizedBox(height: 50,),
-          Text('Tu producto ha sido', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+          Text('Ha ocurrido', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                 fontSize: 24.0, fontWeight: FontWeight.bold,))),
-          Text('creado con éxito', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+          Text('un error creando tu puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                 fontSize: 24.0, fontWeight: FontWeight.bold,))),
           SizedBox(height: 20.0,),
-          Text('Entra en "Mis productos"', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
-                fontSize: 16.0, fontWeight: FontWeight.normal,))),
-          Text('para visualizarlo ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
-                fontSize: 16.0, fontWeight: FontWeight.normal,))),
+          Text('tu puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
+                fontSize: 16.0, fontWeight: FontWeight.w600,))),
+          Text('vuelve a intentarlo', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
+                fontSize: 16.0, fontWeight: FontWeight.w600,))),
+          Text('por favor', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
+                fontSize: 16.0, fontWeight: FontWeight.w600,))),
           SizedBox(height: 50.0,),
           GestureDetector(
-           onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio,
-           args.numNave,args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));},
+           onTap: () {Navigator.pop(context);},
            child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0) ,
               child:Container(
@@ -52,7 +51,7 @@ class AltaProductoOk extends StatelessWidget {
                 width: 200.0,
                 color: Color.fromRGBO(29, 233, 182, 1),
                 child: Center(child: 
-                Text('Ir a Mis productos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                Text('Volver a intentar', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
                 fontSize: 14.0, fontWeight: FontWeight.w700,))),
                 )
                 )
@@ -65,17 +64,3 @@ class AltaProductoOk extends StatelessWidget {
     );
   }
 }
-
-
-/* 
-class DatosPuesto {
-  final String userId;
-  final String nombre;
-  final String foto;
-  final String mercadoId;
-
-
-  DatosPuesto(this.userId, this.nombre,this.foto,this.mercadoId);
-} */
-
-

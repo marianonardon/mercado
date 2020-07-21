@@ -130,9 +130,9 @@ class _AltaProductoState extends State<AltaProducto> {
               
               SizedBox(height: 25.0),
                 
-              _botonConfirmar(context,args.idComercio,args.mercadoId,args.foto,args.nombre,args.userId),
+              _botonConfirmar(context,args.idComercio,args.mercadoId,args.foto,args.nombre,args.userId,args.numNave,args.comercioPuesto,args.comercioCuit,
+              args.comercioTelefono,args.comercioMail,args.comercioNombre),
               SizedBox(height: 10.0),
-
               ]
             ),
           )
@@ -174,7 +174,7 @@ class _AltaProductoState extends State<AltaProducto> {
                   borderRadius: BorderRadius.circular(8.0),
                   borderSide: BorderSide.none
                 ),
-              labelText: 'Nombre de producto',
+              labelText: 'Nombre de producto *',
               labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                          fontWeight: FontWeight.bold, fontSize: 14.0),
               contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
@@ -226,7 +226,7 @@ class _AltaProductoState extends State<AltaProducto> {
                     color: Colors.greenAccent,
                     width: 1.0,
                   ), */
-                labelText: 'Descripción',
+                labelText: 'Descripción *',
                 labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                   fontWeight: FontWeight.bold, fontSize: 14.0),
               contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
@@ -315,7 +315,7 @@ class _AltaProductoState extends State<AltaProducto> {
                     color: Colors.greenAccent,
                     width: 1.0,
                   ), */
-                labelText: 'Stock',
+                labelText: 'Stock *',
                 labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                   fontWeight: FontWeight.bold, fontSize: 14.0),
               contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
@@ -374,7 +374,7 @@ class _AltaProductoState extends State<AltaProducto> {
                     color: Colors.greenAccent,
                     width: 1.0,
                   ), */
-                  labelText: 'Precio',
+                  labelText: 'Precio *',
                   labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                   fontWeight: FontWeight.bold, fontSize: 14.0),
                   contentPadding: EdgeInsets.only(top: 5.0),
@@ -425,7 +425,7 @@ class _AltaProductoState extends State<AltaProducto> {
                     color: Colors.greenAccent,
                     width: 1.0,
                   ), */
-                   labelText: 'Cantidad',
+                   labelText: 'Cantidad *',
                    labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                   fontWeight: FontWeight.bold, fontSize: 14.0),
                   contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
@@ -654,7 +654,7 @@ class _AltaProductoState extends State<AltaProducto> {
 
 
 
-  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user) {
+  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre) {
     MediaQueryData media = MediaQuery.of(context);
     return GestureDetector(
       onTap: () async {
@@ -696,13 +696,15 @@ class _AltaProductoState extends State<AltaProducto> {
          String fotoUrl;
          fotoUrl = await subirImagen(foto);
          urlFoto = fotoUrl;
+       } else {
+         urlFoto = 'https://res.cloudinary.com/agilemarket/image/upload/v1594599858/m3wh5dxmlwmyjbpit3cr.png';
        }
 
         
          ProductoCrear().producto(nombreController.text, descripcionController.text, categoriaId, stockController.text,
                                   calidad, urlFoto , tipoUnidadId, comercioId, precio1Controller.text, cantidad1Controller.text,
                                   precio2Controller.text,cantidad2Controller.text,precio3Controller.text,cantidad3Controller.text,mercado,
-                                  fotoUser,nombreUser,user,context);
+                                  fotoUser,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context);
        }
       },
         

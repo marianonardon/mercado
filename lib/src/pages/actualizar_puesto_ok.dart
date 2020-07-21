@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 
-class AltaProductoOk extends StatelessWidget {
+class ActPuestoOk extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PuestoArguments args = ModalRoute.of(context).settings.arguments;
@@ -32,12 +32,12 @@ class AltaProductoOk extends StatelessWidget {
             ),
           ),
           SizedBox(height: 50,),
-          Text('Tu producto ha sido', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+          Text('Tu puesto ha sido', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                 fontSize: 24.0, fontWeight: FontWeight.bold,))),
-          Text('creado con éxito', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+          Text('actualizado con éxito', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                 fontSize: 24.0, fontWeight: FontWeight.bold,))),
           SizedBox(height: 20.0,),
-          Text('Entra en "Mis productos"', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
+          Text('Entra en "Mi puesto"', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
                 fontSize: 16.0, fontWeight: FontWeight.normal,))),
           Text('para visualizarlo ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
                 fontSize: 16.0, fontWeight: FontWeight.normal,))),
@@ -52,7 +52,7 @@ class AltaProductoOk extends StatelessWidget {
                 width: 200.0,
                 color: Color.fromRGBO(29, 233, 182, 1),
                 child: Center(child: 
-                Text('Ir a Mis productos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                Text('Ir a Mi puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
                 fontSize: 14.0, fontWeight: FontWeight.w700,))),
                 )
                 )

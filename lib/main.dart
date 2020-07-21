@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_ui/src/pages/actualizar_puesto.dart';
+import 'package:flutter_login_ui/src/pages/actualizar_puesto_err.dart';
+import 'package:flutter_login_ui/src/pages/actualizar_puesto_ok.dart';
 import 'package:flutter_login_ui/src/pages/alta_producto.dart';
 import 'package:flutter_login_ui/src/pages/alta_vendedor.dart';
 import 'package:flutter_login_ui/src/pages/alta_vendedor_ok.dart';
@@ -57,6 +60,9 @@ class MyApp extends StatelessWidget {
         'altaProdOk'    : (BuildContext context) => AltaProductoOk(),
         'errorRegProd' : (BuildContext context) => ErrorRegistrarProducto(),
         'actProd'    : (BuildContext context) => ActualizarProducto(),
+        'actPues'    : (BuildContext context) => ActualizarPuesto(),
+        'actPuesOk'    : (BuildContext context) => ActPuestoOk(),
+        'errorActPues' : (BuildContext context) => ErrorActualizarPuesto(),
         },
       ),
     );

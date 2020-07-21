@@ -23,6 +23,9 @@ class _ComboCategoria extends State<ComboCategoria> {
 
   Future<String> _fetchCategorias() async {
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setString('idCategoria', categoriaId );
+
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
     String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
 

@@ -100,11 +100,11 @@ class Precio {
 
 class ProductoCrear extends StatefulWidget {
   Widget producto(String nombre, descripcion, categoria, stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,BuildContext context ) {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,BuildContext context ) {
     
     return FutureBuilder<Producto>(
       future: createProducto( nombre, descripcion, categoria, stock, calidad, urlFoto, tipoUnidadId, comercioId,precio1,cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,context),
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data.comercioNombre);
@@ -119,7 +119,7 @@ class ProductoCrear extends StatefulWidget {
   }
 
 Future<Producto> createProducto(String nombre, descripcion, categoria, stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,BuildContext context) async {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,BuildContext context) async {
     
     
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
@@ -266,12 +266,12 @@ Future<Producto> createProducto(String nombre, descripcion, categoria, stock, in
           final decodedData2 = json.decode(response.body);
           final producto =  Producto.fromJsonMap(decodedData2);
           String comercio = producto.comercioID;
-          Navigator.pushNamed(context, 'altaProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio));
+          Navigator.pushNamed(context, 'altaProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,));
     
         //return Puesto.fromJson(json.decode(response.body));
       } else {
             Navigator.of(context).pop();
-            Navigator.pushNamed(context, 'errorRegProd', arguments: PuestoArguments(user,nombreUser,foto,mercado,comercioId));
+            Navigator.pushNamed(context, 'errorRegProd', arguments: PuestoArguments(user,nombreUser,foto,mercado,comercioId,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,));
       }
     }
     
