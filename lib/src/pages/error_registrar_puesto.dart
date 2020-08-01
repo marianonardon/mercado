@@ -35,11 +35,9 @@ class ErrorRegistrarPuesto extends StatelessWidget {
           Text('un error creando tu puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                 fontSize: 24.0, fontWeight: FontWeight.bold,))),
           SizedBox(height: 20.0,),
-          Text('tu puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
+          Text('El puesto ya', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
                 fontSize: 16.0, fontWeight: FontWeight.w600,))),
-          Text('vuelve a intentarlo', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
-                fontSize: 16.0, fontWeight: FontWeight.w600,))),
-          Text('por favor', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
+          Text('existe', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
                 fontSize: 16.0, fontWeight: FontWeight.w600,))),
           SizedBox(height: 50.0,),
           GestureDetector(

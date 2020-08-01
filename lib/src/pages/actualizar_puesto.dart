@@ -286,7 +286,10 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
             validator: (cuit) {if (cuit.isEmpty) {
               return 'El campo Cuit no puede estar vacío!';
               }else {
-                return null;
+                if(cuit.length < 11) {
+                  return 'El campo Cuit está incompleto!';
+                } else {
+                return null;}
               }},
             controller: cuitController,
             keyboardType: TextInputType.number,
@@ -350,7 +353,10 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
             validator: (telefono) {if (telefono.isEmpty) {
                 return 'El campo Teléfono no puede estar vacío!';
                 }else {
-                  return null;
+                  if(telefono.length < 10) {
+                    return 'El campo Teléfono está incompleto!';
+                  }else {
+                  return null;}
                 }},
             controller: telefonoController,
             keyboardType: TextInputType.number,
@@ -417,8 +423,19 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
             validator: (mail) {if (mail.isEmpty) {
                 return 'El campo E-mail no puede estar vacío!';
                 }else {
-                  return null;
-                }},
+                  String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
+                        "\\@" +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                        "(" +
+                        "\\." +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                        ")+";
+                    RegExp regExp = new RegExp(p);
+                    if (regExp.hasMatch(mail)) {
+                      return null;
+                    } else {
+                    return 'El Email suministrado no es válido.';}
+                  }},
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(

@@ -11,68 +11,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 
 
-class Puestos{
-
-  List<Puesto> items = new List();
-
-  Puestos();
-
-  Puestos.fromJsonList(List<dynamic> jsonList) {
-
-    if (jsonList == null) return;
-
-    for (var item in jsonList) {
-      final puesto = new Puesto.fromJson(item);
-      items.add(puesto);
-      
-    }
-
-  }
-
-
-
-}
-
-
-class Puesto {
-  final String mercadoId;
-  final String mercadoNombre;
-  final String comercioId;
-  final String comercioNombre;
-  final String comercioTelefono;
-  final String comercioCuit;
-  final String comercioPuesto;
-  final String comercioNumNave;
-  final String comercioFechaAlta;
-  final String comercioExternalId;
-  final String comercioEmail;
-
-
-  Puesto({this.mercadoId, this.mercadoNombre,this.comercioId, this.comercioNombre,this.comercioTelefono, this.comercioCuit,
-          this.comercioPuesto,this.comercioNumNave,this.comercioFechaAlta,this.comercioExternalId,this.comercioEmail});
-
-  factory Puesto.fromJson(Map<String, dynamic> json) {
-    return Puesto(
-      mercadoId: json['mercadoID'], 
-      mercadoNombre: json['mercadoNombre'],
-      comercioId: json['comercioID'], 
-      comercioNombre: json['comercioNombre'], 
-      comercioTelefono: json['comercioTelefono'], 
-      comercioCuit: json['comercioCuit'], 
-      comercioPuesto: json['comercioPuesto'], 
-      comercioNumNave: json['comercioNumNave'], 
-      comercioFechaAlta: json['comercioFechaAlta'], 
-      comercioExternalId: json['comercioExternalID'], 
-      comercioEmail: json['comercioEmail'], 
-
-      
-      
-      
-    );
-  }
-}
-
-
 class Productos{
 
   List<Producto> items = new List();
@@ -110,6 +48,8 @@ class Producto {
   final String tipoUnidadNombre;
   final String comercioID;
   final String comercioNombre;
+  final String comercioPuesto;
+  final String comercioNumNave;
   final String mercadoID;
   final String mercadoNombre;
   final bool   productoDestacado;
@@ -118,12 +58,12 @@ class Producto {
 
   Producto({this.productoID, this.productoNombre, this.productoDescripcion, this.productoStock,
           this.productoCalidad, this.productoFoto,this.categoriaID, this.categoriaNombre, this.tipoUnidadID,
-          this.tipoUnidadNombre, this.comercioID, this.comercioNombre, this.mercadoID,
+          this.tipoUnidadNombre, this.comercioID, this.comercioNombre,this.comercioPuesto,this.comercioNumNave, this.mercadoID,
           this.mercadoNombre, this.productoDestacado, this.precios});
 
   factory Producto.fromJsonMap(Map<String, dynamic> parsedJson) {
 
-    var list = parsedJson['precio'] as List;
+    var list = parsedJson['precio'] as List;  
     print(list.runtimeType);
     List<Precio> preciosList = list.map((i) => Precio.fromJson(i)).toList();
 
@@ -139,7 +79,9 @@ class Producto {
       tipoUnidadID: parsedJson['tipoUnidadID'],
       tipoUnidadNombre: parsedJson['tipoUnidadNombre'],
       comercioID: parsedJson['comercioID'],
-      comercioNombre: parsedJson['ComercioNombre'],
+      comercioNombre: parsedJson['comercioNombre'],
+      comercioPuesto: parsedJson['comercioPuesto'],
+      comercioNumNave: parsedJson['comercioNumNave'],
       mercadoID: parsedJson['mercadoID'],
       mercadoNombre: parsedJson['mercadoNombre'],
       productoDestacado: parsedJson['productoDestacado'],
@@ -169,16 +111,17 @@ class Precio {
  String puestoPuesto;
 
 class ProductosListView extends StatelessWidget {
-  ProductosListView(this.categoriaId, this.mercadoId);
+  ProductosListView(this.categoriaId, this.mercadoId,this.productoBuscado);
   final String categoriaId;
   final String mercadoId;
+  final String productoBuscado;
 
   @override
   Widget build(BuildContext context){
     
     
     return FutureBuilder<List<Producto>>(
-      future: fetchProductos(categoriaId,mercadoId),
+      future: fetchProductos(categoriaId,mercadoId,productoBuscado),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if(snapshot.requireData.isEmpty){
@@ -294,12 +237,12 @@ class ProductosListView extends StatelessWidget {
           return _crearLista(data[index].productoNombre,
                         foto,preciox1,preciox2,preciox3,cantidad1,cantidad2,cantidad3,
                         data[index].comercioNombre,
-                        data[index].tipoUnidadNombre, data[index].productoCalidad,data[index].comercioID,
+                        data[index].tipoUnidadNombre, data[index].productoCalidad,data[index].comercioID,data[index].comercioPuesto,
                         context);
         });
   }
 
-    Widget _crearLista(String title, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,String comercioId, context) {
+    Widget _crearLista(String title, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,String comercioId, String comercioPuesto, context) {
     MediaQueryData media = MediaQuery.of(context);
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -316,7 +259,7 @@ class ProductosListView extends StatelessWidget {
                 
               //  _crearTitulo(),
                 SizedBox(height: 8.0),
-               _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,context)
+               _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,context)
               ],
             ),
           ),
@@ -325,7 +268,7 @@ class ProductosListView extends StatelessWidget {
     );
   }
 
-   _crearTarjetas(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,context) {
+   _crearTarjetas(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,context) {
 
 /*     String puestos;
     List<Puesto> data;
@@ -405,10 +348,12 @@ class ProductosListView extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         Container(
-                          child: Text(
-                          title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                            fontSize: 16.0, fontWeight: FontWeight.bold,
-                            ))
+                          child: Flexible(
+                                                      child: Text(
+                            title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                              fontSize: 16.0, fontWeight: FontWeight.bold,
+                              ))
+                            ),
                           ),
                         ),
                       SizedBox(width: 10.0),
@@ -437,10 +382,12 @@ class ProductosListView extends StatelessWidget {
                     SizedBox(height:6.0),
                     Row(
                       children: <Widget>[
-                        Text(
-                            comercio, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                              fontSize: 12.0, fontWeight: FontWeight.w400,
+                         Flexible(
+                                                    child: Text(
+                              '$comercio   Puesto:$comercioPuesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                fontSize: 12.0, fontWeight: FontWeight.w400,
                         ))),
+                         ),
                         
                       ],
                     ),
@@ -526,6 +473,7 @@ class ProductosListView extends StatelessWidget {
           context: context,
           builder: (builder) {
             int cantidad = 1;
+
             cantidadProd = cantidad;
             
             
@@ -716,7 +664,7 @@ class ProductosListView extends StatelessWidget {
           });
   }
 
-  Future<List<Producto>> fetchProductos(categoriaId,mercadoId) async { 
+  Future<List<Producto>> fetchProductos(categoriaId,mercadoId,productoBuscado) async { 
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
     String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
@@ -755,8 +703,8 @@ class ProductosListView extends StatelessWidget {
 
     int categoria = int.parse(categoriaId);
     int mercado   = int.parse(mercadoId);
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado';
-    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado';
+    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
 
     final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
 
@@ -764,61 +712,6 @@ class ProductosListView extends StatelessWidget {
       final decodedData = json.decode(response.body);
       final productos = new Productos.fromJsonList(decodedData);
       return productos.items;
-      //List jsonResponse = json.decode(response.body);
-      //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));
-    } else {
-      throw Exception('Failed to load jobs from API');
-    }
-  }
-
-    Future<List<Puesto>> _fetchPuestos(comercioId) async {
-
-    String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
-    String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
-
-    Map<String, String> bodyToken = {
-      "client_id": "d6471aff30e64770bd9da53caccc4cc4",
-      "client_secret": "7dae40626f4f45378b22bb47aa750024",
-      "scope": "FullControl",
-      "username": "admin",
-      "password": "admin123",
-    };
-
-        Map<String, String> bodyTokenQA = {
-      "client_id": "32936ed0b05f48859057b6a2dd5aee6f",
-      "client_secret": "915b06d26cdf44f7b832c66fe6e58743",
-      "scope": "FullControl",
-      "username": "admin",
-      "password": "admin123",
-    };
-
-    Map<String, String> headers = {
-        "Content-Type": "application/x-www-form-urlencoded"
-    };
-
-
-    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
-    final decodedData = json.decode(responseToken.body);
-    final token = new Token.fromJsonMap(decodedData);
-    String token2 = token.accessToken.toString();
-
-
-    Map<String, String> headers2 = {
-      "Authorization": "OAuth $token2"
-      };
-
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultarComercio';
-    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarComercio';
-    final userPuesto = '?comercioID=$comercioId';
-    final response = await http.get('$mercadosListAPIUrlQA$userPuesto', headers: headers2);
-
-    if (response.statusCode == 200) {
-      final decodedData = json.decode(response.body);
-      final puestos = new Puestos.fromJsonList(decodedData['comercios']);
-      
-/*       Puesto puesto = puestos.items[0]; */
-      return puestos.items;
-      
       //List jsonResponse = json.decode(response.body);
       //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));
     } else {
@@ -995,11 +888,13 @@ class ProductosListViewHorizontal extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height:3.0),
-          Text(
-              '\$$precio $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
-                fontSize: 12.0, fontWeight: FontWeight.w600,
-          )),
-          overflow: TextOverflow.ellipsis,)
+          Flexible(
+            child: Text(
+                '\$$precio x $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
+                  fontSize: 12.0, fontWeight: FontWeight.w600,
+            )),
+            overflow: TextOverflow.ellipsis,),
+          )
       ],
       )
     );

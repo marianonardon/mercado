@@ -33,6 +33,7 @@ class LoginState with ChangeNotifier {
 
   void login(LoginProvider loginProvider) async{
     _loading = true;
+    _loggedIn = false;
     notifyListeners();
 
     switch(loginProvider) {
@@ -83,6 +84,7 @@ class LoginState with ChangeNotifier {
         );
     prefs.setString('nombre', googleUser.displayName);
     prefs.setString('fotoUser', googleUser.photoUrl);
+    prefs.setString('usuarioId2', '');
     print(googleUser.id + googleUser.email + googleUser.displayName);
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
@@ -127,6 +129,7 @@ class LoginState with ChangeNotifier {
         );
     prefs.setString('nombre', user.  displayName);
     prefs.setString('fotoUser', user.photoUrl);
+    prefs.setString('usuarioId2', '');
     print(user.uid + user.email + user.displayName);
     
     return user;

@@ -33,6 +33,7 @@ class Token {
 class Puesto {
   final String idComercio;
   final String id;
+  final String id2;
   final String comercioNombre;
   final String comercioCuit;
   final String comercioDireccion;
@@ -43,13 +44,14 @@ class Puesto {
   final String comercioNumNave;
   final String gx;
 
-  Puesto({this.idComercio,this.id, this.comercioNombre,this.comercioCuit, this.comercioDireccion,this.comercioDireccionEntrega,
+  Puesto({this.idComercio,this.id,this.id2, this.comercioNombre,this.comercioCuit, this.comercioDireccion,this.comercioDireccionEntrega,
          this.comercioTelefono,this.comercioEmail, this.comercioPuesto,this.comercioNumNave,this.gx});
 
   factory Puesto.fromJsonMap(Map<String, dynamic> parsedJson) {
     return Puesto(
       idComercio: parsedJson['ComercioID'],
       id: parsedJson['ComercioExternalID'], 
+      id2: parsedJson['comercioUserID'], 
       comercioNombre: parsedJson['ComercioNombre'], 
       comercioCuit: parsedJson['ComercioCuit'], 
       comercioDireccion: parsedJson['ComercioDireccion'], 
@@ -90,6 +92,7 @@ Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, pue
     SharedPreferences prefs = await SharedPreferences.getInstance();
   //Return String
     String externalId2 = prefs.getString('usuarioId');
+    String userId      = prefs.getString('usuarioId2');
     setState(() {
       idUser = externalId2;
     }); 
@@ -151,6 +154,7 @@ Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, pue
         body: jsonEncode(<String, String>{
           'MercadoID': mercadoId,
           'ComercioID': idComercio,
+          "ComercioUserID": userId,
           'ComercioExternalID': externalId2,
           'ComercioNombre': nombre,
           'ComercioCuit': cuit,
@@ -164,8 +168,8 @@ Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, pue
       
       if (response2.statusCode == 200) { 
           Navigator.pop(context);
-          final decodedData3 = json.decode(response.body);
-          final puesto =  Puesto.fromJsonMap(decodedData2);
+          final decodedData3 = json.decode(response2.body);
+          final puesto =  Puesto.fromJsonMap(decodedData3);
           String comercio = puesto.idComercio;
           Navigator.pushNamed(context, 'actPuesOk' ,arguments: PuestoArguments(userId,userNombre,fotoUser, mercadoId, comercio,puesto.comercioNumNave,puesto.comercioPuesto,
           puesto.comercioCuit,puesto.comercioTelefono,puesto.comercioEmail,puesto.comercioNombre));

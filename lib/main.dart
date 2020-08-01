@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_login_ui/src/pages/actualizar_puesto.dart';
 import 'package:flutter_login_ui/src/pages/actualizar_puesto_err.dart';
 import 'package:flutter_login_ui/src/pages/actualizar_puesto_ok.dart';
@@ -10,10 +11,15 @@ import 'package:flutter_login_ui/src/pages/confirmoReserva.dart';
 import 'package:flutter_login_ui/src/pages/detalle_producto.dart';
 import 'package:flutter_login_ui/src/pages/error_registrar_puesto.dart';
 import 'package:flutter_login_ui/src/pages/login.dart';
+import 'package:flutter_login_ui/src/pages/login_manual.dart';
 import 'package:flutter_login_ui/src/pages/mercado_page.dart';
 import 'package:flutter_login_ui/src/pages/categorias_page.dart';
+import 'package:flutter_login_ui/src/pages/producto_resultado.dart';
+import 'package:flutter_login_ui/src/pages/producto_xpuesto_page.dart';
+import 'package:flutter_login_ui/src/pages/productos_busqueda.dart';
 import 'package:flutter_login_ui/src/pages/productos_page.dart';
 import 'package:flutter_login_ui/src/pages/puestos_page.dart';
+import 'package:flutter_login_ui/src/pages/registro_user_page.dart';
 import 'package:flutter_login_ui/src/pages/vendedor_prod_page.dart';
 import 'package:flutter_login_ui/src/pages/alta_producto_ok.dart';
 import 'package:flutter_login_ui/src/pages/alta_producto_err.dart';
@@ -30,10 +36,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
     return ChangeNotifierProvider<LoginState>(
         builder: (BuildContext context) => LoginState(),
         child: MaterialApp(
-        title: 'Flutter Login UI',
+        title: 'Agile Market',
         debugShowCheckedModeBanner: false,
         //home: LoginScreen(),
         routes: {
@@ -63,6 +73,12 @@ class MyApp extends StatelessWidget {
         'actPues'    : (BuildContext context) => ActualizarPuesto(),
         'actPuesOk'    : (BuildContext context) => ActPuestoOk(),
         'errorActPues' : (BuildContext context) => ErrorActualizarPuesto(),
+        'buscarProducto' : (BuildContext context) => ProductosBusquedaPage(),
+        'resultadoProducto' : (BuildContext context) => ProductosResultadoPage(),
+        'puestoProd' : (BuildContext context) => ProductoXPuestoPage(),
+        'loginManual' : (BuildContext context) => LoginManualPageFinal(),
+        'registrarse' : (BuildContext context) => RegistroUserPageFinal(),
+        
         },
       ),
     );

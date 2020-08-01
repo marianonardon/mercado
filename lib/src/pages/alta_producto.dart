@@ -674,21 +674,24 @@ class _AltaProductoState extends State<AltaProducto> {
 
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            title: Center(child: Text('Cargando producto')),
-            content:  SizedBox(
-                      width: media.size.width * 0.005,
-                      height: media.size.height * 0.05,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 3.0,
-                          valueColor : AlwaysStoppedAnimation(Color.fromRGBO(29, 233, 182, 1),),
+          builder: (context) => WillPopScope(
+            onWillPop: () async => false,
+                      child: AlertDialog(
+              title: Center(child: Text('Cargando producto')),
+              content:  SizedBox(
+                        width: media.size.width * 0.005,
+                        height: media.size.height * 0.05,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3.0,
+                            valueColor : AlwaysStoppedAnimation(Color.fromRGBO(29, 233, 182, 1),),
+                          ),
                         ),
-                      ),
-                  ),
-            backgroundColor: Colors.white
+                    ),
+              backgroundColor: Colors.white
 
         ),
+          ),
         barrierDismissible: false,
           ).then((_) => setState((){})); 
 

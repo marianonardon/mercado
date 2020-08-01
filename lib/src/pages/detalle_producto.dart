@@ -35,7 +35,8 @@ class _DetalleProductoState extends State<DetalleProducto> {
       peso3 = '\$';
     }
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async { Navigator.pop(context);
+      return true;},
           child: Scaffold(
       //  key: _scaffoldKey,
         appBar: AppBar(
@@ -330,9 +331,9 @@ class _DetalleProductoState extends State<DetalleProducto> {
                               boxShadow: [
                                 BoxShadow(
                                   color: Color.fromRGBO(0, 182, 134, 0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 5,
-                                  offset: Offset(0, 2), // changes position of shadow
+                                  spreadRadius: 2.5,
+                                  blurRadius: 1,
+                                  offset: Offset(0, 0), // changes position of shadow
                                 ),
                               ],
                             ),
@@ -350,43 +351,46 @@ class _DetalleProductoState extends State<DetalleProducto> {
                               onTap: () {
                                  showDialog(
                                     context: mainContext,
-                                    builder: (BuildContext context) => AlertDialog(
-                                      title: Center(child: Text('¿Seguro quiere eliminar el producto?',
-                                      textAlign: TextAlign.center,)),
-                                      actions: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(right:50.0),
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              FlatButton(
-                                                color: Color.fromRGBO(195, 15, 0, 1),
-                                                onPressed: () {
-                                                Navigator.of(context).pop();},
-                                                child: Text('No'),
-                                                textColor: Colors.white,
-                                              
-                                              ),
-                                              SizedBox(width: media.size.width * 0.2,),
-                                              FlatButton(
-                                                color: Color.fromRGBO(29, 233, 182, 1),
-                                                onPressed: () async {
-                                                  String productoId2;
-                                                  productoId2 = await deleteProducto(args.idProducto,args);
-                                                },
-                                                child: Text('Si'),
-                                                textColor: Colors.black,
-                                              
-                                              ),
-                                            ],
+                                    builder: (BuildContext context) => WillPopScope(
+                                      onWillPop: () async => false,
+                                       child: AlertDialog(
+                                        title: Center(child: Text('¿Seguro quiere eliminar el producto?',
+                                        textAlign: TextAlign.center,)),
+                                        actions: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(right:50.0),
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                FlatButton(
+                                                  color: Color.fromRGBO(195, 15, 0, 1),
+                                                  onPressed: () {
+                                                  Navigator.of(context).pop();},
+                                                  child: Text('No'),
+                                                  textColor: Colors.white,
+                                                
+                                                ),
+                                                SizedBox(width: media.size.width * 0.2,),
+                                                FlatButton(
+                                                  color: Color.fromRGBO(29, 233, 182, 1),
+                                                  onPressed: () async {
+                                                    String productoId2;
+                                                    productoId2 = await deleteProducto(args.idProducto,args);
+                                                  },
+                                                  child: Text('Si'),
+                                                  textColor: Colors.black,
+                                                
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        
-                                      ],
-                                      backgroundColor: Colors.white
+                                          
+                                        ],
+                                        backgroundColor: Colors.white
 
                                   ),
-                                  barrierDismissible: true,
+                                    ),
+                                  barrierDismissible: false,
                                     ).then((_) => setState((){}));
 
 
@@ -411,9 +415,9 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                       boxShadow: [
                                         BoxShadow(
                                           color: Color.fromRGBO(195, 15,0, 0.5),
-                                          spreadRadius: 3,
-                                          blurRadius: 5,
-                                          offset: Offset(0, 2), // changes position of shadow
+                                          spreadRadius: 2.5,
+                                          blurRadius: 1,
+                                          offset: Offset(0, 0), // changes position of shadow
                                         ),
                                       ],
                                     ),
@@ -451,21 +455,24 @@ class _DetalleProductoState extends State<DetalleProducto> {
     Navigator.of(context).pop();
     showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            title: Center(child: Text('Eliminado producto')),
-            content:  SizedBox(
-                      width: media.size.width * 0.005,
-                      height: media.size.height * 0.05,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          strokeWidth: 3.0,
-                          valueColor : AlwaysStoppedAnimation(Color.fromRGBO(29, 233, 182, 1),),
+          builder: (context) => WillPopScope(
+            onWillPop: () async => false,
+                      child: AlertDialog(
+              title: Center(child: Text('Eliminando producto')),
+              content:  SizedBox(
+                        width: media.size.width * 0.005,
+                        height: media.size.height * 0.05,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3.0,
+                            valueColor : AlwaysStoppedAnimation(Color.fromRGBO(29, 233, 182, 1),),
+                          ),
                         ),
-                      ),
-                  ),
-            backgroundColor: Colors.white
+                    ),
+              backgroundColor: Colors.white
 
         ),
+          ),
         barrierDismissible: false,
           ).then((_) => setState((){}));
 
@@ -519,39 +526,42 @@ class _DetalleProductoState extends State<DetalleProducto> {
     Navigator.of(context).pop();
     showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            title: Center(child: Text('Producto eliminado')),
-            content:  SizedBox(
-                      width: media.size.width * 0.005,
-                      height: media.size.height * 0.05,
-                      child: Center(
-                        child: Icon(Icons.check_circle, color: Color.fromRGBO(29, 233, 182, 1),size: 50.0,)
-                      ),
-                  ),
-            backgroundColor: Colors.white,
-             actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right:65.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      FlatButton(
-                        color: Color.fromRGBO(29, 233, 182, 1),
-                        onPressed: () {
-                        Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombreUser,args.fotoUser,args.mercadoId,args.comercioId,
-                        args.numNave,args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));},
-                        child: Text('Ir a mis productos'),
-                        textColor: Colors.black,
-                      
-                      ),
+          builder: (context) => WillPopScope(
+            onWillPop: () async => false,
+                      child: AlertDialog(
+              title: Center(child: Text('Producto eliminado')),
+              content:  SizedBox(
+                        width: media.size.width * 0.005,
+                        height: media.size.height * 0.05,
+                        child: Center(
+                          child: Icon(Icons.check_circle, color: Color.fromRGBO(29, 233, 182, 1),size: 50.0,)
+                        ),
+                    ),
+              backgroundColor: Colors.white,
+               actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right:65.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        FlatButton(
+                          color: Color.fromRGBO(29, 233, 182, 1),
+                          onPressed: () {
+                          Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombreUser,args.fotoUser,args.mercadoId,args.comercioId,
+                          args.numNave,args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));},
+                          child: Text('Ir a mis productos'),
+                          textColor: Colors.black,
                         
-                    ],
+                        ),
+                          
+                      ],
+                    ),
                   ),
-                ),
-                
-              ],
+                  
+                ],
 
         ),
+          ),
         barrierDismissible: false,
           ).then((_) => setState((){}));
 

@@ -103,44 +103,27 @@ class Precio {
 
 }
 
-class VendedorProductosListView extends StatefulWidget {
-  VendedorProductosListView(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser,this.numNave,this.comercioPuesto,
-  this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre);
-  final String comercioId;
+class PuestoProductosListView extends StatefulWidget {
+  PuestoProductosListView(this.categoriaId,this.mercadoId,this.comercioId,);
+  
+  final String categoriaId;
   final String mercadoId;
-  final String userId;
-  final String fotoUser;
-  final String nombreUser;
-  final String numNave;
-  final String comercioPuesto;
-  final String comercioCuit;
-  final String comercioTelefono;
-  final String comercioMail;
-  final String comercioNombre;
+  final String comercioId;
 
   @override
-  _ProductosListViewState createState() => _ProductosListViewState(comercioId,mercadoId,userId,fotoUser,nombreUser,numNave,comercioPuesto,comercioCuit,comercioTelefono,
-  comercioMail,comercioNombre);
+  _PuestoProductosListViewState createState() => _PuestoProductosListViewState(categoriaId,mercadoId,comercioId,);
 }
 
-class _ProductosListViewState extends State<VendedorProductosListView> {
-   _ProductosListViewState(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser,this.numNave,this.comercioPuesto,this.comercioCuit,
-   this.comercioTelefono,this.comercioMail,this.comercioNombre);
-  final String comercioId;
+class _PuestoProductosListViewState extends State<PuestoProductosListView> {
+   _PuestoProductosListViewState(this.categoriaId,this.mercadoId,this.comercioId);
+
+  final String categoriaId;
   final String mercadoId;
-  final String userId;
-  final String fotoUser;
-  final String nombreUser;
-  final String numNave;
-  final String comercioPuesto;
-  final String comercioCuit;
-  final String comercioTelefono;
-  final String comercioMail;
-  final String comercioNombre;
+  final String comercioId;
   @override
   Widget build(BuildContext context){
     return FutureBuilder<List<Producto>>(
-      future: fetchProductos(comercioId),
+      future: fetchProductos(comercioId,categoriaId,mercadoId),
       builder: (context, snapshot) {
         MediaQueryData media = MediaQuery.of(context);
         if (snapshot.hasData) {
@@ -152,99 +135,18 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
               child: Container(
                 child: Column(
                    children: <Widget>[
-                     Container(
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                    Stack(
-                      fit: StackFit.loose,
-                      alignment: Alignment.topRight,
-                      children: <Widget> [
-                        Image(
-                          //height: media.size.height * 0.23,
-                          //width: media.size.width * 0.93,
-                          fit: BoxFit.fill,
-                          image: AssetImage('assets/img/PuestoImg.png'),
-
-                          //placeholder: AssetImage('assets/img/loader.gif')),
-                        ),
-                        
-                        GestureDetector(
-                          onTap: () {Navigator.pushNamed(context, 'actPues', arguments: PuestoArguments(userId, nombreUser, fotoUser, mercadoId, comercioId,numNave,comercioPuesto,
-              comercioCuit,comercioTelefono,comercioMail,comercioNombre)); },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(40.0),
-                            child: Container(
-                              color: Colors.black38,
-                              child: Icon(Icons.mode_edit, color: Colors.white, size: 30.0)))
-                        ),
-
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child:  Container(
-                              color: Colors.black26,
-                              child: Column(
-                                children:<Widget>[ 
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start ,
-                                    children: <Widget>[
-                                      SizedBox(width:10.0),
-                                      Flexible(
-                                      child: Text(
-                                        comercioNombre, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                                          fontSize: 24.0, fontWeight: FontWeight.w600,
-                                          )),
-                                        ),
-                                      ),
-                                      SizedBox(width: 30.0),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10.0),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start ,
-                                    children: <Widget>[
-                                      SizedBox(width:10.0),
-                                      Icon(Icons.location_on,color:Colors.white),
-                                      SizedBox(width: 5.0),
-                                      Text(
-                                      'Puesto $comercioPuesto Nave $numNave', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                                        fontSize: 14.0, fontWeight: FontWeight.normal,
-                                        )),
-                                      ),
-                                      SizedBox(width: 13.0),
-                                      Icon(Icons.phone,color:Colors.white),
-                                      SizedBox(width: 5.0),
-                                      Text(
-                                      comercioTelefono, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                                        fontSize: 14.0, fontWeight: FontWeight.normal,
-                                        )),
-                                      ),
-                                      SizedBox(width: 30.0),
-                                    ],
-                                  ),
-                                  SizedBox(height: 15.0),
-                                ]
-                              ),
-                            ),
-                        ),
-                        
-                        ]
-                    ),
-                    ])),
+                     SizedBox(height:media.size.height * 0.13),
                      Image(
                        height: media.size.height * 0.45,
                        image: AssetImage('assets/img/SinProductos.gif'),
                      ),
                     Text(
-                    'Cree un producto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                    'No existen productos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
                       fontSize: 24.0, fontWeight: FontWeight.w600,
                       ))                 
                     ),
                     Text(
-                    'para su puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                    'para este puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
                       fontSize: 24.0, fontWeight: FontWeight.w600,
                       ))                 
                     ),
@@ -262,92 +164,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-
-               Container(
-                  width: double.infinity,
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                    Stack(
-                      fit: StackFit.loose,
-                      alignment: Alignment.topRight,
-                      children: <Widget> [
-                        Image(
-                          //height: media.size.height * 0.23,
-                          //width: media.size.width * 0.93,
-                          fit: BoxFit.fill,
-                          image: AssetImage('assets/img/PuestoImg.png'),
-
-                          //placeholder: AssetImage('assets/img/loader.gif')),
-                        ),
-                        
-                        GestureDetector(
-                          onTap: () {Navigator.pushNamed(context, 'actPues', arguments: PuestoArguments(userId, nombreUser, fotoUser, mercadoId, comercioId,numNave,comercioPuesto,
-              comercioCuit,comercioTelefono,comercioMail,comercioNombre)); },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(40.0),
-                            child: Container(
-                              color: Colors.black38,
-                              child: Icon(Icons.mode_edit, color: Colors.white, size: 30.0)))
-                        ),
-
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child:  Container(
-                              color: Colors.black26,
-                              child: Column(
-                                children:<Widget>[ 
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start ,
-                                    children: <Widget>[
-                                      SizedBox(width:10.0),
-                                      Flexible(
-                                        child: Text(
-                                        comercioNombre, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                                          fontSize: 24.0, fontWeight: FontWeight.w600,
-                                          )),
-                                        ),
-                                      ),
-                                      SizedBox(width: 30.0),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10.0),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start ,
-                                    children: <Widget>[
-                                      SizedBox(width:10.0),
-                                      Icon(Icons.location_on,color:Colors.white),
-                                      SizedBox(width: 5.0),
-                                      Text(
-                                      'Puesto $comercioPuesto Nave $numNave', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                                        fontSize: 14.0, fontWeight: FontWeight.normal,
-                                        )),
-                                      ),
-                                      SizedBox(width: 13.0),
-                                      Icon(Icons.phone,color:Colors.white),
-                                      SizedBox(width: 5.0),
-                                      Text(
-                                      comercioTelefono, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                                        fontSize: 14.0, fontWeight: FontWeight.normal,
-                                        )),
-                                      ),
-                                      SizedBox(width: 30.0),
-                                    ],
-                                  ),
-                                  SizedBox(height: 15.0),
-                                ]
-                              ),
-                            ),
-                        ),
-                        
-                        ]
-                    ),
-                    ])),
-
-                    SizedBox(height: 20.0),
-              
+              SizedBox(height: 20.0),
               Text('  Catálogo de productos',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                 fontSize: 16.0, fontWeight: FontWeight.w600,
                 ))),
@@ -420,13 +237,12 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
                         foto,preciox1,preciox2,preciox3,cantidad1,cantidad2,cantidad3,
                         data[index].comercioNombre,
                         data[index].tipoUnidadNombre, data[index].productoCalidad,comercioId, data[index].productoStock,
-                        data[index].productoID,data[index].categoriaID,data[index].tipoUnidadID,numNave,comercioPuesto,comercioCuit,
-                        comercioTelefono,comercioMail,comercioNombre,context);
+                        data[index].productoID,data[index].categoriaID,data[index].tipoUnidadID,context);
         });
   }
 
     Widget _crearLista(String title,String prodDesc, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,comercioId,String stock,String productoID, String categoriaId,String unidadId,
-    numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre, context) {
+    context) {
     MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
@@ -439,7 +255,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
           //  _crearTitulo(),
             SizedBox(height: 15.0),
            _crearTarjetas(title,prodDesc, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,stock,productoID,categoriaId,unidadId,
-           numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context)
+           context)
           ],
         ),
       ),
@@ -447,7 +263,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
   }
 
   Widget _crearTarjetas(title,prodDesc,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,stock,productoID,categoriaId,unidadId,
-  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context) {
+  context) {
  MediaQueryData media = MediaQuery.of(context); 
   String unidad2;
   String unidad3;
@@ -468,14 +284,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
     speso3 = '\$';
   }
   return Container(
-          child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, 'detalleProd', arguments: ProductoDetalleArg(productoID, title,prodDesc,imagen,precio1,cantidad1,precio2,cantidad2,
-                                  precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,mercadoId,userId,ratingProd,categoriaId,unidadId,fotoUser,nombreUser,
-                                  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre));
-
-              },
-              child: Container(
+          child: Container(
               padding: EdgeInsets.only(left:12.0),
                child: Column(
                  children: <Widget>[
@@ -612,13 +421,12 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
                  ],
                ),
             ),
-          ),
         );
   }
 
   
 
-  Future<List<Producto>> fetchProductos(comercioId) async { 
+  Future<List<Producto>> fetchProductos(comercioId,categoriaId,mercadoId) async { 
 
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
     String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
@@ -656,8 +464,8 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
 
 
 
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?comercioID=$comercioId';
-    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?comercioID=$comercioId';
+    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?comercioID=$comercioId&categoriaID=$categoriaId&mercadoID=$mercadoId';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?comercioID=$comercioId&categoriaID=$categoriaId&mercadoID=$mercadoId';
     final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
 
     if (response.statusCode == 200) {
@@ -690,41 +498,4 @@ class Token {
       userGuid: parsedJson['user_guid'],
     );
   }
-}
-
-class ProductoDetalleArg {
-  final String idProducto;
-  final String nombre;
-  final String descripcion;
-  final String foto;
-  final String precio1;
-  final String cantidad1;
-  final String precio2;
-  final String cantidad2;
-  final String precio3;
-  final String cantidad3;
-  final String stock;
-  final String unidad;
-  final String unidad2;
-  final String unidad3;
-  final String comercioId;
-  final String mercadoId;
-  final String userId;
-  final double calidad;
-  final String categoria;
-  final String unidadId;
-  final String fotoUser;
-  final String nombreUser;
-  final String numNave;
-  final String comercioPuesto;
-  final String comercioCuit;
-  final String comercioTelefono;
-  final String comercioMail;
-  final String comercioNombre;
-  
-
-
-  ProductoDetalleArg(this.idProducto, this.nombre,this.descripcion,this.foto,this.precio1,this.cantidad1,this.precio2,this.cantidad2,this.precio3,this.cantidad3,
-  this.stock,this.unidad,this.unidad2,this.unidad3,this.comercioId,this.mercadoId,this.userId,this.calidad,this.categoria,this.unidadId,this.fotoUser,this.nombreUser,
-  this.numNave,this.comercioPuesto,this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre);
 }

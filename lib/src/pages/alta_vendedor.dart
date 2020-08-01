@@ -388,8 +388,20 @@ class _AltaVendedorState extends State<AltaVendedor> {
             validator: (mail) {if (mail.isEmpty) {
                 return 'El campo E-mail no puede estar vacío!';
                 }else {
-                  return null;
-                }},
+                  String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
+                        "\\@" +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                        "(" +
+                        "\\." +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                        ")+";
+                    RegExp regExp = new RegExp(p);
+                    if (regExp.hasMatch(mail)) {
+                      return null;
+                    } else {
+                    return 'El Email suministrado no es válido.';}
+                  }
+                },
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(

@@ -6,20 +6,27 @@ class PuestosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){Navigator.pushNamed(context, 'altaVendedor', arguments: ScreenArguments(args.userId,args.nombre,args.foto,args.mercadoId));},
-        backgroundColor: Color.fromRGBO(29, 233, 182, 1),
-        child: Icon(Icons.add, color: Colors.black, size: 40.0,),
-        ),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text('Seleccionar Puesto', style: TextStyle(color: Colors.blueGrey, fontSize: 20.0, fontWeight: FontWeight.bold),),
-        iconTheme: IconThemeData(color: Colors.black),
+    return WillPopScope(
+     onWillPop: () async {Navigator.pushNamed(context, 'categorias', arguments: ScreenArguments(args.userId, args.nombre, args.foto,args.mercadoId));
+      return true;},
+          child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){Navigator.pushNamed(context, 'altaVendedor', arguments: ScreenArguments(args.userId,args.nombre,args.foto,args.mercadoId));},
+          backgroundColor: Color.fromRGBO(29, 233, 182, 1),
+          child: Icon(Icons.add, color: Colors.black, size: 40.0,),
+          ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text('Seleccionar Puesto', style: TextStyle(color: Colors.blueGrey, fontSize: 20.0, fontWeight: FontWeight.bold),),
+          iconTheme: IconThemeData(color: Colors.black),
+          leading: new IconButton(
+          icon: new Icon(Icons.chevron_left, size:35),
+          onPressed: () => Navigator.pushNamed(context, 'categorias', arguments: ScreenArguments(args.userId, args.nombre, args.foto,args.mercadoId))),
 
-      ),
-      backgroundColor: Colors.white,
-      body:  _puestoLista(args));
+        ),
+        backgroundColor: Colors.white,
+        body:  _puestoLista(args)),
+    );
           
   }
 

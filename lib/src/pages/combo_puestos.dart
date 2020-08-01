@@ -3,14 +3,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ComboPuesto extends StatefulWidget {
+  ComboPuesto(this.mercadoId);
+  final String mercadoId;
   @override
-  _ComboPuesto createState() => _ComboPuesto();
+  _ComboPuesto createState() => _ComboPuesto(mercadoId);
 }
 
 class _ComboPuesto extends State<ComboPuesto> {
+  _ComboPuesto(this.mercadoId);
+  final String mercadoId;
   String _mySelection;
 
 
@@ -19,11 +24,11 @@ class _ComboPuesto extends State<ComboPuesto> {
   Future<String> _fetchPuestos() async {
 
 
-     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+     String url = "https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token";
 
     Map<String, String> bodyToken = {
-      "client_id": "d6471aff30e64770bd9da53caccc4cc4",
-      "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "client_id": "32936ed0b05f48859057b6a2dd5aee6f",
+      "client_secret": "915b06d26cdf44f7b832c66fe6e58743",
       "scope": "FullControl",
       "username": "admin",
       "password": "admin123",
@@ -44,16 +49,18 @@ class _ComboPuesto extends State<ComboPuesto> {
       "Authorization": "OAuth $token2"
       };
 
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultarComercio';
+    final mercadosListAPIUrl = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarComercio?mercadoID=$mercadoId';
     final response = await http.get('$mercadosListAPIUrl', headers: headers2);
 
     if (response.statusCode == 200) {
       var resBody = json.decode(response.body);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('idPuesto', '' );
 
       setState(() {
         data = resBody['comercios'];
       });
-      return 'Success';
+     
     } else {
       throw Exception('Failed to load jobs from API');
     }
@@ -70,52 +77,57 @@ class _ComboPuesto extends State<ComboPuesto> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
+    if(data != null) {
+      if(data.isNotEmpty){
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(width: 18.0,),
-            Text('Puestos',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
-            fontWeight: FontWeight.normal, fontSize: 12.0))),
-          ],
-        ),
-        SizedBox(height: 10.0),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: Color.fromRGBO(240, 241, 246, 1),
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 3.0,
-                offset: Offset(0, 2),
-              ),
-            ],
+        Center(
+          child: Container(
+            alignment: Alignment.centerRight,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(240, 241, 246, 1),
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 3.0,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            height: media.size.height * 0.06,
+            width: media.size.width * 0.70,
+            child:  Center(
+              child: DropdownButton(
+                hint: Center(child: Text('Seleccione un puesto')),
+                isExpanded: true,
+                items: data.map((item) {
+                return new DropdownMenuItem(
+                  child: Center(child: new Text(item['comercioNombre'])),
+                  value: item['comercioID'].toString(),
+                );
+                }).toList(),
+               onChanged: (newVal) async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString('idPuesto', newVal );
+                setState(() {
+                  _mySelection = newVal;
+                });
+              },
+              value: _mySelection,
           ),
-          height: media.size.height * 0.06,
-          width: media.size.width * 0.90,
-          child:  DropdownButton(
-            hint: Text('Seleccione una categoría'),
-            isExpanded: true,
-            items: data.map((item) {
-            return new DropdownMenuItem(
-              child: new Text(item['comercioNombre']),
-              value: item['comercioID'].toString(),
-            );
-            }).toList(),
-           onChanged: (newVal) {
-            setState(() {
-              _mySelection = newVal;
-            });
-          },
-          value: _mySelection,
-        ),
+            ),
+          ),
         )
       ]
-      );
+      );}else {
+        return Container();
+      }
+      
+      } else{
+        return Container();
+      }
   }
   
 }

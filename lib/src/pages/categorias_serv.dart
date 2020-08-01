@@ -69,8 +69,11 @@ class Categoria {
 }
 
 class CategoriasListView extends StatelessWidget {
-  CategoriasListView(this.mercadoId);
+  CategoriasListView(this.mercadoId,this.userId,this.nombreUser,this.fotoUser);
   final String mercadoId;
+  final String userId;
+  final String nombreUser;
+  final String fotoUser; 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Categoria>>(
@@ -158,7 +161,7 @@ class CategoriasListView extends StatelessWidget {
           //  _crearTitulo(),
             SizedBox(height: 15.0),
             GestureDetector(
-              onTap: () {Navigator.pushNamed(context, 'productos', arguments: ProductosArguments(categoriaID, mercadoId));},
+              onTap: () {Navigator.pushNamed(context, 'productos', arguments: ProductosArguments(categoriaID, mercadoId,'',userId,nombreUser,fotoUser,title));},
             child:_crearTarjetas(title, imagen,context))
           ],
         ),
@@ -221,7 +224,12 @@ class CategoriasListView extends StatelessWidget {
 class ProductosArguments {
   final String categoriaId;
   final String mercadoId;
+  final String productoBuscado;
+  final String userId;
+  final String nombreUser;
+  final String fotoUser; 
+  final String categoriaNombre;
 
 
-  ProductosArguments(this.categoriaId, this.mercadoId);
+  ProductosArguments(this.categoriaId, this.mercadoId,this.productoBuscado,this.userId,this.nombreUser,this.fotoUser,this.categoriaNombre);
 }

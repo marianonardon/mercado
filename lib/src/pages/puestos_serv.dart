@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'mercados_serv.dart';
 
@@ -145,6 +146,11 @@ class PuestosListView extends StatelessWidget {
 
   Future<List<Puesto>> _fetchPuestos(userId) async {
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+  //Return String
+    String externalId2 = prefs.getString('usuarioId');
+    String userId2      = prefs.getString('usuarioId2');
+
     String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
     String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
 
@@ -181,7 +187,7 @@ class PuestosListView extends StatelessWidget {
 
     final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultarComercio';
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarComercio';
-    final userPuesto = '?comercioExternalID=$userId';
+    final userPuesto = '?comercioExternalID=$externalId2&comercioUserID=$userId2';
     final response = await http.get('$mercadosListAPIUrlQA$userPuesto', headers: headers2);
 
     if (response.statusCode == 200) {

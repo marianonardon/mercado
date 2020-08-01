@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_login_ui/src/pages/mercados_serv.dart';
 
 class MercadosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text('Seleccionar Mercado', style: TextStyle(color: Colors.blueGrey, fontSize: 20.0, fontWeight: FontWeight.bold),),
+    return WillPopScope(
+        onWillPop: () async { SystemNavigator.pop();
+      return true;},
+          child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text('Seleccionar Mercado', style: TextStyle(color: Colors.blueGrey, fontSize: 20.0, fontWeight: FontWeight.bold),),
 
-      ),
-      backgroundColor: Colors.white,
-      body:  _mercadoLista());
+        ),
+        backgroundColor: Colors.white,
+        body:  _mercadoLista()),
+    );
           
   }
 

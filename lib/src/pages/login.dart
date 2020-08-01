@@ -11,48 +11,58 @@ class LoginPageFinal extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
   
-    return SafeArea(
-        child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-        //fit: StackFit.,
-         children: <Widget>[
-           Image(image: AssetImage('assets/img/Login2.png'),
-           fit: BoxFit.cover,
-           width: double.infinity,
-           height: double.infinity,),
-           //fit: BoxFit.fill,),
-            //width: double.infinity,
-            //height: double.infinity,),
-           /* Padding(
-             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.33),
-             child: Image(image: AssetImage('assets/img/logo.png'),),
-           ),  */          
-           Container(
-             padding: EdgeInsets.only(left:20.0),
-            child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              SizedBox(
-              height: 100.0),
+    return WillPopScope(
+      onWillPop: () async => false,
+          child: SafeArea(
+          child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Stack(
+          //fit: StackFit.,
+           children: <Widget>[
+             Image(image: AssetImage('assets/img/Login2.png'),
+             fit: BoxFit.cover,
+             width: double.infinity,
+             height: double.infinity,),
+             //fit: BoxFit.fill,),
+              //width: double.infinity,
+              //height: double.infinity,),
+             /* Padding(
+               padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.33),
+               child: Image(image: AssetImage('assets/img/logo.png'),),
+             ),  */          
+             Container(
+               padding: EdgeInsets.only(left:20.0),
+              child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                SizedBox(
+                height: 100.0),
 /*                 Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget> [
-                _armarTitulo(),
-                ]
-              ), */
-              SizedBox(
-              height: media.size.height * 0.57),
-              _iniciarSesionGoogle(context),
-              SizedBox(height: 25.0),
-              _iniciarSesionFacebook(context),
-              SizedBox(height: 25.0),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget> [
+                  _armarTitulo(),
+                  ]
+                ), */
+                SizedBox(
+                height: media.size.height * 0.50),
+                _iniciarSesionGoogle(context),
+                SizedBox(height: 25.0),
+                _iniciarSesionFacebook(context),
+                SizedBox(height: 20.0),
+                GestureDetector(
+                  onTap: () {Navigator.pushNamed(context, 'loginManual');},
+                  child: Text('Iniciar con tu cuenta', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0),)),
+                SizedBox(height: 5.0),
+                GestureDetector(
+                  onTap: () {Navigator.pushNamed(context, 'registrarse');},
+                  child: Text('Registrarse', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0),))
 
-              ]
-            )
-          ),]
+                ]
+              )
+            ),]
+          ),
+          
         ),
-        
       ),
     );
   }

@@ -33,6 +33,7 @@ class Token {
 class Puesto {
   final String idComercio;
   final String id;
+  final String id2;
   final String comercioNombre;
   final String comercioCuit;
   final String comercioDireccion;
@@ -42,13 +43,14 @@ class Puesto {
   final String comercioPuesto;
   final String comercioNumNave;
 
-  Puesto({this.idComercio,this.id, this.comercioNombre,this.comercioCuit, this.comercioDireccion,this.comercioDireccionEntrega,
+  Puesto({this.idComercio,this.id, this.id2,this.comercioNombre,this.comercioCuit, this.comercioDireccion,this.comercioDireccionEntrega,
          this.comercioTelefono,this.comercioEmail, this.comercioPuesto,this.comercioNumNave});
 
   factory Puesto.fromJsonMap(Map<String, dynamic> parsedJson) {
     return Puesto(
       idComercio: parsedJson['ComercioID'],
       id: parsedJson['ComercioExternalID'], 
+      id2: parsedJson['comercioUserID'], 
       comercioNombre: parsedJson['ComercioNombre'], 
       comercioCuit: parsedJson['ComercioCuit'], 
       comercioDireccion: parsedJson['ComercioDireccion'], 
@@ -88,6 +90,7 @@ Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, pue
     SharedPreferences prefs = await SharedPreferences.getInstance();
   //Return String
     String externalId2 = prefs.getString('usuarioId');
+    String userId      = prefs.getString('usuarioId2');
     setState(() {
       idUser = externalId2;
     }); 
@@ -141,6 +144,7 @@ Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, pue
     
         headers: headers3,
         body: jsonEncode(<String, String>{
+          "ComercioUserID": userId,
           'ComercioExternalID': externalId2,
           'ComercioNombre': nombre,
           'ComercioCuit': cuit,
