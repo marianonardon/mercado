@@ -1,4 +1,4 @@
-package com.example.flutter_login_ui;
+package com.weeti.agilemarket;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

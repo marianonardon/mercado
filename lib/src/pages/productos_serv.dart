@@ -666,12 +666,12 @@ class ProductosListView extends StatelessWidget {
 
   Future<List<Producto>> fetchProductos(categoriaId,mercadoId,productoBuscado) async { 
 
-    String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String url = "https://agilemarket.com.ar/oauth/access_token";
     String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
 
     Map<String, String> bodyToken = {
-      "client_id": "d6471aff30e64770bd9da53caccc4cc4",
-      "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "client_id": "da0d4cd9919d4d80afecf1c56d954633",
+      "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
       "password": "admin123",
@@ -690,7 +690,7 @@ class ProductosListView extends StatelessWidget {
     };
 
 
-    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
+    final responseToken = await http.post(url, body: bodyToken, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -703,10 +703,10 @@ class ProductosListView extends StatelessWidget {
 
     int categoria = int.parse(categoriaId);
     int mercado   = int.parse(mercadoId);
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
+    final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
 
-    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
@@ -758,12 +758,12 @@ class ProductosListViewHorizontal extends StatelessWidget {
 
   Future<List<Producto>> fetchProductos(categoriaId,mercadoId) async {
 
-    String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String url = "https://agilemarket.com.ar/oauth/access_token";
     String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
 
     Map<String, String> bodyToken = {
-      "client_id": "d6471aff30e64770bd9da53caccc4cc4",
-      "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "client_id": "da0d4cd9919d4d80afecf1c56d954633",
+      "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
       "password": "admin123",
@@ -783,7 +783,7 @@ class ProductosListViewHorizontal extends StatelessWidget {
 
 
 
-    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
+    final responseToken = await http.post(url, body: bodyToken, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -797,10 +797,10 @@ class ProductosListViewHorizontal extends StatelessWidget {
 
     int categoria = int.parse(categoriaId);
     int mercado = int.parse(mercadoId);
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultaProducto?categoriaID=$categoria&destacado=1&mercadoID=$mercado';
+    final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/consultaProducto?categoriaID=$categoria&destacado=1&mercadoID=$mercado';
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=1&mercadoID=$mercado';
     
-    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);

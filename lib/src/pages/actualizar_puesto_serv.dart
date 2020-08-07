@@ -96,14 +96,18 @@ Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, pue
     setState(() {
       idUser = externalId2;
     }); 
+
+    if(externalId2 == ''){
+      idUser = userId;
+    }
     
     
-    String url = "https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/oauth/access_token";
+    String url = "https://agilemarket.com.ar/oauth/access_token";
     String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
 
     Map<String, String> bodyToken = {
-      "client_id": "d6471aff30e64770bd9da53caccc4cc4",
-      "client_secret": "7dae40626f4f45378b22bb47aa750024",
+      "client_id": "da0d4cd9919d4d80afecf1c56d954633",
+      "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
       "password": "admin123",
@@ -122,7 +126,7 @@ Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, pue
     };
 
 
-    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
+    final responseToken = await http.post(url, body: bodyToken, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -138,17 +142,17 @@ Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, pue
           "Authorization": "OAuth $token2"
         };
 
-    final mercadosListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/comercio/2,0,$idUser';
+    final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/comercio/$mercadoId,$idComercio';
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/comercio/$mercadoId,$idComercio';
 
-    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData2 = json.decode(response.body);
       final puesto2 =  Puesto.fromJsonMap(decodedData2);
     
       final http.Response response2 = await http.put(
-        '$mercadosListAPIUrlQA',
+        '$mercadosListAPIUrl',
     
         headers: headers3,
         body: jsonEncode(<String, String>{

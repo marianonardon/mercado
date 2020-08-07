@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 import 'package:provider/provider.dart';
 
 
@@ -123,8 +126,15 @@ class LoginState with ChangeNotifier {
 
     final FirebaseUser user = await _auth.signInWithCredential(credential);
     print("signed in " + user.displayName +' ' + user.uid + '  ' + user.providerId + ' ' + user.email);
+    final token = result.accessToken.token;
+    final graphResponse = await http.get(
+                'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
+    final  profile = json.decode(graphResponse.body);
+    final profile2 = Profile.fromJson(profile);
+    String idUsuario = profile2.id;
+  
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('usuarioId', user.uid).catchError((onError) =>
+    prefs.setString('usuarioId', idUsuario).catchError((onError) =>
           print("Error $onError")
         );
     prefs.setString('nombre', user.  displayName);
@@ -140,4 +150,24 @@ class LoginState with ChangeNotifier {
                 _loggedIn = false;
                 notifyListeners();
     }
+}
+
+class Profile {
+  final String name;
+  final String firstName;
+  final String lastName;
+  final String email;
+  final String id;
+
+  Profile({this.name, this.firstName,this.lastName,this.email,this.id});
+
+  factory Profile.fromJson(Map<String, dynamic> parsedJson) {
+    return Profile(
+      name: parsedJson['name'],
+      firstName: parsedJson['first_name'],
+      lastName: parsedJson['last_name'],
+      email: parsedJson['email'],
+      id: parsedJson['id'],
+    );
+  }
 }

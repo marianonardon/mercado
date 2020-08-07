@@ -105,12 +105,22 @@ class CategoriasListView extends StatelessWidget {
       "password": "admin123",
     };
 
+        String urlProd = "https://agilemarket.com.ar/oauth/access_token";
+
+    Map<String, String> bodyTokenProd = {
+      "client_id": "da0d4cd9919d4d80afecf1c56d954633",
+      "client_secret": "be70f816716f402b8c02e53daec3e067",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
     Map<String, String> headers = {
         "Content-Type": "application/x-www-form-urlencoded"
     };
 
 
-    final responseToken = await http.post(url, body: bodyToken, headers: headers);
+    final responseToken = await http.post(urlProd, body: bodyTokenProd, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -122,9 +132,9 @@ class CategoriasListView extends StatelessWidget {
 
 
 
-    final categoriasListAPIUrl = 'https://apps5.genexus.com/Idef38f58ee9b80b1400d5b7848a7e9447/rest/consultarCategoria';
+    final categoriasListAPIUrl = 'https://agilemarket.com.ar/rest/consultarCategoria';
     final categoriasListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarCategoria';
-    final response = await http.get('$categoriasListAPIUrlQA',headers: headers2);
+    final response = await http.get('$categoriasListAPIUrl',headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);

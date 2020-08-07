@@ -38,8 +38,18 @@ class _ComboPuesto extends State<ComboPuesto> {
         "Content-Type": "application/x-www-form-urlencoded"
     };
 
+        String urlProd = "https://agilemarket.com.ar/oauth/access_token";
 
-    final responseToken = await http.post(url, body: bodyToken, headers: headers);
+    Map<String, String> bodyTokenProd = {
+      "client_id": "da0d4cd9919d4d80afecf1c56d954633",
+      "client_secret": "be70f816716f402b8c02e53daec3e067",
+      "scope": "FullControl",
+      "username": "admin",
+      "password": "admin123",
+    };
+
+
+    final responseToken = await http.post(urlProd, body: bodyTokenProd, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -50,7 +60,8 @@ class _ComboPuesto extends State<ComboPuesto> {
       };
 
     final mercadosListAPIUrl = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarComercio?mercadoID=$mercadoId';
-    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
+    final mercadosListAPIUrlProd = 'https://agilemarket.com.ar/rest/consultarComercio?mercadoID=$mercadoId';
+    final response = await http.get('$mercadosListAPIUrlProd', headers: headers2);
 
     if (response.statusCode == 200) {
       var resBody = json.decode(response.body);
