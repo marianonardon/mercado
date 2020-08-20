@@ -3,13 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../login_state.dart';
 
-class LoginPageFinal extends StatelessWidget {
+class LoginPageFinal extends StatefulWidget {
+  @override
+  _LoginPageFinalState createState() => _LoginPageFinalState();
+}
+
+class _LoginPageFinalState extends State<LoginPageFinal> {
+  bool checkboxValue = true;
   @override
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
+    
   
     return WillPopScope(
       onWillPop: () async => false,
@@ -31,7 +39,7 @@ class LoginPageFinal extends StatelessWidget {
                child: Image(image: AssetImage('assets/img/logo.png'),),
              ),  */          
              Container(
-               padding: EdgeInsets.only(left:20.0),
+               padding: EdgeInsets.only(left:10.0),
               child: Column(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
@@ -43,19 +51,52 @@ class LoginPageFinal extends StatelessWidget {
                   _armarTitulo(),
                   ]
                 ), */
+                
                 SizedBox(
-                height: media.size.height * 0.50),
+                height: media.size.height * 0.40),
+                
                 _iniciarSesionGoogle(context),
                 SizedBox(height: 25.0),
                 _iniciarSesionFacebook(context),
                 SizedBox(height: 20.0),
                 GestureDetector(
                   onTap: () {Navigator.pushNamed(context, 'loginManual');},
-                  child: Text('Iniciar con tu cuenta', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0),)),
+                  child: Text('Iniciar con tu cuenta', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0,fontWeight: FontWeight.bold),)),
                 SizedBox(height: 5.0),
                 GestureDetector(
                   onTap: () {Navigator.pushNamed(context, 'registrarse');},
-                  child: Text('Registrarse', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0),))
+                  child: Text('Registrarse', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0,fontWeight: FontWeight.bold),)),
+                SizedBox(height: 5.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Column(
+                        children: [
+                          Text('Acepto términos y condiciones de estas', style: new TextStyle(color: Colors.black, fontSize: 18.0),),
+                          GestureDetector(
+                            onTap: () {launch('https://agilemarket.com.ar');},
+                            child: Text('políticas de privacidad de Agile market', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0),)),
+                        ],
+                      ),
+                    ),
+                    
+                    Container(
+                        child: Column(
+                          children: <Widget>[
+                          new Checkbox(
+                            value: checkboxValue,
+                            activeColor: Colors.green,
+                            onChanged:( newValue){
+                              setState(() {
+                                checkboxValue = newValue;
+                              });
+                            }),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
 
                 ]
               )
@@ -76,7 +117,6 @@ class LoginPageFinal extends StatelessWidget {
         )
         ) ,);
   }
-
 
     Widget _iniciarSesionGoogle(BuildContext context) {
       final String assetName = 'assets/logos/google.svg';
@@ -114,7 +154,10 @@ class LoginPageFinal extends StatelessWidget {
             },
             child: RaisedButton(
             elevation: 1.0,
-            onPressed: () {Provider.of<LoginState>(context).login(LoginProvider.google);},
+            onPressed: () {
+              if(checkboxValue == true){
+              Provider.of<LoginState>(context).login(LoginProvider.google);
+              }},
             padding: EdgeInsets.all(15.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(0.0),
@@ -189,7 +232,11 @@ class LoginPageFinal extends StatelessWidget {
             },
             child: RaisedButton(
             elevation: 1.0,
-            onPressed: () {Provider.of<LoginState>(context).login(LoginProvider.facebook);},
+            onPressed: () {
+              if(checkboxValue == true){
+              Provider.of<LoginState>(context).login(LoginProvider.facebook);
+              }},
+              
             padding: EdgeInsets.all(15.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(0.0),
@@ -221,6 +268,4 @@ class LoginPageFinal extends StatelessWidget {
       ),
     );
   }
-
-  
 }

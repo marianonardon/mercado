@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../login_state.dart';
 import 'login_manual_serv.dart';
@@ -25,6 +26,7 @@ class _LoginManualPageFinalState extends State<LoginManualPageFinal> {
   final formKey = GlobalKey<FormState>();
 
   int calidad;
+  bool checkboxValue = true;
 
 
 
@@ -99,7 +101,38 @@ class _LoginManualPageFinalState extends State<LoginManualPageFinal> {
                     SizedBox(height: 25.0),
                     GestureDetector(
                      onTap: () {Navigator.pushNamed(context,'/');},
-                     child: Text('Login con redes', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 16.0),))
+                     child: Text('Login con redes', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 16.0),)),
+                     SizedBox(height: 5.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Column(
+                            children: [
+                              Text('Acepto términos y condiciones de estas', style: new TextStyle(color: Colors.black, fontSize: 18.0),),
+                              GestureDetector(
+                                onTap: () {launch('https://agilemarket.com.ar');},
+                                child: Text('políticas de privacidad de Agile market', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0),)),
+                            ],
+                          ),
+                        ),
+                        
+                        Container(
+                            child: Column(
+                              children: <Widget>[
+                              new Checkbox(
+                                value: checkboxValue,
+                                activeColor: Colors.green,
+                                onChanged:( newValue){
+                                  setState(() {
+                                    checkboxValue = newValue;
+                                  });
+                                }),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
 
                     ]
                   ),
@@ -216,6 +249,7 @@ class _LoginManualPageFinalState extends State<LoginManualPageFinal> {
     MediaQueryData media = MediaQuery.of(context);
     return GestureDetector(
       onTap: () async {
+        if(checkboxValue == true){
         
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -255,7 +289,7 @@ class _LoginManualPageFinalState extends State<LoginManualPageFinal> {
         
          LoginManual().login(nombreUsuarioController.text,contraseniaController.text, context);
        }
-      },
+      }},
         
         // Navigator.pushNamed(context, 'vendedorProd');                                         
       child: ClipRRect(

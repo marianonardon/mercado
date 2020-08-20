@@ -8,6 +8,7 @@ import 'package:flutter_login_ui/src/pages/carrito_db.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
 
 
 
@@ -237,12 +238,12 @@ class ProductosListView extends StatelessWidget {
           return _crearLista(data[index].productoNombre,
                         foto,preciox1,preciox2,preciox3,cantidad1,cantidad2,cantidad3,
                         data[index].comercioNombre,
-                        data[index].tipoUnidadNombre, data[index].productoCalidad,data[index].comercioID,data[index].comercioPuesto,
-                        context);
+                        data[index].tipoUnidadNombre, data[index].productoCalidad,data[index].comercioID,data[index].comercioPuesto,data[index].productoDescripcion,
+                        data[index].productoStock,context);
         });
   }
 
-    Widget _crearLista(String title, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,String comercioId, String comercioPuesto, context) {
+    Widget _crearLista(String title, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,String comercioId, String comercioPuesto,descripcion,stock, context) {
     MediaQueryData media = MediaQuery.of(context);
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,7 +260,7 @@ class ProductosListView extends StatelessWidget {
                 
               //  _crearTitulo(),
                 SizedBox(height: 8.0),
-               _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,context)
+               _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,descripcion,stock,context)
               ],
             ),
           ),
@@ -268,7 +269,7 @@ class ProductosListView extends StatelessWidget {
     );
   }
 
-   _crearTarjetas(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,context) {
+   _crearTarjetas(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,descripcion,stock,context) {
 
 /*     String puestos;
     List<Puesto> data;
@@ -319,127 +320,143 @@ class ProductosListView extends StatelessWidget {
          Row(
            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Image(
-                    height: 55  ,
-                    width: 55,
-                    fit: BoxFit.fill,
-                    image: NetworkImage(imagen),
+              GestureDetector(
+                onTap: () {
+                Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
+                                  precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
+                                  '',comercioPuesto,'','','',''));
 
-                   // placeholder: AssetImage('assets/img/original.gif')),
-                  )),
-                ],
+              },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Image(
+                      height: 55  ,
+                      width: 55,
+                      fit: BoxFit.fill,
+                      image: NetworkImage(imagen),
+
+                     // placeholder: AssetImage('assets/img/original.gif')),
+                    )),
+                  ],
+                ),
               ),
               SizedBox(width: 15.0),
-              Container(
-                width: media.size.width * 0.70 ,
-                alignment: AlignmentDirectional.bottomStart,
-                padding: EdgeInsets.all(6.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children:<Widget>[ 
-                    SizedBox(height: 10.0),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          child: Flexible(
-                                                      child: Text(
-                            title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                              fontSize: 16.0, fontWeight: FontWeight.bold,
-                              ))
-                            ),
-                          ),
-                        ),
-                      SizedBox(width: 10.0),
-                      
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(5.0),
-                                                  child: Container(
-                              color: Color.fromRGBO(29, 233, 182, 1),
-                              child: Row(
-                                children: <Widget>[
-                                  SizedBox(width: 4.0),
-                                  Text(
-                                    ratingProd.toString(), style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                                      fontSize: 12.0, fontWeight: FontWeight.w500
-                        ))),
-                        SizedBox(width: 5.0),
-                        Icon(Icons.star, color:Colors.white, size: 15.0 ),
-                        SizedBox(width: 4.0),
-                                ],
+              GestureDetector(
+                onTap: () {
+                Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
+                                  precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
+                                  '',comercioPuesto,'','','',''));
+
+              },
+                child: Container(
+                  width: media.size.width * 0.70 ,
+                  alignment: AlignmentDirectional.bottomStart,
+                  padding: EdgeInsets.all(6.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children:<Widget>[ 
+                      SizedBox(height: 10.0),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Flexible(
+                                                        child: Text(
+                              title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                fontSize: 16.0, fontWeight: FontWeight.bold,
+                                ))
                               ),
                             ),
                           ),
+                        SizedBox(width: 10.0),
                         
-                      ],
-                    ),
-                    SizedBox(height:6.0),
-                    Row(
-                      children: <Widget>[
-                         Flexible(
-                                                    child: Text(
-                              '$comercio   Puesto:$comercioPuesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(5.0),
+                                                    child: Container(
+                                color: Color.fromRGBO(29, 233, 182, 1),
+                                child: Row(
+                                  children: <Widget>[
+                                    SizedBox(width: 4.0),
+                                    Text(
+                                      ratingProd.toString(), style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                        fontSize: 12.0, fontWeight: FontWeight.w500
+                          ))),
+                          SizedBox(width: 5.0),
+                          Icon(Icons.star, color:Colors.white, size: 15.0 ),
+                          SizedBox(width: 4.0),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          
+                        ],
+                      ),
+                      SizedBox(height:6.0),
+                      Row(
+                        children: <Widget>[
+                           Flexible(
+                                                      child: Text(
+                                '$comercio   Puesto:$comercioPuesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                  fontSize: 12.0, fontWeight: FontWeight.w400,
+                          ))),
+                           ),
+                          
+                        ],
+                      ),
+                      SizedBox(height:6.0),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            width: 80.00,
+                            child: Text(
+                                '\$$precio1', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                  fontSize: 14.0, fontWeight: FontWeight.w600,
+                            ))),
+                          ),
+                          Text(
+                              '$cantidad1 $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
                                 fontSize: 12.0, fontWeight: FontWeight.w400,
-                        ))),
-                         ),
-                        
-                      ],
-                    ),
-                    SizedBox(height:6.0),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          width: 80.00,
-                          child: Text(
-                              '\$$precio1', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                                fontSize: 14.0, fontWeight: FontWeight.w600,
                           ))),
-                        ),
-                        Text(
-                            '$cantidad1 $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                              fontSize: 12.0, fontWeight: FontWeight.w400,
-                        ))),
-                        
+                          
 
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          width: 80.00,
-                          child: Text(
-                              '$speso2$precio2', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                                fontSize: 14.0, fontWeight: FontWeight.w600,
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            width: 80.00,
+                            child: Text(
+                                '$speso2$precio2', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                  fontSize: 14.0, fontWeight: FontWeight.w600,
+                            ))),
+                          ),
+                          Text(
+                              '$cantidad2 $unidad2 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                fontSize: 12.0, fontWeight: FontWeight.w400,
                           ))),
-                        ),
-                        Text(
-                            '$cantidad2 $unidad2 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                              fontSize: 12.0, fontWeight: FontWeight.w400,
-                        ))),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          width: 80.00,
-                          child: Text(
-                              '$speso3$precio3', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                                fontSize: 14.0, fontWeight: FontWeight.w600,
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            width: 80.00,
+                            child: Text(
+                                '$speso3$precio3', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                  fontSize: 14.0, fontWeight: FontWeight.w600,
+                            ))),
+                          ),
+                          Text(
+                              '$cantidad3 $unidad3 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                fontSize: 12.0, fontWeight: FontWeight.w400,
                           ))),
-                        ),
-                        Text(
-                            '$cantidad3 $unidad3 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                              fontSize: 12.0, fontWeight: FontWeight.w400,
-                        ))),
-                      ],
-                    )
-                  ]
+                        ],
+                      )
+                    ]
+                  ),
                 ),
               ),
               /* Expanded(child: GestureDetector(
@@ -839,7 +856,7 @@ class ProductosListViewHorizontal extends StatelessWidget {
               initialPage: 1
             ),
             itemCount: productos.length,
-            itemBuilder: (context, i) => _productoTarjeta(productos[i]
+            itemBuilder: (context, i) => _productoTarjeta(productos[i],context
             )
           ),
           ),
@@ -851,11 +868,62 @@ class ProductosListViewHorizontal extends StatelessWidget {
 
 
 
-  Widget _productoTarjeta(Producto producto) {
+  Widget _productoTarjeta(Producto producto,context) {
 
     String precio = producto.precios[0].precioProducto;
+    String cantidad = producto.precios[0].precioCantidad;
     String unidad = producto.tipoUnidadNombre;
     String foto;
+    String preciox1;
+          String preciox2;
+          String preciox3;
+          String cantidad1;
+          String cantidad2;
+          String cantidad3;
+          String unidad2;
+          String unidad3;
+          if((producto.precios.length - 1) >= 2) {
+             preciox1 = producto.precios[0].precioProducto;
+             preciox2 = producto.precios[1].precioProducto;
+             preciox3 = producto.precios[2].precioProducto;
+             cantidad1 = producto.precios[0].precioCantidad;
+             cantidad2 = producto.precios[1].precioCantidad;
+             cantidad3 = producto.precios[2].precioCantidad;
+             unidad2 = producto.tipoUnidadNombre;
+             unidad3 = producto.tipoUnidadNombre;
+          }else{
+            if ((producto.precios.length - 1) == 1) {
+             preciox1 = producto.precios[0].precioProducto;
+             preciox2 = producto.precios[1].precioProducto;
+             preciox3 = '';
+             cantidad1 = producto.precios[0].precioCantidad;
+             cantidad2 = producto.precios[1].precioCantidad;
+             cantidad3 = '';
+             unidad2 = producto.tipoUnidadNombre;
+             unidad3 = '';
+           } else{
+              if ((producto.precios.length - 1) == 0) {
+                preciox1 = producto.precios[0].precioProducto;
+                preciox2 = '';
+                preciox3 = '';
+                cantidad1 = producto.precios[0].precioCantidad;
+                cantidad2 = '';
+                cantidad3 = '';
+                unidad2 = '';
+                unidad3 = '';}
+                else{
+                preciox1 = '';
+                preciox2 = '';
+                preciox3 = '';
+                cantidad1 = '';
+                cantidad2 = '';
+                cantidad3 = '';
+                unidad2 = '';
+                unidad3 = '';
+
+              }
+          }
+          }
 
     if (producto.productoFoto == '') {
       foto = 'https://uy.emedemujer.com/wp-content/uploads/sites/4/2015/10/674262.jpg';
@@ -863,40 +931,49 @@ class ProductosListViewHorizontal extends StatelessWidget {
        foto = producto.productoFoto;}
 
 
-    return Container(
-      padding: EdgeInsets.all(7.0),
-      child: Column
-      (crossAxisAlignment: CrossAxisAlignment.start,
-        
-        children: <Widget>[
+    return GestureDetector(
+        onTap: () {
+                  Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', producto.productoNombre,producto.productoDescripcion,
+                  producto.productoFoto,precio,cantidad,preciox2,cantidad2,
+                                    preciox3,cantidad3,producto.productoStock,unidad,unidad2,unidad3,'',mercadoId,'',0.0,categoriaId,'','','',
+                                    '','','','','',''));
 
-        ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: FadeInImage(
-            placeholder: AssetImage('assets/img/no-image.jpg'),
-            image: NetworkImage(foto),
-            height: 88.0,
-            width: 100.0,
-            fit: BoxFit.cover,
-            ),
-        ),
-        SizedBox(height: 8.0),
-        Text(
-          producto.productoNombre, style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-            fontSize: 12.0, fontWeight: FontWeight.normal,
-            )),
-            overflow: TextOverflow.ellipsis,
+                },
+          child: Container(
+        padding: EdgeInsets.all(7.0),
+        child: Column
+        (crossAxisAlignment: CrossAxisAlignment.start,
+          
+          children: <Widget>[
+
+          ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: FadeInImage(
+              placeholder: AssetImage('assets/img/no-image.jpg'),
+              image: NetworkImage(foto),
+              height: 88.0,
+              width: 100.0,
+              fit: BoxFit.cover,
+              ),
           ),
-          SizedBox(height:3.0),
-          Flexible(
-            child: Text(
-                '\$$precio x $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
-                  fontSize: 12.0, fontWeight: FontWeight.w600,
-            )),
-            overflow: TextOverflow.ellipsis,),
-          )
-      ],
-      )
+          SizedBox(height: 8.0),
+          Text(
+            producto.productoNombre, style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+              fontSize: 12.0, fontWeight: FontWeight.normal,
+              )),
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(height:3.0),
+            Flexible(
+              child: Text(
+                  '\$$precio x $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
+                    fontSize: 12.0, fontWeight: FontWeight.w600,
+              )),
+              overflow: TextOverflow.ellipsis,),
+            )
+        ],
+        )
+      ),
     );
   }
 

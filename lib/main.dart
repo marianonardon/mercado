@@ -24,6 +24,7 @@ import 'package:flutter_login_ui/src/pages/vendedor_prod_page.dart';
 import 'package:flutter_login_ui/src/pages/alta_producto_ok.dart';
 import 'package:flutter_login_ui/src/pages/alta_producto_err.dart';
 import 'package:flutter_login_ui/src/pages/actualizar_producto.dart';
+import 'package:flutter_login_ui/src/pages/detalle_producto_comprador.dart';
 
 
 import 'package:provider/provider.dart';
@@ -78,6 +79,7 @@ class MyApp extends StatelessWidget {
         'puestoProd' : (BuildContext context) => ProductoXPuestoPage(),
         'loginManual' : (BuildContext context) => LoginManualPageFinal(),
         'registrarse' : (BuildContext context) => RegistroUserPageFinal(),
+        'detalleProdComp'  : (BuildContext context) => DetalleProductoComprador(),
         
         },
       ),

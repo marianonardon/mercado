@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
+import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 
@@ -297,123 +298,141 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
                    Row(
                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(12.0),
-                              child: Image(
-                              height: 55  ,
-                              width: 55,
-                              fit: BoxFit.fill,
-                              image: NetworkImage(imagen),
+                        GestureDetector(
+                          onTap: () {
+                                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,prodDesc,imagen,precio1,cantidad1,precio2,cantidad2,
+                                  precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
+                                  '','','','','',''));
+
+                         },
+
+                            child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12.0),
+                                child: Image(
+                                height: 55  ,
+                                width: 55,
+                                fit: BoxFit.fill,
+                                image: NetworkImage(imagen),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         SizedBox(width: 15.0),
-                        Container(
-                          width: media.size.width * 0.70 ,
-                          alignment: AlignmentDirectional.bottomStart,
-                          padding: EdgeInsets.all(6.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            children:<Widget>[ 
-                              SizedBox(height: 10.0),
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    child: Flexible(
-                                      child: Text(
-                                      title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                                        fontSize: 16.0, fontWeight: FontWeight.bold,
-                                        ))
-                                      ),
-                                    ),
-                                  ),
-                                SizedBox(width: 10.0),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                                            child: Container(
-                                        color: Color.fromRGBO(29, 233, 182, 1),
-                                        child: Row(
-                                          children: <Widget>[
-                                            SizedBox(width: 4.0),
-                                            Text(
-                                              ratingProd.toString(), style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                                                fontSize: 12.0, fontWeight: FontWeight.w500
-                                  ))),
-                                  SizedBox(width: 5.0),
-                                  Icon(Icons.star, color:Colors.white, size: 15.0 ),
-                                  SizedBox(width: 4.0),
-                                          ],
+                        GestureDetector(
+                          onTap: () {
+                                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,prodDesc,imagen,precio1,cantidad1,precio2,cantidad2,
+                                  precio3,cantidad3,'',unidad,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
+                                  '','','','','',''));
+
+                         },
+
+                            child: Container(
+                            width: media.size.width * 0.70 ,
+                            alignment: AlignmentDirectional.bottomStart,
+                            padding: EdgeInsets.all(6.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              children:<Widget>[ 
+                                SizedBox(height: 10.0),
+                                Row(
+                                  children: <Widget>[
+                                    Container(
+                                      child: Flexible(
+                                        child: Text(
+                                        title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                          fontSize: 16.0, fontWeight: FontWeight.bold,
+                                          ))
                                         ),
                                       ),
                                     ),
-                                  
-                                ],
-                              ),
-                              SizedBox(height:6.0),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                      comercio, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                                        fontSize: 12.0, fontWeight: FontWeight.w400,
-                                  ))),
-                                  
-                                ],
-                              ),
-                              SizedBox(height:6.0),
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    width: 80.00,
-                                    child: Text(
-                                        '\$$precio1', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                                          fontSize: 14.0, fontWeight: FontWeight.w600,
+                                  SizedBox(width: 10.0),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(5.0),
+                                                              child: Container(
+                                          color: Color.fromRGBO(29, 233, 182, 1),
+                                          child: Row(
+                                            children: <Widget>[
+                                              SizedBox(width: 4.0),
+                                              Text(
+                                                ratingProd.toString(), style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                                  fontSize: 12.0, fontWeight: FontWeight.w500
                                     ))),
-                                  ),
-                                  Text(
-                                      '$cantidad1 $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                                        fontSize: 12.0, fontWeight: FontWeight.w400,
-                                  ))),
-                                  
+                                    SizedBox(width: 5.0),
+                                    Icon(Icons.star, color:Colors.white, size: 15.0 ),
+                                    SizedBox(width: 4.0),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    
+                                  ],
+                                ),
+                                SizedBox(height:6.0),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                        comercio, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                          fontSize: 12.0, fontWeight: FontWeight.w400,
+                                    ))),
+                                    
+                                  ],
+                                ),
+                                SizedBox(height:6.0),
+                                Row(
+                                  children: <Widget>[
+                                    Container(
+                                      width: 80.00,
+                                      child: Text(
+                                          '\$$precio1', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                            fontSize: 14.0, fontWeight: FontWeight.w600,
+                                      ))),
+                                    ),
+                                    Text(
+                                        '$cantidad1 $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                          fontSize: 12.0, fontWeight: FontWeight.w400,
+                                    ))),
+                                    
 
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    width: 80.00,
-                                    child: Text(
-                                        '$speso2$precio2', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                                          fontSize: 14.0, fontWeight: FontWeight.w600,
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Container(
+                                      width: 80.00,
+                                      child: Text(
+                                          '$speso2$precio2', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                            fontSize: 14.0, fontWeight: FontWeight.w600,
+                                      ))),
+                                    ),
+                                    Text(
+                                        '$cantidad2 $unidad2 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                          fontSize: 12.0, fontWeight: FontWeight.w400,
                                     ))),
-                                  ),
-                                  Text(
-                                      '$cantidad2 $unidad2 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                                        fontSize: 12.0, fontWeight: FontWeight.w400,
-                                  ))),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Container(
-                                    width: 80.00,
-                                    child: Text(
-                                        '$speso3$precio3', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                                          fontSize: 14.0, fontWeight: FontWeight.w600,
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Container(
+                                      width: 80.00,
+                                      child: Text(
+                                          '$speso3$precio3', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                            fontSize: 14.0, fontWeight: FontWeight.w600,
+                                      ))),
+                                    ),
+                                    Text(
+                                        '$cantidad3 $unidad3 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                          fontSize: 12.0, fontWeight: FontWeight.w400,
                                     ))),
-                                  ),
-                                  Text(
-                                      '$cantidad3 $unidad3 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
-                                        fontSize: 12.0, fontWeight: FontWeight.w400,
-                                  ))),
-                                ],
-                              )
-                            ]
+                                  ],
+                                )
+                              ]
+                            ),
                           ),
                         ),
                         ],
