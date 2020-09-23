@@ -2,10 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_login_ui/src/pages/productos_serv.dart';
 import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'carrito_db.dart';
 
 
 
@@ -36,91 +40,26 @@ class Productos{
 
 
 
-class Producto {
-  final String productoID;
-  final String productoNombre;
-  final String productoDescripcion;
-  final String productoStock;
-  final double productoCalidad;
-  final String productoFoto;
-  final String categoriaID;
-  final String categoriaNombre;
-  final String tipoUnidadID;
-  final String tipoUnidadNombre;
-  final String comercioID;
-  final String comercioNombre;
-  final String mercadoID;
-  final String mercadoNombre;
-  final bool   productoDestacado;
-  final List<Precio> precios;
-
-
-  Producto({this.productoID, this.productoNombre, this.productoDescripcion, this.productoStock,
-          this.productoCalidad, this.productoFoto,this.categoriaID, this.categoriaNombre, this.tipoUnidadID,
-          this.tipoUnidadNombre, this.comercioID, this.comercioNombre, this.mercadoID,
-          this.mercadoNombre, this.productoDestacado, this.precios});
-
-  factory Producto.fromJsonMap(Map<String, dynamic> parsedJson) {
-
-    var list = parsedJson['precio'] as List;
-    print(list.runtimeType);
-    List<Precio> preciosList = list.map((i) => Precio.fromJson(i)).toList();
-
-    return Producto(
-      productoID: parsedJson['productoID'],
-      productoNombre: parsedJson['productoNombre'],
-      productoDescripcion: parsedJson['productoDescripcion'],
-      productoStock: parsedJson['productoStock'],
-      productoCalidad: parsedJson['productoCalidad'].toDouble(),
-      productoFoto: parsedJson['productoFoto'],
-      categoriaID: parsedJson['categoriaID'],
-      categoriaNombre: parsedJson['categoriaNombre'],
-      tipoUnidadID: parsedJson['tipoUnidadID'],
-      tipoUnidadNombre: parsedJson['tipoUnidadNombre'],
-      comercioID: parsedJson['comercioID'],
-      comercioNombre: parsedJson['comercioNombre'],
-      mercadoID: parsedJson['mercadoID'],
-      mercadoNombre: parsedJson['mercadoNombre'],
-      productoDestacado: parsedJson['productoDestacado'],
-      precios: preciosList
-
-    );
-  }
-}
-
-class Precio {
-  final String precioCantidad;
-  final String precioProducto;
-
-  Precio({this.precioCantidad, this.precioProducto});
-
-  factory Precio.fromJson(Map<String, dynamic> parsedJson) {
-    return Precio(
-      precioCantidad: parsedJson['precioCantidad'],
-      precioProducto: parsedJson['precioProducto']
-    );
-  }
-
-
-}
 
 class PuestoProductosListView extends StatefulWidget {
-  PuestoProductosListView(this.categoriaId,this.mercadoId,this.comercioId,);
+  PuestoProductosListView(this.categoriaId,this.mercadoId,this.comercioId,this.globalKey);
   
   final String categoriaId;
   final String mercadoId;
   final String comercioId;
+  final globalKey;
 
   @override
-  _PuestoProductosListViewState createState() => _PuestoProductosListViewState(categoriaId,mercadoId,comercioId,);
+  _PuestoProductosListViewState createState() => _PuestoProductosListViewState(categoriaId,mercadoId,comercioId,globalKey);
 }
 
 class _PuestoProductosListViewState extends State<PuestoProductosListView> {
-   _PuestoProductosListViewState(this.categoriaId,this.mercadoId,this.comercioId);
+   _PuestoProductosListViewState(this.categoriaId,this.mercadoId,this.comercioId,this.globalKey);
 
   final String categoriaId;
   final String mercadoId;
   final String comercioId;
+  final globalKey;
   @override
   Widget build(BuildContext context){
     return FutureBuilder<List<Producto>>(
@@ -238,12 +177,13 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
                         foto,preciox1,preciox2,preciox3,cantidad1,cantidad2,cantidad3,
                         data[index].comercioNombre,
                         data[index].tipoUnidadNombre, data[index].productoCalidad,comercioId, data[index].productoStock,
-                        data[index].productoID,data[index].categoriaID,data[index].tipoUnidadID,context);
+                        data[index].productoID,data[index].categoriaID,data[index].tipoUnidadID,data[index].comercioPuesto,data[index].comercioNumNave,
+                        globalKey,context);
         });
   }
 
     Widget _crearLista(String title,String prodDesc, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,comercioId,String stock,String productoID, String categoriaId,String unidadId,
-    context) {
+    comercioPuesto,comecioNumNave,globalKey,context) {
     MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
@@ -256,7 +196,7 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
           //  _crearTitulo(),
             SizedBox(height: 15.0),
            _crearTarjetas(title,prodDesc, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,stock,productoID,categoriaId,unidadId,
-           context)
+           comercioPuesto,comecioNumNave,globalKey,context)
           ],
         ),
       ),
@@ -264,12 +204,23 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
   }
 
   Widget _crearTarjetas(title,prodDesc,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,stock,productoID,categoriaId,unidadId,
-  context) {
- MediaQueryData media = MediaQuery.of(context); 
+  comercioPuesto,comecioNumNave,globalKey,context) {
+ MediaQueryData media = MediaQuery.of(context);
+  String speso1;
+  String unidad1;
   String unidad2;
   String unidad3;
   String speso2;
   String speso3;
+
+  if(precio1 == ''){
+    unidad1 = '';
+    speso1 = '';
+  } else{
+    unidad1 = unidad;
+    speso1 = '\$';
+  }
+
   if(precio2 == ''){
     unidad2 = '';
     speso2 = '';
@@ -301,7 +252,7 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
                         GestureDetector(
                           onTap: () {
                                  Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,prodDesc,imagen,precio1,cantidad1,precio2,cantidad2,
-                                  precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
+                                  precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
                                   '','','','','',''));
 
                          },
@@ -325,7 +276,7 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
                         GestureDetector(
                           onTap: () {
                                  Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,prodDesc,imagen,precio1,cantidad1,precio2,cantidad2,
-                                  precio3,cantidad3,'',unidad,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
+                                  precio3,cantidad3,'',unidad1,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
                                   '','','','','',''));
 
                          },
@@ -389,12 +340,12 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
                                     Container(
                                       width: 80.00,
                                       child: Text(
-                                          '\$$precio1', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                         '$speso1$precio1', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
                                             fontSize: 14.0, fontWeight: FontWeight.w600,
                                       ))),
                                     ),
                                     Text(
-                                        '$cantidad1 $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                        '$cantidad1 $unidad1 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
                                           fontSize: 12.0, fontWeight: FontWeight.w400,
                                     ))),
                                     
@@ -435,6 +386,32 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
                             ),
                           ),
                         ),
+                        GestureDetector(
+                onTap: () async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  String mercadoHora = prefs.getString('horaMercado');
+                  if (mercadoHora != 'Cerrado'){
+                    showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                              title:  Center(child: Text('Mercado abierto')),
+                              content:  SizedBox(
+                                        width: media.size.width * 0.005,
+                                        height: media.size.height * 0.1,
+                                        child:  Center(child:  Text('Sólo pueden agregarse productos al carrito cuando el mercado se encuentra cerrado',
+                                        textAlign: TextAlign.center,)),
+                                    ),
+                              backgroundColor: Colors.white
+
+                        ),
+                        barrierDismissible: true
+                          ).then((_) => setState((){}));
+
+                  }else {
+                  
+                  _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comecioNumNave,comercioId,mercadoId,productoID,stock,globalKey,context);}},
+                  
+                child: Icon(Icons.add_box,size: 35.0, color:Color.fromRGBO(0, 255, 208, 1))) 
                         ],
                     ),
                  ],
@@ -442,6 +419,357 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
             ),
         );
   }
+
+  Future<void> _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comercioNave,comercioId,mercadoId,productoId,stock,globalKey,context) async {
+
+      int cantidadProd = 1;
+      MediaQueryData media = MediaQuery.of(context);
+      String precioProducto;
+      double precioUnitario;
+
+      var producto = Carrito(
+        nombreProducto: title.toString(),
+        fotoProducto: imagen.toString(),
+        comercioProducto: comercio.toString(),
+        cantidadProducto: cantidadProd,
+        unidadProducto: unidad.toString(),
+        precioProducto: precioProducto.toString(),
+        precioUnitario: 0.0,
+        productoId: int.parse(productoId),
+        comercioId:int.parse(comercioId),
+        mercadoId:int.parse(mercadoId),
+        );
+
+
+
+      showModalBottomSheet(
+          elevation: 300.0,
+          context: context,
+          builder: (builder) {
+            int cantidad = 1;
+
+            cantidadProd = cantidad;
+            
+            
+            return StatefulBuilder(
+              builder: (BuildContext context2, StateSetter setState) {
+                return Container(
+                padding: EdgeInsets.all(10.0),
+                alignment: Alignment.topLeft,
+                 height: 900.0,
+                 width: double.infinity,
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(height:20.0),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15.0),
+                              child: 
+                              /* Container(
+                                width: 100.0,
+                                height: 110.0,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: CachedNetworkImage(imageUrl: imagen,),
+                              ) */
+                              
+                              
+                              
+                              FadeInImage(
+                              height: 100,
+                              width: 110,
+                              fit: BoxFit.fill,
+                              image: NetworkImage(imagen),
+
+                              placeholder: AssetImage('assets/img/original.gif')),
+                            ),
+                            SizedBox(width: 20.0,),
+                            Container(
+                              width: 200.0,
+                              alignment: AlignmentDirectional.bottomStart,
+                              padding: EdgeInsets.all(2.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                children:<Widget>[ 
+                                  Text(
+                                  title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                    fontSize: 20.0, fontWeight: FontWeight.bold,
+                                    ))
+                                  ),
+                                  SizedBox(height:6.0),
+                                  Text(
+                                      '\$$precio1 x $cantidad1$unidad', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
+                                        fontSize: 16.0, fontWeight: FontWeight.w600,
+                                  )))
+                                ]
+                              )
+                            )
+                          ]
+                ),
+                SizedBox(height:15.0),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                    child: Container(
+                    color: Color.fromRGBO(0, 255, 208,0.2 ),
+                    height: media.size.height * 0.11,
+                    width: double.infinity,
+                    padding: EdgeInsets.all(13.0),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            SizedBox(width: 15.0),
+                            Text(
+                                      comercio, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                        fontSize: 16.0, fontWeight: FontWeight.w600,
+                                  ))),
+
+                          ],
+                        ),
+                        SizedBox(
+                          height: media.size.height * 0.02,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(width: 15.0),
+                            Flexible(
+                                    child: Text(
+                                    'Puesto: $comercioPuesto Nave: $comercioNave', style: GoogleFonts.lato(textStyle:TextStyle(color:Colors.black,
+                                      fontSize: 12.0, fontWeight: FontWeight.w400,
+                              ))),
+                               ),
+                          ],
+                        ),
+                      ],
+                      
+                      
+                    ),
+                  ),
+                ),
+                  SizedBox(height:20.0),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                    GestureDetector(
+                        onTap: () {
+                        setState(() {
+                          if (cantidad > 1) {
+                            cantidad = cantidad - 1 ; 
+                            cantidadProd = cantidad;}
+                        });},
+                        child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                          child: Container(
+                          color: Color.fromRGBO(255, 81, 0, 1),
+                          height: media.size.height * 0.06,
+                          width: media.size.width * 0.18,
+                          //padding: EdgeInsets.all(13.0),
+                          child: Center(
+                            child: Icon(Icons.remove)
+                          ),
+
+                        ),
+                      ),
+                    ),
+                    SizedBox(width:20.0),
+                    Text( '$cantidad $unidad', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(43, 47, 58, 1),
+                                fontSize: 16.0, fontWeight: FontWeight.w600,
+                          ))),
+                    SizedBox(width:20.0),
+                    GestureDetector(
+
+                        onTap: () {
+                          setState(() {
+                            cantidad = cantidad + 1 ;
+                            cantidadProd = cantidad;
+                        });
+                        },                  
+                        child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                          child: Container(
+                          color: Color.fromRGBO(0, 255, 208, 1),
+                          height: media.size.height * 0.06,
+                          width: media.size.width * 0.18,
+                          //padding: EdgeInsets.all(13.0),
+                          child: Center(
+                            child: Icon(Icons.add)
+                          ),
+
+                        ),
+                      ),
+                    ),
+
+                  ],),
+                SizedBox(height:15.0),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                    child: GestureDetector(
+                        
+                      onTap: () async {
+
+
+                        if (cantidad3 != '') {
+                          int cantidadx3 = int.parse(cantidad3);
+                          double preciox3   = double.parse(precio3);
+                          if (cantidad >= cantidadx3) {
+                            setState(() {
+                              precioProducto = (preciox3 * cantidad).toString();
+                              precioUnitario = preciox3;
+                            });
+                          }else{
+                            int cantidadx2 = int.parse(cantidad2);
+                            double preciox2   = double.parse(precio2);
+                            if (cantidad >= cantidadx2) {
+                              setState(() {
+                                precioProducto = (preciox2 * cantidad).toString();
+                                precioUnitario = preciox2;
+                              });
+                            }else {
+                              int cantidadx1 = int.parse(cantidad1);
+                              double preciox1   = double.parse(precio1);
+                              setState(() {
+                                precioProducto = (preciox1 * cantidad).toString();
+                                precioUnitario = preciox1;
+                              });
+                            }
+                          }
+                        }else{
+                          if (cantidad2 != '') {
+                            int cantidadx2 = int.parse(cantidad2);
+                            double preciox2   = double.parse(precio2);
+                            if (cantidad >= cantidadx2) {
+                              setState(() {
+                                precioProducto = (preciox2 * cantidad).toString();
+                                precioUnitario = preciox2;
+                              });
+                            }else {
+                              int cantidadx1 = int.parse(cantidad1);
+                              double preciox1   = double.parse(precio1);
+                              setState(() {
+                                precioProducto = (preciox1 * cantidad).toString();
+                                precioUnitario = preciox1;
+                              });
+                            }
+                        }else{
+                          if (cantidad1 != '') {
+                          int cantidadx1 = int.parse(cantidad1);
+                          double preciox1   = double.parse(precio1);
+                          setState(() {
+                            precioProducto = (preciox1 * cantidad).toString();
+                            precioUnitario = preciox1;
+                          });
+                          
+                        } else{
+                          setState(() {
+                            precioProducto = '';
+                            precioUnitario = 0.0;
+                          });
+                        }
+                        }
+                        }
+                        setState(() {
+                        producto.cantidadProducto = cantidad;
+                        producto.precioProducto   = precioProducto.toString();
+                        producto.precioUnitario = precioUnitario;
+                        
+                        });
+                        
+                        //DBProvider().deleteCarrito(1);
+
+
+
+                        int stockProducto = int.parse(stock);
+
+                        if(stockProducto > cantidad ){
+                            final snackBar = SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Flexible(child: Text('Este producto no posee stock para dicha cantidad')),
+                          action: SnackBarAction(
+                            textColor: Colors.white,
+                            label: 'Cerrar',
+                            onPressed: () {
+                              // Some code to undo the change.
+                              },
+                            ),
+                          );
+
+                        // Find the Scaffold in the widget tree and use
+                        // it to show a SnackBar.
+                          Navigator.pop(context);
+                          globalKey.currentState.showSnackBar(snackBar);
+
+                        } else {
+                          await DBProvider().insertCarrito(producto);
+                          final snackBar = SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text('Se ha añadido al carrito!'),
+                            action: SnackBarAction(
+                              textColor: Colors.white,
+                              label: 'Cerrar',
+                              onPressed: () {
+                                // Some code to undo the change.
+                              },
+                            ),
+                          );
+
+                          // Find the Scaffold in the widget tree and use
+                          // it to show a SnackBar.
+                          Navigator.pop(context);
+                          globalKey.currentState.showSnackBar(snackBar);
+
+                        }
+                        
+                        //Navigator.pushNamed(context, 'carrito', arguments: title);
+                        },
+                      child: Container(
+                      color: Color.fromRGBO(29, 233, 182, 1),
+                      height: media.size.height * 0.07,
+                      width: media.size.width * 0.9,
+                      //padding: EdgeInsets.all(13.0),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Center(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SizedBox(width: 15.0),
+                                  Text('Agregar producto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                              fontSize: 14.0, fontWeight: FontWeight.w500,
+                                        ))),
+                                  SizedBox(width: 5.0),
+                                  Icon(Icons.add_shopping_cart)
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ),
+                    ),
+                ),
+                    ],
+                  ),
+              );
+              }
+            );
+          });
+  
+  
+
+
+
+}
 
   
 
@@ -455,7 +783,7 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
       "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
-      "password": "admin123",
+      "password": "wetiteam123",
     };
 
         Map<String, String> bodyTokenQA = {
@@ -518,3 +846,5 @@ class Token {
     );
   }
 }
+
+  

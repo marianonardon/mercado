@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -68,12 +69,18 @@ class Categoria {
   }
 }
 
-class CategoriasListView extends StatelessWidget {
+class CategoriasListView extends StatefulWidget {
   CategoriasListView(this.mercadoId,this.userId,this.nombreUser,this.fotoUser);
   final String mercadoId;
   final String userId;
   final String nombreUser;
   final String fotoUser; 
+
+  @override
+  _CategoriasListViewState createState() => _CategoriasListViewState();
+}
+
+class _CategoriasListViewState extends State<CategoriasListView> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Categoria>>(
@@ -112,7 +119,7 @@ class CategoriasListView extends StatelessWidget {
       "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
-      "password": "admin123",
+      "password": "wetiteam123",
     };
 
     Map<String, String> headers = {
@@ -125,6 +132,12 @@ class CategoriasListView extends StatelessWidget {
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
 
+    //SharedPreferences prefs = await SharedPreferences.getInstance();
+      //String token2 = prefs.getString('token');
+    //String token2 = 'maro';
+       
+
+
 
     Map<String, String> headers2 = {
       "Authorization": "OAuth $token2"
@@ -134,7 +147,7 @@ class CategoriasListView extends StatelessWidget {
 
     final categoriasListAPIUrl = 'https://agilemarket.com.ar/rest/consultarCategoria';
     final categoriasListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarCategoria';
-    final response = await http.get('$categoriasListAPIUrl',headers: headers2);
+    var response = await http.get('$categoriasListAPIUrl',headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
@@ -143,7 +156,24 @@ class CategoriasListView extends StatelessWidget {
       //List jsonResponse = json.decode(response.body);
       //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));
     } else {
-      throw Exception('Failed to load jobs from API');
+      if (response.statusCode == 401) {
+        final responseToken = await http.post(urlProd, body: bodyTokenProd, headers: headers);
+        final decodedData = json.decode(responseToken.body);
+        final token = new Token.fromJsonMap(decodedData);
+        token2 = token.accessToken.toString();
+        final response = await http.get('$categoriasListAPIUrl',headers: headers2);
+        
+        if (response.statusCode == 200) {
+          final decodedData = json.decode(response.body);
+          final categoria = new Categorias.fromJsonList(decodedData);
+          return categoria.items;
+          //List jsonResponse = json.decode(response.body);
+          //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));
+        } else {
+          throw Exception('Failed to load jobs from API');
+        }
+
+      }
     }
   }
 
@@ -156,7 +186,6 @@ class CategoriasListView extends StatelessWidget {
                         data[index].categoriaImagen,data[index].categoriaID,context);
         });
   }
-
 
   Widget _crearLista(String title, String imagen,String categoriaID,context) {
     MediaQueryData media = MediaQuery.of(context);
@@ -171,14 +200,13 @@ class CategoriasListView extends StatelessWidget {
           //  _crearTitulo(),
             SizedBox(height: 15.0),
             GestureDetector(
-              onTap: () {Navigator.pushNamed(context, 'productos', arguments: ProductosArguments(categoriaID, mercadoId,'',userId,nombreUser,fotoUser,title));},
+              onTap: () {Navigator.pushNamed(context, 'productos', arguments: ProductosArguments(categoriaID, widget.mercadoId,'',widget.userId,widget.nombreUser,widget.fotoUser,title));},
             child:_crearTarjetas(title, imagen,context))
           ],
         ),
       ),
     );
   }
-
 
   _crearTarjetas(title,imagen,context) {
     MediaQueryData media = MediaQuery.of(context);
@@ -227,7 +255,6 @@ class CategoriasListView extends StatelessWidget {
   );
 
   }
-
 }
 
 

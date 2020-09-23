@@ -20,11 +20,12 @@ class ProductoXPuestoPage extends StatefulWidget {
 }
 
 class _ProductoXPuestoPageState extends State<ProductoXPuestoPage> {
-  
+  final globalKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
         final ProductosPuestoArguments args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
+      key: globalKey,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         title: Text('Productos del puesto ',style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
@@ -48,7 +49,7 @@ class _ProductoXPuestoPageState extends State<ProductoXPuestoPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                // SizedBox(height: 20.0),
-                Container(child: PuestoProductosListView(args.categoriaIdProd,args.mercadoIdProd,args.puestoId)),
+                Container(child: PuestoProductosListView(args.categoriaIdProd,args.mercadoIdProd,args.puestoId,globalKey)),
               ],
             ),
           ),

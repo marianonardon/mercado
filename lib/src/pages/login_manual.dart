@@ -111,7 +111,7 @@ class _LoginManualPageFinalState extends State<LoginManualPageFinal> {
                             children: [
                               Text('Acepto términos y condiciones de estas', style: new TextStyle(color: Colors.black, fontSize: 18.0),),
                               GestureDetector(
-                                onTap: () {launch('https://agilemarket.com.ar');},
+                                onTap: () {launch('https://agilemarket.com.ar/politicas.aspx');},
                                 child: Text('políticas de privacidad de Agile market', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0),)),
                             ],
                           ),

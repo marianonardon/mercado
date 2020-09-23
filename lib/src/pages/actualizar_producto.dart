@@ -312,10 +312,12 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
+
+          
           width: media.size.width * 0.90,
           child: TextFormField(
             validator: (stock) {if (stock.isEmpty) {
-                return 'El campo Stock no puede estar vacío!';
+                return null;
                 }else {
                   if (isNumeric(stock)) {
                     return null;
@@ -394,7 +396,7 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
               width: media.size.width * 0.43,
               child: TextFormField(
                 validator: (precio) {if (precio.isEmpty) {
-                return 'El Precio no puede estar vacío!';
+                return null;
                 }else {
                   if (isNumeric(precio)) {
                     return null;
@@ -444,7 +446,7 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
               width: media.size.width * 0.43,
               child: TextFormField(
                 validator: (cantidad) {if (cantidad.isEmpty) {
-                return 'Cantidad no puede estar vacío!';
+                return null;
                 }else {
                   if (isNumeric(cantidad)) {
                     return null;

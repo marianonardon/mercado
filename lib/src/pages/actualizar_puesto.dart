@@ -93,7 +93,9 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
                SizedBox(height: 10.0),
               _inputCuit(context,args.comercioCuit),
               SizedBox(height: 10.0),
-              _inputNavePuesto(args.numNave,args.comercioPuesto),
+              _inputNave(args.numNave),
+              SizedBox(height: 10.0),
+              _inputPuesto(args.comercioPuesto),
               SizedBox(height: 15.0),
               Text('Datos de contacto',style: GoogleFonts.roboto(textStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                 fontWeight: FontWeight.bold, fontSize: 18.0))), 
@@ -476,7 +478,7 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
     );
   }
 
-  Widget _inputNavePuesto(nunNave,comercioPuesto) { 
+  Widget _inputNave(nunNave) { 
     MediaQueryData media = MediaQuery.of(context);
         nave =  naveController.text;
     if (nunNave != nave) {
@@ -487,24 +489,13 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
       }else {
         naveController.text = nunNave;
     }
-    puesto =  puestoController.text;
-    if (comercioPuesto != puesto) {
-      if (puesto == ''){
-        puestoController.text = comercioPuesto;
-      } else {
-        puestoController.text = puesto;}
-      }else {
-        puestoController.text = comercioPuesto;
-    }
-    return Row(
-      children: <Widget>[
-        Column(
+    return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 10.0),
             Container(
               alignment: Alignment.centerLeft,
-              width: media.size.width * 0.43,
+              width: media.size.width * 0.90,
               child: TextFormField(
                 readOnly: true,
                 validator: (nave) {if (nave.isEmpty) {
@@ -513,7 +504,7 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
                   return null;
                 }},
                 controller: naveController,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
                 style: TextStyle(
                   color: Colors.black,
                   fontFamily: 'OpenSans',
@@ -531,7 +522,7 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
                     color: Colors.greenAccent,
                     width: 1.0,
                   ), */
-                labelText: 'Nave',
+                labelText: 'Nave / Sector',
                 labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6),
                 fontWeight: FontWeight.bold, fontSize: 14.0),
                   contentPadding: EdgeInsets.only(top: 5.0),
@@ -549,15 +540,27 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
               ),
             ),
           ],
-        ),
-        SizedBox(width:20.0),
-         Column(
+        );
+  }
+
+    Widget _inputPuesto(comercioPuesto) { 
+    MediaQueryData media = MediaQuery.of(context);
+    puesto =  puestoController.text;
+    if (comercioPuesto != puesto) {
+      if (puesto == ''){
+        puestoController.text = comercioPuesto;
+      } else {
+        puestoController.text = puesto;}
+      }else {
+        puestoController.text = comercioPuesto;
+    }
+    return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 10.0),
             Container(
               alignment: Alignment.centerLeft,
-              width: media.size.width * 0.43,
+              width: media.size.width * 0.90,
               child: TextFormField(
                 readOnly: true,
                 validator: (puesto) {if (puesto.isEmpty) {
@@ -566,7 +569,7 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
                   return null;
                 }},
                 controller: puestoController,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
                 style: TextStyle(
                   color: Colors.black,
                   fontFamily: 'OpenSans',
@@ -584,7 +587,7 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
                     color: Colors.greenAccent,
                     width: 1.0,
                   ), */
-                labelText: 'Puesto',
+                labelText: 'Puesto / Nombre',
                 labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                   fontWeight: FontWeight.bold, fontSize: 14.0),
                   contentPadding: EdgeInsets.only(top: 5.0),
@@ -602,9 +605,7 @@ class _ActualizarPuestoState extends State<ActualizarPuesto> {
               ),
             ),
           ],
-        ),
-      ],
-    );
+        );
   }
 
 

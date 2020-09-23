@@ -132,7 +132,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, in
       "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
-      "password": "admin123",
+      "password": "wetiteam123",
     };
 
         Map<String, String> bodyTokenQA = {
@@ -173,6 +173,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, in
       final productos = new Producto.fromJsonMap(decodedData);
       final actprodListAPIUrl = 'https://agilemarket.com.ar/rest/Producto/$productoId';
       final actprodListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/Producto/$productoId';
+      double calidadProd = calidad.toDouble();
     
          http.Response response2 = await http.put(
           '$actprodListAPIUrl',
@@ -184,7 +185,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, in
             "ProductoNombre": nombre,
             "ProductoDescripcion": descripcion,
             "ProductoStock": stock,
-            "ProductoCalidad": 4,
+            "ProductoCalidad": calidadProd,
             "ProductoFoto": urlFoto,
             "CategoriaID": categoria,
             "TipoUnidadID": tipoUnidadId,
@@ -211,6 +212,31 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, in
           ),
         );
 
+        if (precio1 == '') {
+          response2 = await http.put(
+          '$actprodListAPIUrl',
+      
+          headers: headers3,
+          body: jsonEncode(<String, dynamic>
+          {
+            "ProductoID": productos.productoID,
+            "ProductoNombre": nombre,
+            "ProductoDescripcion": descripcion,
+            "ProductoStock": stock,
+            "ProductoCalidad": calidadProd,
+            "ProductoFoto": urlFoto,
+            "CategoriaID": categoria,
+            "TipoUnidadID": tipoUnidadId,
+            "ComercioID": comercioId,
+            "MercadoID": mercado ,
+            "ProductoDestacado": false,
+            "gx_md5_hash": productos.gx
+          }
+          
+          ),
+        );
+        } else {
+
         if (precio2 == '') {
           response2 = await http.put(
           '$actprodListAPIUrl',
@@ -222,7 +248,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, in
             "ProductoNombre": nombre,
             "ProductoDescripcion": descripcion,
             "ProductoStock": stock,
-            "ProductoCalidad": 4,
+            "ProductoCalidad": calidadProd,
             "ProductoFoto": urlFoto,
             "CategoriaID": categoria,
             "TipoUnidadID": tipoUnidadId,
@@ -252,7 +278,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, in
             "ProductoNombre": nombre,
             "ProductoDescripcion": descripcion,
             "ProductoStock": stock,
-            "ProductoCalidad": 4,
+            "ProductoCalidad": calidadProd,
             "ProductoFoto": urlFoto,
             "CategoriaID": categoria,
             "TipoUnidadID": tipoUnidadId,
@@ -274,6 +300,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, in
           
           ),
         );
+        }
         }
         }
         

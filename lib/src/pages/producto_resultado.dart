@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_login_ui/src/pages/productos_serv.dart';
+import 'package:flutter_login_ui/src/providers/productos_provider.dart';
+import 'package:flutter_login_ui/src/widgets/listado_productos.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'categorias_serv.dart';
@@ -16,17 +18,36 @@ class ProductosResultadoPage extends StatefulWidget {
 }
 
 class _ProductosResultadoPageState extends State<ProductosResultadoPage> {
+  Function siguientePagina;
+  final productosProvider = new ProductosProvider();
+
+  final _scrollController = new ScrollController(
+          initialScrollOffset: 200.0,
+          keepScrollOffset:true
+        );
+  final globalKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
 
 
     final ProductosArguments args = ModalRoute.of(context).settings.arguments;
     String productoBuscado = args.productoBuscado;
+
+    productosProvider.fetchProductos(args.categoriaId,args.mercadoId,productoBuscado);
+
+    _scrollController.addListener(() {
+            if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 20) {
+              siguientePagina = productosProvider.fetchProductos;
+              siguientePagina(args.categoriaId,args.mercadoId,productoBuscado);
+              //ProductosListView(args.categoriaId,args.mercadoId,'').siguientePagina();
+            }
+          });
     
 
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
+        key: globalKey,
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
         leading: new IconButton(
@@ -45,6 +66,7 @@ class _ProductosResultadoPageState extends State<ProductosResultadoPage> {
       backgroundColor: Colors.white,
       body: Container(
           child: SingleChildScrollView(
+              controller:_scrollController ,
               child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
@@ -56,7 +78,7 @@ class _ProductosResultadoPageState extends State<ProductosResultadoPage> {
                 ))),     
                 SizedBox(height: 20.0),      
 
-                Container(child: ProductosListView(args.categoriaId,args.mercadoId,args.productoBuscado))
+                _listaProductos(),
               ],
             ),
           ),
@@ -91,5 +113,63 @@ class _ProductosResultadoPageState extends State<ProductosResultadoPage> {
       );
 
       
+  }
+
+  _listaProductos() {
+    return Container(
+      child: StreamBuilder<List<Producto>>(
+      stream: productosProvider.productosStream,
+      // fetchProductos(widget.categoriaId,widget.mercadoId,widget.productoBuscado),
+      builder: (context, AsyncSnapshot<List> snapshot) {
+        if (snapshot.hasData) {
+          if(snapshot.requireData.isEmpty){
+/*             if (productoValidacion == true) {
+              return Container();
+            } else { */
+            return Center(
+              child: Container(
+                child: Column(
+                   children: <Widget>[
+                     Image(
+                       image: AssetImage('assets/img/SinProductos.gif'),
+                     ),
+                    Text(
+                    'No existen productos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                    Text(
+                    'para estos filtros', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                     
+
+                  ]
+                )
+                
+                ),
+            );
+            //}
+          } else {
+          List<Producto> data = snapshot.data;
+          
+          return ListadoProductos(
+            productos: data,
+            globalKey: globalKey,
+
+            //siguientePagina: productosProvider.fetchProductos,
+          );
+            }
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        }
+        MediaQueryData media = MediaQuery.of(context,);
+        return Center(
+          heightFactor: media.size.height * 0.025,
+          child: CircularProgressIndicator());
+      },
+    ),
+    );
   }
 }

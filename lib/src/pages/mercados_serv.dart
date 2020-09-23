@@ -42,12 +42,35 @@ class Mercado {
   final String mercadoFechaAlta;
   final bool mercadoHabilitado;
   final String mercadoImagen;
-  final String mercadoHoraInicio;
-  final String mercadoHoraFin;
+  final bool mercadoLunes;
+  final String mercadoLunesHoraDesde;
+  final String mercadoLunesHoraHasta;
+  final bool mercadoMartes;
+  final String mercadoMartesHoraDesde;
+  final String mercadoMartesHoraHasta;
+  final bool mercadoMiercoles;
+  final String mercadoMiercolesHoraDesde;
+  final String mercadoMiercolesHoraHasta;
+  final bool mercadoJueves;
+  final String mercadoJuevesHoraDesde;
+  final String mercadoJuevesHoraHasta;
+  final bool mercadoViernes;
+  final String mercadoViernesHoraDesde;
+  final String mercadoViernesHoraHasta;
+  final bool mercadoSabado;
+  final String mercadoSabadoHoraDesde;
+  final String mercadoSabadoHoraHasta;
+  final bool mercadoDomingo;
+  final String mercadoDomingoHoraDesde;
+  final String mercadoDomingoHoraHasta;
 
 
   Mercado({this.mercadoId, this.mercadoNombre, this.mercadoDireccion, this.mercadoTelefono, this.mercadoFechaAlta,
-          this.mercadoHabilitado, this.mercadoImagen, this.mercadoHoraInicio,this.mercadoHoraFin});
+          this.mercadoHabilitado, this.mercadoImagen, this.mercadoLunes, this.mercadoLunesHoraDesde,this.mercadoLunesHoraHasta,
+          this.mercadoMartes,this.mercadoMartesHoraDesde,this.mercadoMartesHoraHasta,this.mercadoMiercoles,this.mercadoMiercolesHoraDesde,
+          this.mercadoMiercolesHoraHasta,this.mercadoJueves,this.mercadoJuevesHoraDesde,this.mercadoJuevesHoraHasta,this.mercadoViernes,
+          this.mercadoViernesHoraDesde,this.mercadoViernesHoraHasta,this.mercadoSabado,this.mercadoSabadoHoraDesde,this.mercadoSabadoHoraHasta,
+          this.mercadoDomingo,this.mercadoDomingoHoraDesde,this.mercadoDomingoHoraHasta});
 
   factory Mercado.fromJsonMap(Map<String, dynamic> parsedJson) {
     return Mercado(
@@ -58,8 +81,27 @@ class Mercado {
       mercadoFechaAlta: parsedJson['mercadoFechaAlta'],
       mercadoHabilitado: parsedJson['mercadoHabilitado'],
       mercadoImagen: parsedJson['mercadoImagen'],
-      mercadoHoraInicio: parsedJson['mercadoHoraInicio'],
-      mercadoHoraFin: parsedJson['mercadoHoraFin'],
+      mercadoLunes: parsedJson['mercadoLunes'],
+      mercadoLunesHoraDesde: parsedJson['mercadoLunesHoraDesde'],
+      mercadoLunesHoraHasta: parsedJson['mercadoLunesHoraHasta'],
+      mercadoMartes: parsedJson['mercadoMartes'],
+      mercadoMartesHoraDesde: parsedJson['mercadoMartesHoraDesde'],
+      mercadoMartesHoraHasta: parsedJson['mercadoMartesHoraHasta'],
+      mercadoMiercoles: parsedJson['mercadoMiercoles'],
+      mercadoMiercolesHoraDesde: parsedJson['mercadoMiercolesHoraDesde'],
+      mercadoMiercolesHoraHasta: parsedJson['mercadoMiercolesHoraHasta'],
+      mercadoJueves: parsedJson['mercadoJueves'],
+      mercadoJuevesHoraDesde: parsedJson['mercadoJuevesHoraDesde'],
+      mercadoJuevesHoraHasta: parsedJson['mercadoJuevesHoraHasta'],
+      mercadoViernes: parsedJson['mercadoViernes'],
+      mercadoViernesHoraDesde: parsedJson['mercadoViernesHoraDesde'],
+      mercadoViernesHoraHasta: parsedJson['mercadoViernesHoraHasta'],
+      mercadoSabado: parsedJson['mercadoSabado'],
+      mercadoSabadoHoraDesde: parsedJson['mercadoSabadoHoraDesde'],
+      mercadoSabadoHoraHasta: parsedJson['mercadoSabadoHoraHasta'],
+      mercadoDomingo: parsedJson['mercadoDomingo'],
+      mercadoDomingoHoraDesde: parsedJson['mercadoDomingoHoraDesde'],
+      mercadoDomingoHoraHasta: parsedJson['mercadoDomingoHoraHasta'],
     );
   }
 }
@@ -137,7 +179,7 @@ class _MercadosListViewState extends State<MercadosListView> {
       "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
-      "password": "admin123",
+      "password": "wetiteam123",
     };
 
         Map<String, String> bodyTokenQA = {
@@ -157,6 +199,8 @@ class _MercadosListViewState extends State<MercadosListView> {
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('token',token2 );
 
 
     Map<String, String> headers2 = {
@@ -185,8 +229,99 @@ class _MercadosListViewState extends State<MercadosListView> {
         shrinkWrap: true,
         itemCount: data.length,
         itemBuilder: (context, index) {
+          DateTime now = DateTime.now();
+          int diaActual = now.weekday;
+          String mercadoHoraInicio;
+          String mercadoHoraFin;
+          bool diaBool;
+          switch(diaActual) {
+            case 1:
+              diaBool = data[index].mercadoLunes;
+              if (diaBool == true) {
+              
+                mercadoHoraInicio = data[index].mercadoLunesHoraDesde;
+                mercadoHoraFin = data[index].mercadoLunesHoraHasta;
+              } else{
+                mercadoHoraInicio = 'Cerrado';
+                mercadoHoraFin = '';
+              }
+              break;
+            case 2:
+
+              diaBool = data[index].mercadoMartes;
+              if (diaBool == true) {
+              mercadoHoraInicio = data[index].mercadoMartesHoraDesde;
+              mercadoHoraFin = data[index].mercadoMartesHoraHasta;
+              } else{
+                mercadoHoraInicio = 'Cerrado';
+                mercadoHoraFin = '';
+              }
+              break;
+            
+            case 3:
+
+              diaBool = data[index].mercadoMiercoles;
+              if (diaBool == true) {
+              mercadoHoraInicio = data[index].mercadoMiercolesHoraDesde;
+              mercadoHoraFin = data[index].mercadoMiercolesHoraHasta;
+              } else{
+                mercadoHoraInicio = 'Cerrado';
+                mercadoHoraFin = '';
+              }
+              break;
+
+            case 4:
+
+              diaBool = data[index].mercadoJueves;
+              if (diaBool == true) {
+              mercadoHoraInicio = data[index].mercadoJuevesHoraDesde;
+              mercadoHoraFin = data[index].mercadoJuevesHoraHasta;
+              } else{
+                mercadoHoraInicio = 'Cerrado';
+                mercadoHoraFin = '';
+              }
+              break;
+
+            case 5:
+
+              diaBool = data[index].mercadoViernes;
+              if (diaBool == true) {
+              mercadoHoraInicio = data[index].mercadoViernesHoraDesde;
+              mercadoHoraFin = data[index].mercadoViernesHoraHasta;
+              } else{
+                mercadoHoraInicio = 'Cerrado';
+                mercadoHoraFin = '';
+              }
+              break;
+
+            case 6:
+
+              diaBool = data[index].mercadoSabado;
+              if (diaBool == true) {
+              mercadoHoraInicio = data[index].mercadoSabadoHoraDesde;
+              mercadoHoraFin = data[index].mercadoSabadoHoraHasta;
+              } else{
+                mercadoHoraInicio = 'Cerrado';
+                mercadoHoraFin = '';
+              }
+              break;
+
+            case 7:
+
+              diaBool = data[index].mercadoDomingo;
+              if (diaBool == true) {
+              mercadoHoraInicio = data[index].mercadoDomingoHoraDesde;
+              mercadoHoraFin = data[index].mercadoDomingoHoraHasta;
+              } else{
+                mercadoHoraInicio = 'Cerrado';
+                mercadoHoraFin = '';
+              }
+              break;
+
+          }
+          
           return _crearLista(data[index].mercadoNombre, data[index].mercadoDireccion, Icons.location_on,
-                        data[index].mercadoImagen,idUser,data[index].mercadoId,data[index].mercadoHoraInicio, data[index].mercadoHoraFin,context);
+                        data[index].mercadoImagen,idUser,data[index].mercadoId,mercadoHoraInicio, mercadoHoraFin,context);
         });
   }
 
@@ -204,7 +339,12 @@ class _MercadosListViewState extends State<MercadosListView> {
           //  _crearTitulo(),
             SizedBox(height: 20.0),
             GestureDetector(
-              onTap: () {Navigator.pushNamed(context, 'categorias', arguments: ScreenArguments(idUser, nombreUsuario, fotoUsuario,mercadoId));},
+              onTap: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+                prefs.setString('horaMercado', '$mercadoHoraInicio');
+                prefs.setString('horaMercadoFin', '$mercadoHoraFin');
+                Navigator.pushNamed(context, 'categorias', arguments: ScreenArguments(idUser, nombreUsuario, fotoUsuario,mercadoId));},
             child:_crearTarjetas(title, subtitle, icon, imagen, mercadoHoraInicio,mercadoHoraFin,context))
           ],
         ),
@@ -214,18 +354,38 @@ class _MercadosListViewState extends State<MercadosListView> {
 
   _crearTarjetas(title, subtitle, icon, imagen, horaInicio,horaFin,context) {
     MediaQueryData media = MediaQuery.of(context);
+    String hourFin;
+    String minFin;
+    String hourIni;
+    String minIni;
+    String mercadoHorario;
+
+
+    if (horaFin != '') {
+    
     DateTime horarioFin = DateTime.parse(horaFin);
-    String hourFin = horarioFin.hour.toString();
-    String minFin  = horarioFin.minute.toString();
+     hourFin = horarioFin.hour.toString();
+     minFin  = horarioFin.minute.toString();
     if (int.parse(minFin) < 10) {
       minFin = '0$minFin';
     }
+    } else{
+       hourFin = '';
+       minFin  = '';
+    }
 
+    if (horaInicio != 'Cerrado') {
     DateTime horarioInicio = DateTime.parse(horaInicio);
-    String hourIni = horarioInicio.hour.toString();
-    String minIni  = horarioInicio.minute.toString();
+     hourIni = horarioInicio.hour.toString();
+     minIni  = horarioInicio.minute.toString();
     if (int.parse(minIni) < 10) {
       minIni = '0$minIni';
+    }
+    mercadoHorario = 'De $hourIni:$minIni a $hourFin:$minFin';
+    } else {
+       hourIni = 'Cerrado';
+       minIni  = '';
+       mercadoHorario = 'Cerrado';
     }
     
   return Stack(
@@ -259,12 +419,14 @@ class _MercadosListViewState extends State<MercadosListView> {
                 Row(
                   children: <Widget>[
                     SizedBox(width: 20.0),
-                    Text(
-                    title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                      fontSize: 21.0, fontWeight: FontWeight.w600,
-                      ))
-                    
+                    Flexible(
+                      child: Text(
+                      title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                        fontSize: 19.0, fontWeight: FontWeight.w600,
+                        ))
+                      
               ),
+                    ),
                   ],
                 ),
                 Row(
@@ -273,10 +435,12 @@ class _MercadosListViewState extends State<MercadosListView> {
                     Icon(icon, color: Colors.white,),
 
                     SizedBox(width: 5.0),
-                    Text(
-                    subtitle, style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
-                      fontSize: 15.0, fontWeight: FontWeight.w600)),
+                    Flexible(
+                                          child: Text(
+                      subtitle, style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
+                        fontSize: 14.0, fontWeight: FontWeight.w600)),
               ),
+                    ),
                   ]
                 ),
               Row(
@@ -284,17 +448,19 @@ class _MercadosListViewState extends State<MercadosListView> {
                     SizedBox(width: 20.0),
                     Icon(Icons.access_time, color: Colors.white,size: 20.0,),
                     SizedBox(width: 5.0),
-                    Text(
-                    'De $hourIni:$minIni a $hourFin:$minFin', style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
-                      fontSize: 15.0, fontWeight: FontWeight.w600)),
+                    Flexible(
+                                          child: Text(
+                      'Hoy: $mercadoHorario', style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
+                        fontSize: 14.0, fontWeight: FontWeight.w600)),
               ),
+                    ),
                   ],
                 )
                 
               ]
             ),
           ),
-        ),
+        ),  
       ),
       SizedBox(height: 20.0),
       ]

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
+import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_login_ui/src/pages/productos_serv.dart';
@@ -105,9 +106,9 @@ class Precio {
 
 } */
 
-class VendedorProductosListView extends StatefulWidget {
-  VendedorProductosListView(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser,this.numNave,this.comercioPuesto,
-  this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre);
+class VendedorProductosResultadoListView extends StatefulWidget {
+  VendedorProductosResultadoListView(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser,this.numNave,this.comercioPuesto,
+  this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre,this.productoBuscado);
   final String comercioId;
   final String mercadoId;
   final String userId;
@@ -119,15 +120,16 @@ class VendedorProductosListView extends StatefulWidget {
   final String comercioTelefono;
   final String comercioMail;
   final String comercioNombre;
+  final String productoBuscado;
 
   @override
-  _ProductosListViewState createState() => _ProductosListViewState(comercioId,mercadoId,userId,fotoUser,nombreUser,numNave,comercioPuesto,comercioCuit,comercioTelefono,
-  comercioMail,comercioNombre);
+  _VendedorProductosResultadoListViewState createState() => _VendedorProductosResultadoListViewState(comercioId,mercadoId,userId,fotoUser,nombreUser,numNave,comercioPuesto,comercioCuit,comercioTelefono,
+  comercioMail,comercioNombre,productoBuscado);
 }
 
-class _ProductosListViewState extends State<VendedorProductosListView> {
-   _ProductosListViewState(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser,this.numNave,this.comercioPuesto,this.comercioCuit,
-   this.comercioTelefono,this.comercioMail,this.comercioNombre);
+class _VendedorProductosResultadoListViewState extends State<VendedorProductosResultadoListView> {
+   _VendedorProductosResultadoListViewState(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser,this.numNave,this.comercioPuesto,this.comercioCuit,
+   this.comercioTelefono,this.comercioMail,this.comercioNombre,this.productoBuscado);
   final String comercioId;
   final String mercadoId;
   final String userId;
@@ -139,10 +141,11 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
   final String comercioTelefono;
   final String comercioMail;
   final String comercioNombre;
+  final String productoBuscado;
   @override
   Widget build(BuildContext context){
     return FutureBuilder<List<Producto>>(
-      future: fetchProductos(comercioId),
+      future: fetchProductos(comercioId,productoBuscado),
       builder: (context, snapshot) {
         MediaQueryData media = MediaQuery.of(context);
         if (snapshot.hasData) {
@@ -243,12 +246,12 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
                        image: AssetImage('assets/img/SinProductos.gif'),
                      ),
                     Text(
-                    'Cree un producto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                    'No existe producto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
                       fontSize: 24.0, fontWeight: FontWeight.w600,
                       ))                 
                     ),
                     Text(
-                    'para su puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                    'para los filtros buscados', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
                       fontSize: 24.0, fontWeight: FontWeight.w600,
                       ))                 
                     ),
@@ -634,7 +637,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
 
   
 
-  Future<List<Producto>> fetchProductos(comercioId) async { 
+  Future<List<Producto>> fetchProductos(comercioId,productoBuscado) async { 
 
     String url = "https://agilemarket.com.ar/oauth/access_token";
     String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
@@ -672,8 +675,8 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
 
 
 
-    final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/consultaProducto?comercioID=$comercioId';
-    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?comercioID=$comercioId';
+    final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/consultaProducto?comercioID=$comercioId&productoNombre=$productoBuscado';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?comercioID=$comercioId&productoNombre=$productoBuscado';
     final response = await http.get('$mercadosListAPIUrl', headers: headers2);
 
     if (response.statusCode == 200) {
@@ -708,39 +711,3 @@ class Token {
   }
 }
 
-class ProductoDetalleArg {
-  final String idProducto;
-  final String nombre;
-  final String descripcion;
-  final String foto;
-  final String precio1;
-  final String cantidad1;
-  final String precio2;
-  final String cantidad2;
-  final String precio3;
-  final String cantidad3;
-  final String stock;
-  final String unidad;
-  final String unidad2;
-  final String unidad3;
-  final String comercioId;
-  final String mercadoId;
-  final String userId;
-  final double calidad;
-  final String categoria;
-  final String unidadId;
-  final String fotoUser;
-  final String nombreUser;
-  final String numNave;
-  final String comercioPuesto;
-  final String comercioCuit;
-  final String comercioTelefono;
-  final String comercioMail;
-  final String comercioNombre;
-  
-
-
-  ProductoDetalleArg(this.idProducto, this.nombre,this.descripcion,this.foto,this.precio1,this.cantidad1,this.precio2,this.cantidad2,this.precio3,this.cantidad3,
-  this.stock,this.unidad,this.unidad2,this.unidad3,this.comercioId,this.mercadoId,this.userId,this.calidad,this.categoria,this.unidadId,this.fotoUser,this.nombreUser,
-  this.numNave,this.comercioPuesto,this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre);
-}

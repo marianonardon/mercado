@@ -30,7 +30,7 @@ class _ComboMercado2 extends State<ComboMercado2> {
       "client_secret": "7dae40626f4f45378b22bb47aa750024",
       "scope": "FullControl",
       "username": "admin",
-      "password": "admin123",
+      "password": "wetiteam123",
     };
 
     Map<String, String> bodyTokenQA = {

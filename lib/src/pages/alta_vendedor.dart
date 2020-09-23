@@ -92,7 +92,9 @@ class _AltaVendedorState extends State<AltaVendedor> {
                SizedBox(height: 10.0),
               _inputCuit(context),
               SizedBox(height: 10.0),
-              _inputNavePuesto(),
+              _inputNave(),
+              SizedBox(height: 10.0),
+              _inputPuesto(),
               SizedBox(height: 10.0),
               ComboMercado3(),
               SizedBox(height: 15.0),
@@ -442,17 +444,16 @@ class _AltaVendedorState extends State<AltaVendedor> {
     );
   }
 
-  Widget _inputNavePuesto() { 
+  Widget _inputNave() { 
     MediaQueryData media = MediaQuery.of(context);
-    return Row(
-      children: <Widget>[
+    return 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 10.0),
             Container(
               alignment: Alignment.centerLeft,
-              width: media.size.width * 0.43,
+              width: media.size.width * 0.90,
               child: TextFormField(
                 validator: (nave) {if (nave.isEmpty) {
                 return 'Nave no puede estar vacío!';
@@ -460,7 +461,8 @@ class _AltaVendedorState extends State<AltaVendedor> {
                   return null;
                 }},
                 controller: naveController,
-                keyboardType: TextInputType.number,
+                maxLength: 20,
+                keyboardType: TextInputType.text,
                 style: TextStyle(
                   color: Colors.black,
                   fontFamily: 'OpenSans',
@@ -478,7 +480,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
                     color: Colors.greenAccent,
                     width: 1.0,
                   ), */
-                labelText: 'Nave',
+                labelText: 'Nave / Sector',
                 labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6),
                 fontWeight: FontWeight.bold, fontSize: 14.0),
                   contentPadding: EdgeInsets.only(top: 5.0),
@@ -496,15 +498,17 @@ class _AltaVendedorState extends State<AltaVendedor> {
               ),
             ),
           ],
-        ),
-        SizedBox(width:20.0),
-         Column(
+        );
+  }
+  Widget _inputPuesto() { 
+    MediaQueryData media = MediaQuery.of(context);
+    return  Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 10.0),
             Container(
               alignment: Alignment.centerLeft,
-              width: media.size.width * 0.43,
+              width: media.size.width * 0.90,
               child: TextFormField(
                 validator: (puesto) {if (puesto.isEmpty) {
                 return 'Puesto no puede estar vacío!';
@@ -512,7 +516,8 @@ class _AltaVendedorState extends State<AltaVendedor> {
                   return null;
                 }},
                 controller: puestoController,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
+                maxLength: 20,
                 style: TextStyle(
                   color: Colors.black,
                   fontFamily: 'OpenSans',
@@ -530,7 +535,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
                     color: Colors.greenAccent,
                     width: 1.0,
                   ), */
-                labelText: 'Puesto',
+                labelText: 'Puesto / Nombre',
                 labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                   fontWeight: FontWeight.bold, fontSize: 14.0),
                   contentPadding: EdgeInsets.only(top: 5.0),
@@ -548,9 +553,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
               ),
             ),
           ],
-        ),
-      ],
-    );
+        );
   }
 
 
@@ -661,7 +664,7 @@ class _ComboMercado3 extends State<ComboMercado3> {
       "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
-      "password": "admin123",
+      "password": "wetiteam123",
     };
 
     Map<String, String> bodyTokenQA = {
@@ -690,7 +693,7 @@ class _ComboMercado3 extends State<ComboMercado3> {
     final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/consultarMercado/';
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarMercado/';
     final mercadosHabilitados = '?habilitado=1';
-    final response = await http.get('$mercadosListAPIUrl$mercadosHabilitados', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
 
 
     if (response.statusCode == 200) {

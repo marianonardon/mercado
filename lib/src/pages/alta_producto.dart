@@ -285,7 +285,7 @@ class _AltaProductoState extends State<AltaProducto> {
           width: media.size.width * 0.90,
           child: TextFormField(
             validator: (stock) {if (stock.isEmpty) {
-                return 'El campo Stock no puede estar vacío!';
+                return null;
                 }else {
                   if (isNumeric(stock)) {
                     return null;
@@ -315,7 +315,7 @@ class _AltaProductoState extends State<AltaProducto> {
                     color: Colors.greenAccent,
                     width: 1.0,
                   ), */
-                labelText: 'Stock *',
+                labelText: 'Stock',
                 labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                   fontWeight: FontWeight.bold, fontSize: 14.0),
               contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
@@ -347,9 +347,8 @@ class _AltaProductoState extends State<AltaProducto> {
               alignment: Alignment.centerLeft,
               width: media.size.width * 0.43,
               child: TextFormField(
-                validator: (precio) {if (precio.isEmpty) {
-                return 'El Precio no puede estar vacío!';
-                }else {
+                validator: (precio) 
+                { if (precio.isNotEmpty) {
                   if (isNumeric(precio)) {
                     return null;
                   } else {
@@ -374,7 +373,7 @@ class _AltaProductoState extends State<AltaProducto> {
                     color: Colors.greenAccent,
                     width: 1.0,
                   ), */
-                  labelText: 'Precio *',
+                  labelText: 'Precio',
                   labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                   fontWeight: FontWeight.bold, fontSize: 14.0),
                   contentPadding: EdgeInsets.only(top: 5.0),
@@ -397,10 +396,9 @@ class _AltaProductoState extends State<AltaProducto> {
               alignment: Alignment.centerLeft,
               width: media.size.width * 0.43,
               child: TextFormField(
-                validator: (cantidad) {if (cantidad.isEmpty) {
-                return 'Cantidad no puede estar vacío!';
-                }else {
-                  if (isNumeric(cantidad)) {
+                validator: (cantidad) 
+                { if(cantidad.isNotEmpty) {
+                   if (isNumeric(cantidad)) {
                     return null;
                   } else {
                     return 'El campo Cantidad debe ser numérico';
@@ -425,7 +423,7 @@ class _AltaProductoState extends State<AltaProducto> {
                     color: Colors.greenAccent,
                     width: 1.0,
                   ), */
-                   labelText: 'Cantidad *',
+                   labelText: 'Cantidad',
                    labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
                   fontWeight: FontWeight.bold, fontSize: 14.0),
                   contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 0, 5.0),
@@ -811,6 +809,9 @@ class _AltaProductoState extends State<AltaProducto> {
 
    _seleccionarFoto() async {
      foto = await ImagePicker.pickImage(
+       maxHeight: 480.0,
+       maxWidth: 640.0,
+       imageQuality: 30,
       source: ImageSource.gallery
       
       
@@ -828,6 +829,9 @@ class _AltaProductoState extends State<AltaProducto> {
 
   _tomarFoto() async {
     foto = await ImagePicker.pickImage(
+      maxHeight: 480.0,
+       maxWidth: 640.0,
+       imageQuality: 30,
       source: ImageSource.camera
       
       

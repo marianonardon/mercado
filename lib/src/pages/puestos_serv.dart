@@ -159,7 +159,7 @@ class PuestosListView extends StatelessWidget {
       "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
-      "password": "admin123",
+      "password": "wetiteam123",
     };
 
         Map<String, String> bodyTokenQA = {
@@ -285,9 +285,11 @@ class PuestosListView extends StatelessWidget {
                 children: <Widget>[
                   SizedBox(width: 20.0),
                   Icon(Icons.location_on, color: Colors.white,),
-                  Text(
-                  'Puesto: $numPuesto   Nave: $numNave', style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
-                    fontSize: 15.0, fontWeight: FontWeight.w600)),
+                  Flexible(
+                    child: Text(
+                    'Puesto / Nombre: $numPuesto   Nave / Sector: $numNave', style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
+                      fontSize: 15.0, fontWeight: FontWeight.w600)),
+                    ),
                   ),
                 ],
               )

@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
+//import 'package:optimized_cached_image/optimized_cached_image.dart';
+//import 'package:optimized_cached_image/widgets.dart';
 
 
 
@@ -64,9 +66,11 @@ class Producto {
 
   factory Producto.fromJsonMap(Map<String, dynamic> parsedJson) {
 
-    var list = parsedJson['precio'] as List;  
-    print(list.runtimeType);
-    List<Precio> preciosList = list.map((i) => Precio.fromJson(i)).toList();
+
+    var list = parsedJson['precio'] != null ? parsedJson['precio'] as List : List<Precio>();
+    List<Precio> preciosList;
+
+    preciosList = parsedJson['precio'] != null ? list.map((i) => Precio.fromJson(i)).toList() : List<Precio>();
 
     return Producto(
       productoID: parsedJson['productoID'],
@@ -111,18 +115,45 @@ class Precio {
  String puestoNave;
  String puestoPuesto;
 
-class ProductosListView extends StatelessWidget {
+class ProductosListView extends StatefulWidget {
   ProductosListView(this.categoriaId, this.mercadoId,this.productoBuscado);
   final String categoriaId;
   final String mercadoId;
   final String productoBuscado;
+  Function siguientePagina;
+
+  @override
+  _ProductosListViewState createState() => _ProductosListViewState();
+}
+
+class _ProductosListViewState extends State<ProductosListView> {
+
+  final _scrollController = new ScrollController(
+          initialScrollOffset: 200.0,
+          keepScrollOffset:false
+        );
+
+  
 
   @override
   Widget build(BuildContext context){
+    final _screenSize = MediaQuery.of(context).size;
+
+    /* _scrollController.addListener(() {
+      if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 ) {
+        print('cargar mas productos');
+        widget.siguientePagina();
+      }
+    }); */
+    fetchProductos(widget.categoriaId, widget.mercadoId, widget.productoBuscado);
+    
+
+
     
     
-    return FutureBuilder<List<Producto>>(
-      future: fetchProductos(categoriaId,mercadoId,productoBuscado),
+    return StreamBuilder<List<Producto>>(
+      stream: productosStream,
+      // fetchProductos(widget.categoriaId,widget.mercadoId,widget.productoBuscado),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if(snapshot.requireData.isEmpty){
@@ -156,7 +187,9 @@ class ProductosListView extends StatelessWidget {
             //}
           } else {
           List<Producto> data = snapshot.data;
+          siguientePagina: fetchProductos;
           return Column(
+            
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               
@@ -184,6 +217,7 @@ class ProductosListView extends StatelessWidget {
         scrollDirection: Axis.vertical,
         physics: NeverScrollableScrollPhysics(),
         itemCount: data.length,
+        controller: _scrollController,
         itemBuilder: (context, index)   {
           
 
@@ -239,11 +273,11 @@ class ProductosListView extends StatelessWidget {
                         foto,preciox1,preciox2,preciox3,cantidad1,cantidad2,cantidad3,
                         data[index].comercioNombre,
                         data[index].tipoUnidadNombre, data[index].productoCalidad,data[index].comercioID,data[index].comercioPuesto,data[index].productoDescripcion,
-                        data[index].productoStock,context);
+                        data[index].productoStock,data[index].comercioNumNave,context);
         });
   }
 
-    Widget _crearLista(String title, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,String comercioId, String comercioPuesto,descripcion,stock, context) {
+    Widget _crearLista(String title, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,String comercioId, String comercioPuesto,descripcion,stock,comercioNave, context) {
     MediaQueryData media = MediaQuery.of(context);
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,7 +294,7 @@ class ProductosListView extends StatelessWidget {
                 
               //  _crearTitulo(),
                 SizedBox(height: 8.0),
-               _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,descripcion,stock,context)
+               _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,descripcion,stock,comercioNave,context)
               ],
             ),
           ),
@@ -269,7 +303,7 @@ class ProductosListView extends StatelessWidget {
     );
   }
 
-   _crearTarjetas(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,descripcion,stock,context) {
+   _crearTarjetas(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,descripcion,stock,comercioNave,context) {
 
 /*     String puestos;
     List<Puesto> data;
@@ -289,10 +323,21 @@ class ProductosListView extends StatelessWidget {
 
 /*    puestos = data[0].comercioPuesto;    */
    MediaQueryData media = MediaQuery.of(context); 
+  
+  String unidad1;
+  String speso1;
   String unidad2;
   String unidad3;
   String speso2;
   String speso3;
+
+  if(precio1 == ''){
+    unidad1 = '';
+    speso1 = '';
+  } else{
+    unidad1 = unidad;
+    speso1 = '\$';
+  }
   if(precio2 == ''){
     unidad2 = '';
     speso2 = '';
@@ -323,7 +368,7 @@ class ProductosListView extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
-                                  precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
+                                  precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,widget.mercadoId,'',ratingProd,widget.categoriaId,'','','',
                                   '',comercioPuesto,'','','',''));
 
               },
@@ -332,14 +377,66 @@ class ProductosListView extends StatelessWidget {
                   children: <Widget>[
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12.0),
-                      child: Image(
+                      child: 
+                      /* Container(
+            width: 80.0,
+            height: 80.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+            ),
+            child: CachedNetworkImage('https://pbs.twimg.com/profile_images/945853318273761280/0U40alJG_400x400.jpg'),
+          ) */
+                      
+                      
+                      
+                      /* FadeInImage(
                       height: 55  ,
                       width: 55,
                       fit: BoxFit.fill,
-                      image: NetworkImage(imagen),
+                      image: NetworkImage(imagen,scale: 0.1),
+                      
 
-                     // placeholder: AssetImage('assets/img/original.gif')),
-                    )),
+                     placeholder: AssetImage('assets/img/original.gif'), */
+                     /* MeetNetworkImage(
+                        height: 55,
+                        width: 55,
+                        fit: BoxFit.fill,
+                        filterQuality: FilterQuality.low,
+                        
+                        imageUrl:
+                            imagen,
+                        loadingBuilder: (context) => Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                        errorBuilder: (context, e) => Center(
+                              child: Text('Error appear!'),
+                            ),
+                      
+                    ) */
+                    Image.network(imagen,fit: BoxFit.fill,
+                    height: 55,
+                        width: 55,
+                      loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null ? 
+                                loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
+
+                   /*  OptimizedCacheImage(
+                         height: 55,
+                        fit: BoxFit.fill,
+                        width: 55,
+                        imageUrl: imagen,
+                        placeholder: (context, imagen) => CircularProgressIndicator(),
+                        errorWidget: (context, imagen, error) => Icon(Icons.error),
+                    ), */
+                    ),
                   ],
                 ),
               ),
@@ -347,12 +444,12 @@ class ProductosListView extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
-                                  precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
+                                  precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,widget.mercadoId,'',ratingProd,widget.categoriaId,'','','',
                                   '',comercioPuesto,'','','',''));
 
               },
                 child: Container(
-                  width: media.size.width * 0.70 ,
+                  width: media.size.width * 0.63 ,
                   alignment: AlignmentDirectional.bottomStart,
                   padding: EdgeInsets.all(6.0),
                   child: Column(
@@ -399,7 +496,7 @@ class ProductosListView extends StatelessWidget {
                       Row(
                         children: <Widget>[
                            Flexible(
-                                                      child: Text(
+                                child: Text(
                                 '$comercio   Puesto:$comercioPuesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                                   fontSize: 12.0, fontWeight: FontWeight.w400,
                           ))),
@@ -413,12 +510,12 @@ class ProductosListView extends StatelessWidget {
                           Container(
                             width: 80.00,
                             child: Text(
-                                '\$$precio1', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                '$speso1$precio1', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
                                   fontSize: 14.0, fontWeight: FontWeight.w600,
                             ))),
                           ),
                           Text(
-                              '$cantidad1 $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                              '$cantidad1 $unidad1 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
                                 fontSize: 12.0, fontWeight: FontWeight.w400,
                           ))),
                           
@@ -459,9 +556,9 @@ class ProductosListView extends StatelessWidget {
                   ),
                 ),
               ),
-              /* Expanded(child: GestureDetector(
-                onTap: () {_showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,context);},
-                child: Icon(Icons.add_box,size: 35.0, color:Color.fromRGBO(0, 255, 208, 1)))) */
+              /* GestureDetector(
+                onTap: () {_showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comercioNave,context);},
+                child: Icon(Icons.add_box,size: 35.0, color:Color.fromRGBO(0, 255, 208, 1))) */
             ],
           ),
        ],
@@ -469,10 +566,11 @@ class ProductosListView extends StatelessWidget {
   );
   }
 
-
-  Future<void> _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,context) async {
+  Future<void> _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comercioNave,context) async {
 
       int cantidadProd = 1;
+      MediaQueryData media = MediaQuery.of(context);
+      String precioProducto;
 
       var producto = Carrito(
         nombreProducto: title,
@@ -480,7 +578,7 @@ class ProductosListView extends StatelessWidget {
         comercioProducto: comercio,
         cantidadProducto: cantidadProd,
         unidadProducto: unidad,
-        precioProducto: precio1,
+        precioProducto: precioProducto,
         );
 
 
@@ -510,7 +608,19 @@ class ProductosListView extends StatelessWidget {
                           children: <Widget>[
                             ClipRRect(
                               borderRadius: BorderRadius.circular(15.0),
-                              child: FadeInImage(
+                              child: 
+                              /* Container(
+                                width: 100.0,
+                                height: 110.0,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                                child: CachedNetworkImage(imageUrl: imagen,),
+                              ) */
+                              
+                              
+                              
+                              FadeInImage(
                               height: 100,
                               width: 110,
                               fit: BoxFit.fill,
@@ -535,8 +645,8 @@ class ProductosListView extends StatelessWidget {
                                   ),
                                   SizedBox(height:6.0),
                                   Text(
-                                      comercio, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                                        fontSize: 15.0, fontWeight: FontWeight.w400,
+                                      '\$$precio1 x $cantidad1$unidad', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
+                                        fontSize: 16.0, fontWeight: FontWeight.w600,
                                   )))
                                 ]
                               )
@@ -548,7 +658,7 @@ class ProductosListView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                     child: Container(
                     color: Color.fromRGBO(0, 255, 208,0.2 ),
-                    height: 80.0,
+                    height: media.size.height * 0.11,
                     width: double.infinity,
                     padding: EdgeInsets.all(13.0),
                     child: Column(
@@ -558,28 +668,29 @@ class ProductosListView extends StatelessWidget {
                             SizedBox(width: 15.0),
                             Text(
                                       comercio, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                                        fontSize: 20.0, fontWeight: FontWeight.bold,
+                                        fontSize: 16.0, fontWeight: FontWeight.w600,
                                   ))),
-                            SizedBox(width: 5.0),
-                            RatingBar(
-                              itemSize: 16.0,
-                              initialRating: ratingProd,
-                              minRating: 1,
-                              direction: Axis.horizontal,
-                              allowHalfRating: false,
-                              itemCount: 5,
-                              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                              itemBuilder: (context, _) => Icon(
-                                Icons.star,
-                                color: Colors.black,
-                              ),
-                              onRatingUpdate: (ratingProd) {
-                                print(ratingProd);
-                              },
-                            )
+
+                          ],
+                        ),
+                        SizedBox(
+                          height: media.size.height * 0.02,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(width: 15.0),
+                            Flexible(
+                                    child: Text(
+                                    'Puesto: $comercioPuesto Nave: $comercioNave', style: GoogleFonts.lato(textStyle:TextStyle(color:Colors.black,
+                                      fontSize: 12.0, fontWeight: FontWeight.w400,
+                              ))),
+                               ),
                           ],
                         ),
                       ],
+                      
+                      
                     ),
                   ),
                 ),
@@ -599,9 +710,9 @@ class ProductosListView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10.0),
                           child: Container(
                           color: Color.fromRGBO(255, 81, 0, 1),
-                          height: 50.0,
-                          width: 100.0,
-                          padding: EdgeInsets.all(13.0),
+                          height: media.size.height * 0.06,
+                          width: media.size.width * 0.18,
+                          //padding: EdgeInsets.all(13.0),
                           child: Center(
                             child: Icon(Icons.remove)
                           ),
@@ -610,8 +721,8 @@ class ProductosListView extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width:20.0),
-                    Text( '$cantidad $unidad', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                                fontSize: 20.0, fontWeight: FontWeight.w300,
+                    Text( '$cantidad $unidad', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(43, 47, 58, 1),
+                                fontSize: 16.0, fontWeight: FontWeight.w600,
                           ))),
                     SizedBox(width:20.0),
                     GestureDetector(
@@ -626,9 +737,9 @@ class ProductosListView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10.0),
                           child: Container(
                           color: Color.fromRGBO(0, 255, 208, 1),
-                          height: 50.0,
-                          width: 100.0,
-                          padding: EdgeInsets.all(13.0),
+                          height: media.size.height * 0.06,
+                          width: media.size.width * 0.18,
+                          //padding: EdgeInsets.all(13.0),
                           child: Center(
                             child: Icon(Icons.add)
                           ),
@@ -644,31 +755,86 @@ class ProductosListView extends StatelessWidget {
                     child: GestureDetector(
                         
                       onTap: () {
+
+
+                        if (cantidad3 != '') {
+                          int cantidadx3 = int.parse(cantidad3);
+                          double preciox3   = double.parse(precio3);
+                          if (cantidad >= cantidadx3) {
+                            setState(() {
+                              precioProducto = (preciox3 * cantidadx3).toString();
+                            });
+                          }else{
+                            int cantidadx2 = int.parse(cantidad2);
+                            double preciox2   = double.parse(precio2);
+                            if (cantidad >= cantidadx2) {
+                              setState(() {
+                                precioProducto = (preciox2 * cantidadx2).toString();
+                              });
+                            }else {
+                              int cantidadx1 = int.parse(cantidad1);
+                              double preciox1   = double.parse(precio1);
+                              setState(() {
+                                precioProducto = (preciox1 * cantidadx1).toString();
+                              });
+                            }
+                          }
+                        }else{
+                          if (cantidad2 != '') {
+                            int cantidadx2 = int.parse(cantidad2);
+                            double preciox2   = double.parse(precio2);
+                            if (cantidad >= cantidadx2) {
+                              setState(() {
+                                precioProducto = (preciox2 * cantidadx2).toString();
+                              });
+                            }else {
+                              int cantidadx1 = int.parse(cantidad1);
+                              double preciox1   = double.parse(precio1);
+                              setState(() {
+                                precioProducto = (preciox1 * cantidadx1).toString();
+                              });
+                            }
+                        }else{
+                          int cantidadx1 = int.parse(cantidad1);
+                          double preciox1   = double.parse(precio1);
+                          setState(() {
+                            precioProducto = (preciox1 * cantidadx1).toString();
+                          });
+                        }
+                        }
+                        setState(() {
                         producto.cantidadProducto = cantidad;
+                        producto.precioProducto   = precioProducto;
+                        });
+                        //DBProvider().deleteCarrito(1);
                         DBProvider().insertCarrito(producto);
-                        Navigator.pushNamed(context, 'carrito', arguments: title);},
+                        Navigator.pushNamed(context, 'carrito', arguments: title);
+                        },
                       child: Container(
                       color: Color.fromRGBO(29, 233, 182, 1),
-                      height: 50.0,
-                      width: double.infinity,
-                      padding: EdgeInsets.all(13.0),
-                      child: Column(
-                        children: <Widget>[
-                          Center(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                SizedBox(width: 15.0),
-                                Text('Agregar al Carro', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                                            fontSize: 20.0, fontWeight: FontWeight.w500,
-                                      ))),
-                                SizedBox(width: 5.0),
-                                Icon(Icons.add_shopping_cart)
-                              ],
+                      height: media.size.height * 0.07,
+                      width: media.size.width * 0.9,
+                      //padding: EdgeInsets.all(13.0),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Center(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SizedBox(width: 15.0),
+                                  Text('Agregar producto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                                              fontSize: 14.0, fontWeight: FontWeight.w500,
+                                        ))),
+                                  SizedBox(width: 5.0),
+                                  Icon(Icons.add_shopping_cart)
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                   ),
                     ),
@@ -679,6 +845,19 @@ class ProductosListView extends StatelessWidget {
               }
             );
           });
+  }
+  
+  List<Producto> _productos = new List();
+  
+  final _productosStreamController = StreamController<List<Producto>>.broadcast();
+
+  Function(List<Producto>) get productosSink => _productosStreamController.sink.add; 
+
+  Stream<List<Producto>> get productosStream => _productosStreamController.stream;
+
+
+  void disposeStreams() {
+    _productosStreamController?.close();
   }
 
   Future<List<Producto>> fetchProductos(categoriaId,mercadoId,productoBuscado) async { 
@@ -691,7 +870,7 @@ class ProductosListView extends StatelessWidget {
       "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
-      "password": "admin123",
+      "password": "wetiteam123",
     };
 
         Map<String, String> bodyTokenQA = {
@@ -721,13 +900,19 @@ class ProductosListView extends StatelessWidget {
     int categoria = int.parse(categoriaId);
     int mercado   = int.parse(mercadoId);
     final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
-    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
+    //final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?pageNumber=1&pageSize=6';
 
     final response = await http.get('$mercadosListAPIUrl', headers: headers2);
+
+    print('servicio');
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
       final productos = new Productos.fromJsonList(decodedData);
+      final productosLista = productos.items;
+      _productos.addAll(productosLista);
+      productosSink(_productos);
       return productos.items;
       //List jsonResponse = json.decode(response.body);
       //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));
@@ -783,7 +968,7 @@ class ProductosListViewHorizontal extends StatelessWidget {
       "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
-      "password": "admin123",
+      "password": "wetiteam123",
     };
 
     Map<String, String> headers = {
@@ -818,6 +1003,7 @@ class ProductosListViewHorizontal extends StatelessWidget {
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=1&mercadoID=$mercado';
     
     final response = await http.get('$mercadosListAPIUrl', headers: headers2);
+    print('servicio');
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
@@ -870,73 +1056,87 @@ class ProductosListViewHorizontal extends StatelessWidget {
 
   Widget _productoTarjeta(Producto producto,context) {
 
-    String precio = producto.precios[0].precioProducto;
-    String cantidad = producto.precios[0].precioCantidad;
-    String unidad = producto.tipoUnidadNombre;
     String foto;
     String preciox1;
-          String preciox2;
-          String preciox3;
-          String cantidad1;
-          String cantidad2;
-          String cantidad3;
-          String unidad2;
-          String unidad3;
-          if((producto.precios.length - 1) >= 2) {
-             preciox1 = producto.precios[0].precioProducto;
-             preciox2 = producto.precios[1].precioProducto;
-             preciox3 = producto.precios[2].precioProducto;
-             cantidad1 = producto.precios[0].precioCantidad;
-             cantidad2 = producto.precios[1].precioCantidad;
-             cantidad3 = producto.precios[2].precioCantidad;
-             unidad2 = producto.tipoUnidadNombre;
-             unidad3 = producto.tipoUnidadNombre;
-          }else{
-            if ((producto.precios.length - 1) == 1) {
-             preciox1 = producto.precios[0].precioProducto;
-             preciox2 = producto.precios[1].precioProducto;
-             preciox3 = '';
-             cantidad1 = producto.precios[0].precioCantidad;
-             cantidad2 = producto.precios[1].precioCantidad;
-             cantidad3 = '';
-             unidad2 = producto.tipoUnidadNombre;
-             unidad3 = '';
-           } else{
-              if ((producto.precios.length - 1) == 0) {
-                preciox1 = producto.precios[0].precioProducto;
-                preciox2 = '';
-                preciox3 = '';
-                cantidad1 = producto.precios[0].precioCantidad;
-                cantidad2 = '';
-                cantidad3 = '';
-                unidad2 = '';
-                unidad3 = '';}
-                else{
-                preciox1 = '';
-                preciox2 = '';
-                preciox3 = '';
-                cantidad1 = '';
-                cantidad2 = '';
-                cantidad3 = '';
-                unidad2 = '';
-                unidad3 = '';
+    String preciox2;
+    String preciox3;
+    String cantidad1;
+    String cantidad2;
+    String cantidad3;
+    String unidad1;
+    String unidad2;
+    String unidad3;
+    String speso1;
+    String x;
+    if((producto.precios.length - 1) >= 2) {
+        preciox1 = producto.precios[0].precioProducto;
+        preciox2 = producto.precios[1].precioProducto;
+        preciox3 = producto.precios[2].precioProducto;
+        cantidad1 = producto.precios[0].precioCantidad;
+        cantidad2 = producto.precios[1].precioCantidad;
+        cantidad3 = producto.precios[2].precioCantidad;
+        unidad1 = producto.tipoUnidadNombre;
+        unidad2 = producto.tipoUnidadNombre;
+        unidad3 = producto.tipoUnidadNombre;
+        speso1 = '\$';
+        x = 'x';
+    }else{
+      if ((producto.precios.length - 1) == 1) {
+        preciox1 = producto.precios[0].precioProducto;
+        preciox2 = producto.precios[1].precioProducto;
+        preciox3 = '';
+        cantidad1 = producto.precios[0].precioCantidad;
+        cantidad2 = producto.precios[1].precioCantidad;
+        cantidad3 = '';
+        unidad1 = producto.tipoUnidadNombre;
+        unidad2 = producto.tipoUnidadNombre;
+        unidad3 = '';
+        speso1 = '\$';
+        x = 'x';
+      } else{
+        if ((producto.precios.length - 1) == 0) {
+          preciox1 = producto.precios[0].precioProducto;
+          preciox2 = '';
+          preciox3 = '';
+          cantidad1 = producto.precios[0].precioCantidad;
+          cantidad2 = '';
+          cantidad3 = '';
+          unidad1 = producto.tipoUnidadNombre;
+          unidad2 = '';
+          unidad3 = '';
+          speso1 = '\$';
+          x = 'x';}
+          else{
+          preciox1 = '';
+          preciox2 = '';
+          preciox3 = '';
+          cantidad1 = '';
+          cantidad2 = '';
+          cantidad3 = '';
+          unidad1 = '';
+          unidad2 = '';
+          unidad3 = '';
+          speso1 = '';
+          x = '';
 
-              }
-          }
-          }
+        }
+    }
+    }
 
     if (producto.productoFoto == '') {
       foto = 'https://uy.emedemujer.com/wp-content/uploads/sites/4/2015/10/674262.jpg';
     }else{
        foto = producto.productoFoto;}
 
+    String nombrePuesto = producto.comercioNombre;
+
 
     return GestureDetector(
         onTap: () {
                   Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', producto.productoNombre,producto.productoDescripcion,
-                  producto.productoFoto,precio,cantidad,preciox2,cantidad2,
-                                    preciox3,cantidad3,producto.productoStock,unidad,unidad2,unidad3,'',mercadoId,'',0.0,categoriaId,'','','',
-                                    '','','','','',''));
+                  producto.productoFoto,preciox1,cantidad1,preciox2,cantidad2,
+                                    preciox3,cantidad3,producto.productoStock,unidad1,unidad2,unidad3,'',mercadoId,'',0.0,categoriaId,'','','',
+                                    producto.comercioNumNave,producto.comercioPuesto,'','','',producto.comercioNombre));
 
                 },
           child: Container(
@@ -966,7 +1166,16 @@ class ProductosListViewHorizontal extends StatelessWidget {
             SizedBox(height:3.0),
             Flexible(
               child: Text(
-                  '\$$precio x $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
+                  '$speso1$preciox1 $x $unidad1 ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
+                    fontSize: 12.0, fontWeight: FontWeight.w600,
+              )),
+              overflow: TextOverflow.ellipsis,),
+            ),
+            SizedBox(height:3.0),
+            Flexible(
+              child: Text(
+                  '$nombrePuesto ', textAlign: TextAlign.center,
+                  style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
                     fontSize: 12.0, fontWeight: FontWeight.w600,
               )),
               overflow: TextOverflow.ellipsis,),

@@ -40,6 +40,15 @@ class _VendedorProductosPageState extends State<VendedorProductosPage> {
                           fontSize: 18.0, fontWeight: FontWeight.w600,
                           )),),
           backgroundColor: Color.fromRGBO(29, 233, 182, 1),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search, color: Colors.white),
+              onPressed: () { Navigator.pushNamed(context, 'buscarProductoVendedor', arguments:  PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio,args.numNave,
+          args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));
+
+
+              }
+            )]
 /*         actions: <Widget>[
             IconButton(
               icon: Icon(Icons.notifications, color: Colors.white),
@@ -113,6 +122,15 @@ class _VendedorProductosPageState extends State<VendedorProductosPage> {
                   Text('Mis puestos'),]),
 
                 onTap: () {Navigator.pushNamed(context, 'puestos',arguments: ScreenArguments(args.userId,args.nombre,args.foto,args.mercadoId));},
+              ),
+              ListTile(
+                title: Row(
+                  children: [
+                  Icon(Icons.receipt),
+                  Text('Mis pedidos'),]),
+
+                onTap: () {Navigator.pushNamed(context, 'pedidosVendedor',arguments: PuestoArguments(args.userId, args.nombre, args.foto, args.mercadoId, args.idComercio,args.numNave,args.comercioPuesto,
+              args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));},
               ),
                ListTile(
                 title: Row(

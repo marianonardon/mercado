@@ -14,10 +14,19 @@ class _DetalleProductoCompradorState extends State<DetalleProductoComprador> {
     MediaQueryData media = MediaQuery.of(context); 
     final ProductoDetalleArg args = ModalRoute.of(context).settings.arguments;
     //final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    String textoPrecio1;
     String textoPrecio2;
     String textoPrecio3;
+    String peso1;
     String peso2;
     String peso3;
+    if(args.precio1 == ''){
+      textoPrecio1 = '';
+      peso1 = '';
+    } else{
+      textoPrecio1 = 'Precio por ';
+      peso1 = '\$';
+    }
     if(args.precio2 == ''){
       textoPrecio2 = '';
       peso2 = '';
@@ -32,6 +41,9 @@ class _DetalleProductoCompradorState extends State<DetalleProductoComprador> {
       textoPrecio3 = 'Precio por ';
       peso3 = '\$';
     }
+    String comercioNombre = args.comercioNombre;
+    String comercioNave   = args.numNave;
+    String comercioPuesto = args.comercioPuesto;
     return WillPopScope(
       onWillPop: () async { Navigator.pop(context);
       return true;},
@@ -121,6 +133,34 @@ class _DetalleProductoCompradorState extends State<DetalleProductoComprador> {
                                                    fontSize: 12.0, fontWeight: FontWeight.normal,
                                                 )),),
                                              ],),
+                                             SizedBox(height:15.0),
+                                             Container(
+                                               color: Color.fromRGBO(0, 203, 159, 0.18),
+                                               width: double.infinity,
+                                               height: media.size.height * 0.07,
+                                               child: Row(
+                                                 children: <Widget>[
+                                                   SizedBox(width: 15.0),
+                                                   Icon(Icons.shopping_cart,
+                                                   color: Color.fromRGBO(0, 203, 159, 1),),
+                                                   SizedBox(width:5.0),
+                                                   Text(args.comercioNombre,style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(0, 203, 159,1),
+                                                   fontSize: 14.0, fontWeight: FontWeight.w600,
+                                                )),),
+                                                
+                                                
+                                                 ]
+                                               )
+                                             ),
+                                             SizedBox(height:15.0),
+                                             Row(
+                                                 children: <Widget>[
+                                                   SizedBox(width: 15.0),
+                                                   Flexible(
+                                                     child: Text('Puesto/Nombre: $comercioPuesto   Nave/Sector: $comercioNave',style: GoogleFonts.lato(textStyle:TextStyle(color:Color.fromRGBO(16, 32,39,1),
+                                                     fontSize: 12.0, fontWeight: FontWeight.w600,
+                                                )),),
+                                                   ),]),
                                              
                                              SizedBox(height:15.0),
                                              Container(
@@ -149,7 +189,7 @@ class _DetalleProductoCompradorState extends State<DetalleProductoComprador> {
                                                    fontSize: 12.0, fontWeight: FontWeight.w600,
                                                 )),),
                                                 SizedBox(
-                                                  width: media.size.width * 0.43,
+                                                  width: media.size.width * 0.49,
                                                 ),
                                                 Text(args.stock,style: GoogleFonts.lato(textStyle:TextStyle(color:Color.fromRGBO(55,71,79,1),
                                                    fontSize: 16.0, fontWeight: FontWeight.bold,
@@ -187,7 +227,7 @@ class _DetalleProductoCompradorState extends State<DetalleProductoComprador> {
                                                      width: media.size.width * 0.5,
                                                      child: Row(children: <Widget>[
                                                        SizedBox(width: 15.0),
-                                                     Text('Precio por ',style: GoogleFonts.lato(textStyle:TextStyle(color:Color.fromRGBO(16, 32,39,1),
+                                                     Text(textoPrecio1,style: GoogleFonts.lato(textStyle:TextStyle(color:Color.fromRGBO(16, 32,39,1),
                                                      fontSize: 12.0, fontWeight: FontWeight.w600,
                                                       )),),
                                                       Text(args.cantidad1,style: GoogleFonts.lato(textStyle:TextStyle(color:Color.fromRGBO(16, 32,39,1),
@@ -205,7 +245,7 @@ class _DetalleProductoCompradorState extends State<DetalleProductoComprador> {
                                                 SizedBox(
                                                   width: media.size.width * 0.18,
                                                 ),
-                                                Text('\$',style: GoogleFonts.lato(textStyle:TextStyle(color:Color.fromRGBO(0,70,174,1),
+                                                Text(peso1,style: GoogleFonts.lato(textStyle:TextStyle(color:Color.fromRGBO(0,70,174,1),
                                                    fontSize: 16.0, fontWeight: FontWeight.w600,
                                                 )),),
                                                 Text(args.precio1,style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(0,70,174,1),

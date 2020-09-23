@@ -45,7 +45,7 @@ class _ComboPuesto extends State<ComboPuesto> {
       "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
-      "password": "admin123",
+      "password": "wetiteam123",
     };
 
 

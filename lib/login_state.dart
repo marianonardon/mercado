@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:provider/provider.dart';
+import 'package:flutter_login_ui/src/pages/carrito_db.dart';
 
 
 
@@ -32,6 +33,18 @@ class LoginState with ChangeNotifier {
 
   FirebaseUser _user;
 
+  
+
+
+ Future<void> isLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+    String loginEstado = prefs.getString('login');
+    if (loginEstado == 'true' ) {
+      _loggedIn = true;
+      notifyListeners();
+    }
+  }
 
 
   void login(LoginProvider loginProvider) async{
@@ -61,10 +74,13 @@ class LoginState with ChangeNotifier {
     }
   }
 
-  void logout() {
+  Future<void> logout() async {
     _googleSignIn.signOut();
     FacebookLogin().logOut();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('login', 'false');
     _loggedIn = false;
+    DBProvider().deleteCarrito(1);
     notifyListeners();
   }
 
@@ -88,6 +104,7 @@ class LoginState with ChangeNotifier {
     prefs.setString('nombre', googleUser.displayName);
     prefs.setString('fotoUser', googleUser.photoUrl);
     prefs.setString('usuarioId2', '');
+    prefs.setString('login', 'true');
     print(googleUser.id + googleUser.email + googleUser.displayName);
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
@@ -140,6 +157,7 @@ class LoginState with ChangeNotifier {
     prefs.setString('nombre', user.  displayName);
     prefs.setString('fotoUser', user.photoUrl);
     prefs.setString('usuarioId2', '');
+    prefs.setString('login', 'true');
     print(user.uid + user.email + user.displayName);
     
     return user;

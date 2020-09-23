@@ -130,7 +130,7 @@ Future<Producto> createProducto(String nombre, descripcion, categoria, stock, in
       "client_secret": "be70f816716f402b8c02e53daec3e067",
       "scope": "FullControl",
       "username": "admin",
-      "password": "admin123",
+      "password": "wetiteam123",
     };
 
         Map<String, String> bodyTokenQA = {
@@ -198,6 +198,27 @@ Future<Producto> createProducto(String nombre, descripcion, categoria, stock, in
         ]
     }),
       );
+
+    if (precio1 == ''){
+         response = await http.post(
+        '$mercadosListAPIUrl',
+    
+        headers: headers3,
+        body: jsonEncode(<String, dynamic>{
+        "ProductoNombre": nombre,
+        "ProductoDescripcion": descripcion,
+        "ProductoStock": stock,
+        "ProductoCalidad": calidad,
+        "ProductoFoto": urlFoto,
+        "CategoriaID": categoria,
+        "TipoUnidadID": tipoUnidadId,
+        "ComercioID": comercioId,
+        "MercadoID": mercado,
+        "ProductoDestacado": false,
+    }),
+    );
+      
+    } else {
     
     if (precio2 == ''){
          response = await http.post(
@@ -254,6 +275,7 @@ Future<Producto> createProducto(String nombre, descripcion, categoria, stock, in
     }),
     ); 
     } 
+    }
     }
     
 

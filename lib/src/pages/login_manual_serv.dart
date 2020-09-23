@@ -139,6 +139,7 @@ Future<Token> createLogin(String nombreUsuario, contrasenia,BuildContext context
             prefs.setString('usuarioId', '');
             prefs.setString('nombre', nombreCompleto);
             prefs.setString('fotoUser', userFoto);
+            prefs.setString('login', 'true');
 
             Navigator.pushNamed(context, 'mercado');
             //List jsonResponse = json.decode(response.body);

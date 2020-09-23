@@ -1,28 +1,191 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_ui/src/providers/generar_pedido.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'carrito_db.dart';
 
 
-double totalPrecio;
+
 
 class CarritosListView extends StatefulWidget {
+  CarritosListView(this.categoriaId,this.mercadoId,this.userId,this.nombreUser,this.fotoUser,this.categoriaNombre);
+  final String categoriaId;
+  final String mercadoId;
+  final String userId;
+  final String nombreUser;
+  final String fotoUser;
+  final String categoriaNombre;
   @override
-  _CarritosListViewState createState() => _CarritosListViewState();
+  _CarritosListViewState createState() => _CarritosListViewState(categoriaId,mercadoId,userId,nombreUser,fotoUser,categoriaNombre);
 }
 
 class _CarritosListViewState extends State<CarritosListView> {
+  double totalPrecio = 0;
+  _CarritosListViewState(this.categoriaId,this.mercadoId,this.userId,this.nombreUser,this.fotoUser,this.categoriaNombre);
+  final String categoriaId;
+  final String mercadoId;
+  final String userId;
+  final String nombreUser;
+  final String fotoUser;
+  final String categoriaNombre;
   @override
 
   int cantidadProd = 1;
+  
   Widget build(BuildContext context){
+    MediaQueryData media = MediaQuery.of(context);
     return FutureBuilder<List<Carrito>>(
       future: DBProvider().getCarritos() ,
       builder: (context, snapshot) {
-        totalPrecio = 0;
         if (snapshot.hasData) {
           List<Carrito> data = snapshot.data;
-          return _carritosListView(data);
+          if (data.length == 0){
+            return Center(
+              child: Container(
+                child: Column(
+                   children: <Widget>[
+                     Image(
+                       image: AssetImage('assets/img/SinProductos.gif'),
+                     ),
+                    Text(
+                    'No existen productos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                    Text(
+                    'en el carrito', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                     
+
+                  ]
+                )
+                
+                ),
+            );
+
+          }else{
+          return Column(
+            children: [
+              _carritosListView(data),
+              SizedBox(height: 15.0),
+               Container( 
+                  color: Colors.white,
+                  child: conseguirTotal(data),
+                ),
+                SizedBox(height: 5.0,),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                    child: GestureDetector(
+                        
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => WillPopScope(
+                            onWillPop: () async => false,
+                                      child: AlertDialog(
+                              title: Center(child: Text('Cargando pedido')),
+                              content:  SizedBox(
+                                        width: media.size.width * 0.005,
+                                        height: media.size.height * 0.05,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 3.0,
+                                            valueColor : AlwaysStoppedAnimation(Color.fromRGBO(29, 233, 182, 1),),
+                                          ),
+                                        ),
+                                    ),
+                              backgroundColor: Colors.white
+
+                        ),
+                          ),
+                        barrierDismissible: true,
+                          ).then((_) => setState((){}));
+                        
+                        GenerarPedido(categoriaId,mercadoId,userId,nombreUser,fotoUser,categoriaNombre).createProducto(data, context);},
+                      child: Container(
+                      color: Color.fromRGBO(29, 233, 182, 1),
+                      height: media.size.height * 0.07,
+                      width: media.size.width * 0.9,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Center(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SizedBox(width: 10.0),
+                                  Text('Confirmar reserva', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                              fontSize: 16.0, fontWeight: FontWeight.w500,
+                                        ))),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ),
+                    ),
+                ),
+                SizedBox(height: 5.0),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                    child: GestureDetector(
+                        
+                      onTap: () {
+                        
+                        DBProvider().deleteCarrito(1);
+                        setState(() {
+                          
+                        });
+                        },
+                      child: Container(
+            width: double.infinity,
+            height: media.size.height * 0.1,
+            color: Colors.white,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                SizedBox(height: 20.0),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10)
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromRGBO(195, 15,0, 0.5),
+                        spreadRadius: 2.5,
+                        blurRadius: 1,
+                        offset: Offset(0, 0), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  width: media.size.width * 0.90,
+                  height: media.size.height * 0.06,
+                  //width: media.size.width * 0.95,
+                  child: Center(
+                    child: Text('Vaciar carrito',style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(195, 15,0, 1),
+                    fontSize: 16.0, fontWeight: FontWeight.w600,
+                    ))),
+                  )
+                
+                ),
+                ]
+                ),
+          ),
+                    ),
+                ),
+                SizedBox(height: 20.0),
+            ],
+          );}
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
@@ -33,22 +196,31 @@ class _CarritosListViewState extends State<CarritosListView> {
 
 
 
-     ListView _carritosListView(data) {
-      return ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          return _crearLista(data[index].nombreProducto,
-                        data[index].fotoProducto, data[index].comercioProducto, data[index].cantidadProducto,
-                        data[index].unidadProducto, data[index].precioProducto,
-                        context);
-        }
-        );
+     Widget _carritosListView(data) {
+      return Container(
+        child: Column(
+          children: [
+            ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return _crearLista(data[index].nombreProducto,
+                              data[index].fotoProducto, data[index].comercioProducto, data[index].cantidadProducto,
+                              data[index].unidadProducto, data[index].precioProducto,
+                              data[index].precioUnitario,data[index].productoId,data[index].comercioId,data[index].mercadoId,
+                              context);
+              }
+              ),
+               
+          ],
+        ),
+      );
         
   }
 
-    Widget _crearLista(String title, String imagen, String comercio, int cantidad, String unidad,String precio, context) {
+    Widget _crearLista(String title, String imagen, String comercio, int cantidad, String unidad,String precio,double precioUnitario,
+                       int productoId,comercioId,mercadoId, context) {
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
       child: Container(
@@ -59,7 +231,7 @@ class _CarritosListViewState extends State<CarritosListView> {
           children: <Widget>[
           //  _crearTitulo(),
             SizedBox(height: 15.0),
-           _crearTarjetas(title, imagen,comercio,cantidad,unidad,precio,context),
+           _crearTarjetas(title, imagen,comercio,cantidad,unidad,precio,precioUnitario,productoId,comercioId,mercadoId,context),
           ],
         ),
       ),
@@ -68,13 +240,10 @@ class _CarritosListViewState extends State<CarritosListView> {
     
   }
 
-  Widget _crearTarjetas(title, imagen,comercio,cantidad,unidad,precio,context) {
+  Widget _crearTarjetas(title, imagen,comercio,cantidad,unidad,precio,precioUnitario,productoId,comercioId,mercadoId,context) {
   cantidadProd = cantidad;
-  totalPrecio = double.parse(precio) + totalPrecio;
 
-  return StatefulBuilder(
-  builder: (BuildContext context, StateSetter setState) {
-  return Container(
+  return  Container(
     padding: EdgeInsets.only(left:5.0),
      child: Row(
        mainAxisAlignment: MainAxisAlignment.start,
@@ -82,8 +251,8 @@ class _CarritosListViewState extends State<CarritosListView> {
           ClipRRect(
             borderRadius: BorderRadius.circular(15.0),
             child: FadeInImage(
-            height: 90,
-            width: 90,
+            height: 55,
+            width: 55,
             fit: BoxFit.fill,
             image: NetworkImage(imagen),
 
@@ -101,20 +270,20 @@ class _CarritosListViewState extends State<CarritosListView> {
               children:<Widget>[ 
                 Text(
                 title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                  fontSize: 20.0, fontWeight: FontWeight.bold,
+                  fontSize: 16.0, fontWeight: FontWeight.bold,
                   ))
                 ),
                 SizedBox(height:6.0),
                 Text(
                     comercio, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                      fontSize: 15.0, fontWeight: FontWeight.w400,
+                      fontSize: 12.0, fontWeight: FontWeight.w400,
                 ))),
                 SizedBox(height:6.0),
                 Row(
                   children: <Widget>[
                     Text(
                         '\$$precio $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
-                          fontSize: 20.0, fontWeight: FontWeight.w700,
+                          fontSize: 14.0, fontWeight: FontWeight.w700,
                     ))),
                   
                   ],
@@ -123,82 +292,36 @@ class _CarritosListViewState extends State<CarritosListView> {
             ),
           ),
 
-          ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child: Container(
-                color: Colors.grey[100],
-                child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                GestureDetector(
-                    onTap: () {
-                    setState(() {
-                      cantidadProd = cantidad;
-                      if (cantidadProd > 1) {
-                        cantidadProd = cantidadProd - 1 ; 
-                        cantidad = cantidadProd;}
-                    });},
-                    child: ClipRRect(
-                    borderRadius: BorderRadius.circular(1.0),
-                      child: Container(
-                      color: Colors.transparent,
-                      height: 25.0,
-                      width: 25.0,
-                      child: Center(
-                        child: Icon(Icons.remove, color: Colors.black,)
-                      ),
 
-                    ),
-                  ),
-                ),
                 SizedBox(width:7.0),
-                Text( '$cantidadProd $unidad', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                            fontSize: 17.0, fontWeight: FontWeight.w400,
-                      ))),
-                SizedBox(width:7.0),
-                GestureDetector(
-
-                    onTap: ([index]) {
-                      setState(() {
-                        cantidadProd = cantidad;
-                        cantidadProd = cantidadProd + 1 ;
-                        cantidad = cantidadProd;
-                    });
-                    },                  
-                    child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                      child: Container(
-                      color: Colors.transparent,
-                      height: 25.0,
-                      width: 25.0,
-                      child: Center(
-                        child: Icon(Icons.add)
-                      ),
-
-                    ),
+                Flexible(
+                        child: Text( '$cantidadProd $unidad', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                fontSize: 14.0, fontWeight: FontWeight.w400,
+                          ))),
                   ),
-                ),
+                
 
               ],),
-            ),
-          )
-
-
-        ],
-      ),
-  );
-  }
+        
   );
 
   }
 
-  
-}
-
-
-  conseguirTotal() {
-    String totPrec = totalPrecio.toString();
+  conseguirTotal(data) {
+    MediaQueryData media = MediaQuery.of(context);
+    double precioTotal = 0.0;
+    String precioString;
+    double precio = 0.0;
+    for(var i = 0; i< data.length; i++) {
+      precioString = data[i].precioProducto;
+      if( precioString != '') {
+      precio = double.parse(precioString);
+      }else {
+        precio = 0.0;
+      }
+      precioTotal = precio + precioTotal;
+    }
+    String totPrec = precioTotal.toString();
     return Container(
       height: 70.0,
       width: double.infinity,
@@ -207,15 +330,21 @@ class _CarritosListViewState extends State<CarritosListView> {
         children: <Widget>[
           SizedBox(width: 20.0),
           Text('Monto Total:',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                                              fontSize: 20.0, fontWeight: FontWeight.w400,
+                                              fontSize: 16.0, fontWeight: FontWeight.w400,
                                         )),
           ),
-          SizedBox(width: 140.0),
+          SizedBox(width: media.size.width * 0.36),
           Expanded(
             child: Text('\$$totPrec',style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
-                fontSize: 22.0, fontWeight: FontWeight.w700,
+                fontSize: 16.0, fontWeight: FontWeight.w700,
           ))))
         ],
       )
     );
   }
+
+  
+}
+
+
+  
