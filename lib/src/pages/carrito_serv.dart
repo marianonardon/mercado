@@ -28,6 +28,24 @@ class _CarritosListViewState extends State<CarritosListView> {
   final String nombreUser;
   final String fotoUser;
   final String categoriaNombre;
+
+
+  String telefono;
+
+
+
+  final telefonoController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+
+
+
+  @override
+  void dispose() {
+    // Limpia el controlador cuando el Widget se descarte
+    telefonoController.dispose();;
+    super.dispose();
+  }
   @override
 
   int cantidadProd = 1;
@@ -80,7 +98,124 @@ class _CarritosListViewState extends State<CarritosListView> {
                     child: GestureDetector(
                         
                       onTap: () {
+                        MediaQueryData media = MediaQuery.of(context);
+                        telefono = telefonoController.text;
                         showDialog(
+                          context: context,
+                          builder: (context) => WillPopScope(
+                            onWillPop: () async => false,
+                                      child: AlertDialog(
+                              title: Center(child: Text('Ingrese su número de teléfono para poder contactarlo',textAlign: TextAlign.center,)),
+                              content:  Form(
+                                          key: formKey,
+                                          child: SizedBox(
+                                          width: media.size.width * 0.005,
+                                          height: media.size.height * 0.2,
+                                          child: Center(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                SizedBox(height: 10.0),
+                                                Container(
+                                                  alignment: Alignment.centerLeft,
+                                                  width: media.size.width * 0.90,
+                                                  child: TextFormField(
+                                                    validator: (telefono) {if (telefono.isEmpty) {
+                                                        return 'El campo Teléfono no puede estar vacío!';
+                                                        }else {
+                                                          if(telefono.length < 10) {
+                                                            return 'El campo Teléfono está incompleto!';
+                                                          }else {
+                                                          return null;}
+                                                        }},
+                                                            controller: telefonoController,
+                                                            keyboardType: TextInputType.number,
+                                                            style: TextStyle(
+                                                              color: Colors.black,
+                                                              fontFamily: 'OpenSans',
+                                                            ),
+                                                            maxLength: 10,
+                                                            maxLengthEnforced: true,
+                                                            decoration: InputDecoration(
+                                                              fillColor: Color.fromRGBO(240, 241, 246, 1),
+                                                                filled: true,
+                                                                border: 
+                                                                
+                                                                new OutlineInputBorder(
+
+                                                                  borderRadius: BorderRadius.circular(8.0),
+                                                                  borderSide: BorderSide.none),
+                                                          /*       borderSide: new BorderSide(
+                                                                    color: Colors.greenAccent,
+                                                                    width: 1.0,
+                                                                  ), */
+                                                                labelText: 'Teléfono (sin 0 y sin 15)',
+                                                                labelStyle: TextStyle(color:Color.fromRGBO(0, 0, 0,0.6), 
+                                                                  fontWeight: FontWeight.bold, fontSize: 14.0),
+                                                              contentPadding: EdgeInsets.only(top: 5.0),
+                                                              prefixIcon: Icon(
+                                                                Icons.phone,
+                                                                size: 25.0,
+                                                                //color: Colors.black,
+                                                              ),
+                                                              hintText: 'ej: 3512654599',
+                                                              hintStyle: TextStyle(
+                                                                          color: Colors.black,
+                                                                          fontFamily: 'OpenSans',
+                                                                        ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: media.size.width * 0.01,),
+                                                        Center(
+                                                          child: FlatButton(
+                                                            color: Color.fromRGBO(29, 233, 182, 1),
+                                                            onPressed: () async {
+                                                              if (formKey.currentState.validate()) {
+                                                                Navigator.of(context);
+                                                                showDialog(
+                                                                  context: formKey.currentContext,
+                                                                  builder: (context) => WillPopScope(
+                                                                    onWillPop: () async => false,
+                                                                              child: AlertDialog(
+                                                                      title: Center(child: Text('Cargando pedido')),
+                                                                      content:  SizedBox(
+                                                                                width: media.size.width * 0.005,
+                                                                                height: media.size.height * 0.05,
+                                                                                child: Center(
+                                                                                  child: CircularProgressIndicator(
+                                                                                    strokeWidth: 3.0,
+                                                                                    valueColor : AlwaysStoppedAnimation(Color.fromRGBO(29, 233, 182, 1),),
+                                                                                  ),
+                                                                                ),
+                                                                            ),
+                                                                      backgroundColor: Colors.white
+
+                                                                ),
+                                                                  ),
+                                                                barrierDismissible: true,
+                                                                  ).then((_) => setState((){}));
+                                                                  GenerarPedido(categoriaId,mercadoId,userId,nombreUser,fotoUser,categoriaNombre).createProducto(data,telefonoController.text, context);
+                                                              }
+                                                              
+                                                            },
+                                                            child: Text('Confirmar reserva'),
+                                                            textColor: Colors.black,
+                                                          
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ),
+                                      ),
+                              ),
+                              backgroundColor: Colors.white
+
+                        ),
+                          ),
+                        barrierDismissible: false,
+                          ).then((_) => setState((){}));
+                        /* showDialog(
                           context: context,
                           builder: (context) => WillPopScope(
                             onWillPop: () async => false,
@@ -101,9 +236,10 @@ class _CarritosListViewState extends State<CarritosListView> {
                         ),
                           ),
                         barrierDismissible: true,
-                          ).then((_) => setState((){}));
+                          ).then((_) => setState((){})); */
                         
-                        GenerarPedido(categoriaId,mercadoId,userId,nombreUser,fotoUser,categoriaNombre).createProducto(data, context);},
+                        //GenerarPedido(categoriaId,mercadoId,userId,nombreUser,fotoUser,categoriaNombre).createProducto(data, context);
+                        },
                       child: Container(
                       color: Color.fromRGBO(29, 233, 182, 1),
                       height: media.size.height * 0.07,
@@ -282,7 +418,7 @@ class _CarritosListViewState extends State<CarritosListView> {
                 Row(
                   children: <Widget>[
                     Text(
-                        '\$$precio $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
+                        '$cantidadProd $unidad ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
                           fontSize: 14.0, fontWeight: FontWeight.w700,
                     ))),
                   
@@ -295,9 +431,9 @@ class _CarritosListViewState extends State<CarritosListView> {
 
                 SizedBox(width:7.0),
                 Flexible(
-                        child: Text( '$cantidadProd $unidad', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                                fontSize: 14.0, fontWeight: FontWeight.w400,
-                          ))),
+                        child: Text( '\$$precio', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
+                          fontSize: 14.0, fontWeight: FontWeight.w700,
+                    ))),
                   ),
                 
 

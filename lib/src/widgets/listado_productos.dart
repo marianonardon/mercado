@@ -399,11 +399,19 @@ class _ListadoProductosState extends State<ListadoProductos> {
                 ),
               ),
               GestureDetector(
+                
                 onTap: () async {
+                  DateTime now = DateTime.now();
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   String mercadoHora = prefs.getString('horaMercado');
+                  String mercadoHoraFin = prefs.getString('horaMercadoFin');
+                  
                   if (mercadoHora != 'Cerrado'){
-                    showDialog(
+                    DateTime horaInicio = DateTime.parse(mercadoHora);
+                    DateTime horaFin = DateTime.parse(mercadoHoraFin);
+                    if(now.hour > horaInicio.hour){
+                        if(now.hour < horaFin.hour){
+                        showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
                               title:  Center(child: Text('Mercado abierto')),
@@ -418,10 +426,20 @@ class _ListadoProductosState extends State<ListadoProductos> {
                         ),
                         barrierDismissible: true
                           ).then((_) => setState((){}));
+                          } else {
+                             _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comercioNave,comercioId,mercadoId,productoId,stock,context);
+                          }
+                      } else {
+                        
+                          _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comercioNave,comercioId,mercadoId,productoId,stock,context);
+              
+                      }
 
                   }else {
+                      _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comercioNave,comercioId,mercadoId,productoId,stock,context);
+
                   
-                  _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comercioNave,comercioId,mercadoId,productoId,stock,context);}},
+                  }},
                 child: Icon(Icons.add_box,size: 35.0, color:Color.fromRGBO(0, 255, 208, 1))) 
             ],
           ),
@@ -449,6 +467,44 @@ class _ListadoProductosState extends State<ListadoProductos> {
         comercioId:int.parse(comercioId),
         mercadoId:int.parse(mercadoId),
         );
+
+        String unidad1;
+  String speso1;
+  String unidad2;
+  String unidad3;
+  String speso2;
+  String speso3;
+  String x1;
+  String x2;
+  String x3;
+
+  if(precio1 == ''){
+    unidad1 = '';
+    speso1 = '';
+    x1 = '';
+  } else{
+    unidad1 = unidad;
+    speso1 = '\$';
+    x1 = 'x';
+  }
+  if(precio2 == ''){
+    unidad2 = '';
+    speso2 = '';
+    x2 = '';
+  } else{
+    unidad2 = unidad;
+    speso2 = '\$';
+    x2 = 'x';
+  }
+  if(precio3 == ''){
+    unidad3 = '';
+    speso3 = '';
+    x3 = '';
+  }else {
+    unidad3 = unidad;
+    speso3 = '\$';
+    x3 = '';
+  }
 
 
 
@@ -514,12 +570,23 @@ class _ListadoProductosState extends State<ListadoProductos> {
                                   ),
                                   SizedBox(height:6.0),
                                   Text(
-                                      '\$$precio1 x $cantidad1$unidad', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
+                                      '$speso1$precio1 $x1 $cantidad1$unidad1', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
+                                        fontSize: 16.0, fontWeight: FontWeight.w600,
+                                  ))),
+                                  SizedBox(height:6.0),
+                                  Text(
+                                      '$speso2$precio2 $x2 $cantidad2$unidad2', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
+                                        fontSize: 16.0, fontWeight: FontWeight.w600,
+                                  ))),
+                                  SizedBox(height:6.0),
+                                  Text(
+                                      '$speso3$precio3 $x3 $cantidad3$unidad3', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(2, 127, 100, 1),
                                         fontSize: 16.0, fontWeight: FontWeight.w600,
                                   )))
                                 ]
                               )
-                            )
+                            ),
+                            
                           ]
                 ),
                 SizedBox(height:15.0),
@@ -698,10 +765,10 @@ class _ListadoProductosState extends State<ListadoProductos> {
 
                         int stockProducto = int.parse(stock);
 
-                        if(stockProducto > cantidad ){
-                            final snackBar = SnackBar(
+                        if(stockProducto < cantidad ){
+                            final snackBarError = SnackBar(
                           backgroundColor: Colors.red,
-                          content: Flexible(child: Text('Este producto no posee stock para dicha cantidad')),
+                          content:  Text('Este producto no posee stock para dicha cantidad'),
                           action: SnackBarAction(
                             textColor: Colors.white,
                             label: 'Cerrar',
@@ -714,10 +781,10 @@ class _ListadoProductosState extends State<ListadoProductos> {
                         // Find the Scaffold in the widget tree and use
                         // it to show a SnackBar.
                           Navigator.pop(context);
-                          widget.globalKey.currentState.showSnackBar(snackBar);
+                          widget.globalKey.currentState.showSnackBar(snackBarError);
 
                         } else {
-                          await DBProvider().insertCarrito(producto);
+                          await DBProvider().insertCarrito(producto,stockProducto);
                           final snackBar = SnackBar(
                             backgroundColor: Colors.green,
                             content: Text('Se ha añadido al carrito!'),

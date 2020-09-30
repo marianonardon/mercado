@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 class DBProvider {
 
 
-    Future<List<Carrito>> insertCarrito(Carrito carrito) async {
+    Future<List<Carrito>> insertCarrito(Carrito carrito,int stock) async {
 
           final database = openDatabase(
       // Establecer la ruta a la base de datos. Nota: Usando la función `join` del
@@ -75,9 +75,12 @@ class DBProvider {
           comercioId:baseDatos[i].comercioId,
           mercadoId:baseDatos[i].mercadoId,
         );
+        int cantidad = baseDatos[i].cantidadProducto;
 
-        updateCarrito(producto);
-
+        if(stock >= cantidad ) {
+          updateCarrito(producto);
+          
+        }
     }
     }
     }

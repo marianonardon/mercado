@@ -12,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ListadoProductosVendedor extends StatelessWidget {
   List<PedidoComprador> pedidos;
+  String pedidoTokenDispositivo;
   //Function siguientePagina;
 
   ListadoProductosVendedor({@required this.pedidos});
@@ -102,6 +103,7 @@ class ListadoProductosVendedor extends StatelessWidget {
     String diaPedido = horarioPedido.day.toString();
     String mesPedido = horarioPedido.month.toString();
     String anioPedido = horarioPedido.year.toString();
+    String telefonoPedido = pedido.pedidoTelefono;
 
   return Container(
     width: media.size.width * 0.93,
@@ -186,7 +188,7 @@ class ListadoProductosVendedor extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children:<Widget>[ 
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 5.0),
                       Row(
                         children: <Widget>[
                           Container(
@@ -199,6 +201,18 @@ class ListadoProductosVendedor extends StatelessWidget {
                             ),
                           ),
                         SizedBox(width: 10.0),
+                          
+                        ],
+                      ),
+                      SizedBox(height:6.0),
+                      Row(
+                        children: <Widget>[
+                           Flexible(
+                                child: Text(
+                                'Teléfono: $telefonoPedido', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                  fontSize: 12.0, fontWeight: FontWeight.w600,
+                          ))),
+                           ),
                           
                         ],
                       ),
@@ -241,7 +255,7 @@ class ListadoProductosVendedor extends StatelessWidget {
                           GestureDetector(
                             onTap: (){Navigator.pushNamed(context, 'pedidosDetalleVendedor',arguments: PedidoArguments(pedido.pedidoComercioID,pedido.pedidoID,
                             args.userId, args.nombre, args.foto, args.mercadoId, args.idComercio,args.numNave,args.comercioPuesto,
-              args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,'',''));},
+              args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,'','',pedido.pedidoTokenDispositivo));},
                             child: Container(
                               width: 70.00,
                               child: Text(

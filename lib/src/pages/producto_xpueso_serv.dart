@@ -388,10 +388,17 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
                         ),
                         GestureDetector(
                 onTap: () async {
+                  DateTime now = DateTime.now();
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   String mercadoHora = prefs.getString('horaMercado');
+                  String mercadoHoraFin = prefs.getString('horaMercadoFin');
+                  
                   if (mercadoHora != 'Cerrado'){
-                    showDialog(
+                    DateTime horaInicio = DateTime.parse(mercadoHora);
+                    DateTime horaFin = DateTime.parse(mercadoHoraFin);
+                    if(now.hour > horaInicio.hour){
+                        if(now.hour < horaFin.hour){
+                        showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
                               title:  Center(child: Text('Mercado abierto')),
@@ -406,11 +413,22 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
                         ),
                         barrierDismissible: true
                           ).then((_) => setState((){}));
+                          } else {
+                             _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comecioNumNave,comercioId,mercadoId,productoID,stock,globalKey,context);
+                          }
+                      } else {
+                        
+                          _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comecioNumNave,comercioId,mercadoId,productoID,stock,globalKey,context);
+              
+                      }
 
                   }else {
+                      _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comecioNumNave,comercioId,mercadoId,productoID,stock,globalKey,context);
+
                   
-                  _showModalSheet(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioPuesto,comecioNumNave,comercioId,mercadoId,productoID,stock,globalKey,context);}},
-                  
+                  }},
+
+
                 child: Icon(Icons.add_box,size: 35.0, color:Color.fromRGBO(0, 255, 208, 1))) 
                         ],
                     ),
@@ -688,10 +706,10 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
 
                         int stockProducto = int.parse(stock);
 
-                        if(stockProducto > cantidad ){
-                            final snackBar = SnackBar(
+                        if(stockProducto < cantidad ){
+                            final snackBarError = SnackBar(
                           backgroundColor: Colors.red,
-                          content: Flexible(child: Text('Este producto no posee stock para dicha cantidad')),
+                          content: Text('Este producto no posee stock para dicha cantidad'),
                           action: SnackBarAction(
                             textColor: Colors.white,
                             label: 'Cerrar',
@@ -704,10 +722,10 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
                         // Find the Scaffold in the widget tree and use
                         // it to show a SnackBar.
                           Navigator.pop(context);
-                          globalKey.currentState.showSnackBar(snackBar);
+                          globalKey.currentState.showSnackBar(snackBarError);
 
                         } else {
-                          await DBProvider().insertCarrito(producto);
+                          await DBProvider().insertCarrito(producto,stockProducto);
                           final snackBar = SnackBar(
                             backgroundColor: Colors.green,
                             content: Text('Se ha añadido al carrito!'),

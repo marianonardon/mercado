@@ -133,7 +133,7 @@ class _ProductosPageState extends State<ProductosPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   
-                  ProductosListViewHorizontal(args.categoriaId,args.mercadoId),
+                  ProductosListViewHorizontal(args.categoriaId,args.mercadoId,globalKey),
                   
 
                   //Container(child: ProductosListView(args.categoriaId,args.mercadoId,''))

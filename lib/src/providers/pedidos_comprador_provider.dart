@@ -36,9 +36,13 @@ class PedidoComprador {
   final String pedidoExternalID;
   final String pedidoUserID;
   final String pedidoFullName;
+  final String pedidoTokenDispositivo;
+  final String pedidoTelefono;
   final String pedidoComercioID;
   final String comercioID;
   final String comercioNombre;
+  final String comercioTelefono;
+  final String comercioTokenDispositivo;
   final String mercadoID;
   final String mercadoNombre;
   final String estadoID;
@@ -47,7 +51,7 @@ class PedidoComprador {
 
 
   PedidoComprador({this.pedidoID, this.pedidoFecha, this.pedidoExternalID, this.pedidoUserID,
-          this.pedidoFullName, this.pedidoComercioID,this.comercioID, this.comercioNombre, this.mercadoID,
+          this.pedidoFullName, this.pedidoTokenDispositivo, this.pedidoTelefono, this.pedidoComercioID,this.comercioID, this.comercioNombre, this.comercioTelefono, this.comercioTokenDispositivo,this.mercadoID,
           this.mercadoNombre, this.estadoID, this.estadoNombre,this.pedidoPrecioTotal});
 
   factory PedidoComprador.fromJsonMap(Map<String, dynamic> parsedJson) {
@@ -59,8 +63,12 @@ class PedidoComprador {
       pedidoExternalID: parsedJson['PedidoExternalID'],
       pedidoUserID: parsedJson['pedidoUserID'],
       pedidoFullName: parsedJson['pedidoFullName'],
+      pedidoTokenDispositivo: parsedJson['pedidoTokenDispositivo'],
+      pedidoTelefono: parsedJson['pedidoTelefono'],
       pedidoComercioID: parsedJson['pedidoComercioID'],
       comercioNombre: parsedJson['comercioNombre'],
+      comercioTelefono: parsedJson['comercioTelefono'],
+      comercioTokenDispositivo: parsedJson['comercioTokenDispositivo'],
       mercadoID: parsedJson['mercadoID'],
       mercadoNombre: parsedJson['mercadoNombre'],
       estadoID: parsedJson['estadoID'],
@@ -109,7 +117,7 @@ class PedidosCompradorProvider {
     };
 
 
-    final responseToken = await http.post(url, body: bodyToken, headers: headers);
+    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -126,7 +134,7 @@ class PedidosCompradorProvider {
     //final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarPedido?PedidoExternalID=$externalId2&pedidoUserID=$userId2';
 
-    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
 
 
     if (response.statusCode == 200) {

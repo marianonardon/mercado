@@ -33,7 +33,7 @@ class _CarritoPageState extends State<CarritoPage> {
               onPressed: () {}
             )
           ],),
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
            child: Column(
             children: <Widget>[

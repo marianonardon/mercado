@@ -33,6 +33,7 @@ import 'package:flutter_login_ui/src/pages/actualizar_producto.dart';
 import 'package:flutter_login_ui/src/pages/detalle_producto_comprador.dart';
 import 'package:flutter_login_ui/src/pages/vendedor_resultado_page.dart';
 
+import 'package:flutter_login_ui/src/providers/push_notifications_provider.dart';
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,9 +42,24 @@ import 'login_state.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  
+
+  @override
+  void initState() { 
+    super.initState();
+    
+    final pushProvider = new PushNotificationProvider();
+    pushProvider.initNotifications();
+    
+  }
   bool login = false;
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([

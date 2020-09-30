@@ -5,6 +5,7 @@ import 'package:flutter_login_ui/src/pages/productos_serv.dart';
 import 'package:flutter_login_ui/src/pages/productos_page.dart';
 import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
+import 'package:flutter_login_ui/src/providers/enviar_notificaciones.dart';
 import 'package:flutter_login_ui/src/providers/pedidos_comprador_provider.dart';
 //import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -47,6 +48,16 @@ class ListadoProductosComprador extends StatelessWidget {
   }
 
    Widget _tarjeta(BuildContext context, PedidoComprador pedido) {
+
+     DateTime fechaDePedido = DateTime.parse(pedido.pedidoFecha);
+    DateTime fechaSumada = fechaDePedido.add(Duration(minutes: 02));
+    DateTime now = DateTime.now();
+    String usuario = pedido.pedidoFullName;
+
+    if(fechaSumada.isAfter(now)){
+      
+      EnviarNotificaciones().sendAndRetrieveMessage(pedido.comercioTokenDispositivo, 'Pedido Recibido', '$usuario le ha realizado un pedido');
+    }
 
       return _crearLista(pedido,context);
         
@@ -101,6 +112,7 @@ class ListadoProductosComprador extends StatelessWidget {
     String diaPedido = horarioPedido.day.toString();
     String mesPedido = horarioPedido.month.toString();
     String anioPedido = horarioPedido.year.toString();
+    String telefonoComercio = pedido.comercioTelefono;
 
   return Container(
     width: media.size.width * 0.93,
@@ -185,7 +197,7 @@ class ListadoProductosComprador extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children:<Widget>[ 
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 5.0),
                       Row(
                         children: <Widget>[
                           Container(
@@ -198,6 +210,18 @@ class ListadoProductosComprador extends StatelessWidget {
                             ),
                           ),
                         SizedBox(width: 10.0),
+                          
+                        ],
+                      ),
+                      SizedBox(height:4.0),
+                      Row(
+                        children: <Widget>[
+                           Flexible(
+                                child: Text(
+                                'Teléfono: $telefonoComercio', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                  fontSize: 12.0, fontWeight: FontWeight.w600,
+                          ))),
+                           ),
                           
                         ],
                       ),
@@ -240,7 +264,7 @@ class ListadoProductosComprador extends StatelessWidget {
                           GestureDetector(
                             onTap: (){Navigator.pushNamed(context, 'pedidosDetalle',arguments: PedidoArguments(pedido.pedidoComercioID,pedido.pedidoID,args.userId, args.nombreUser,
                              args.fotoUser,args.mercadoId,'','','',
-                            '','','','',args.categoriaId,args.categoriaNombre));},
+                            '','','','',args.categoriaId,args.categoriaNombre,pedido.pedidoTokenDispositivo));},
                             child: Container(
                               width: 70.00,
                               child: Text(
@@ -285,8 +309,9 @@ class PedidoArguments {
   final String comercioNombre;
   final String categoriaId;
   final String categoriaNombre;
+  final String pedidoTokenDispositivo;
 
 
   PedidoArguments(this.pedidoComercioID, this.pedidoID,this.userId,this.nombre,this.foto,this.mercadoId,this.idComercio,this.numNave,this.comercioPuesto,this.comercioCuit,
-  this.comercioTelefono,this.comercioMail,this.comercioNombre,this.categoriaId,this.categoriaNombre);
+  this.comercioTelefono,this.comercioMail,this.comercioNombre,this.categoriaId,this.categoriaNombre,this.pedidoTokenDispositivo);
 }

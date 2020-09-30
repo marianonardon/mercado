@@ -120,7 +120,7 @@ class ProductoActualizar extends StatefulWidget {
     );
   }
 
-Future<Producto> updateProducto(String nombre, descripcion, categoria, stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
+Future<Producto> updateProducto(String nombre, descripcion, categoria, String stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
                   precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,BuildContext context) async {
     
     

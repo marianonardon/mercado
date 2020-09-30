@@ -107,6 +107,7 @@ class _PedidosDetalleVendedorPageState extends State<PedidosDetalleVendedorPage>
           
           return ListadoPedidosDetalleVendedor(
             pedidos: data,
+            tokenDispositivo: args.pedidoTokenDispositivo,
             //siguientePagina: productosProvider.fetchProductos,
           );
           /* return ListadoProductosVendedor(

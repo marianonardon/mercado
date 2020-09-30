@@ -6,7 +6,7 @@ import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
 import 'package:flutter_login_ui/src/providers/actualizar_estado_pedido.dart';
 import 'package:flutter_login_ui/src/providers/pedido_detalle_provider.dart';
-import 'package:flutter_login_ui/src/providers/pedidos_comprador_provider.dart';
+import 'package:flutter_login_ui/src/providers/enviar_notificaciones.dart';
 import 'package:flutter_login_ui/src/widgets/listado_pedidos_comprador.dart';
 //import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,9 +14,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ListadoPedidosDetalleVendedor extends StatefulWidget {
   PedidoDetalle pedidos;
+  String tokenDispositivo;
   //Function siguientePagina;
 
-  ListadoPedidosDetalleVendedor({@required this.pedidos});
+  ListadoPedidosDetalleVendedor({@required this.pedidos, this.tokenDispositivo});
 
   @override
   _ListadoPedidosDetalleVendedorState createState() => _ListadoPedidosDetalleVendedorState();
@@ -33,26 +34,26 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
   Widget build(BuildContext context) {
     final _screenSize = MediaQuery.of(context).size;
 
-    return SingleChildScrollView(child: _tarjeta(context, widget.pedidos ));
+    return SingleChildScrollView(child: _tarjeta(context, widget.pedidos, widget.tokenDispositivo));
       
   }
 
-   Widget _tarjeta(BuildContext context, PedidoDetalle pedido) {
+   Widget _tarjeta(BuildContext context, PedidoDetalle pedido, String tokenDispositivo) {
 
-      return _crearLista(pedido,context);
+      return _crearLista(pedido,tokenDispositivo,context);
         
     
    
    }
 
-   Widget _crearLista(PedidoDetalle pedido,context) {
+   Widget _crearLista(PedidoDetalle pedido,String tokenDispositivo,context) {
     MediaQueryData media = MediaQuery.of(context);
     return  
-                 _crearTarjetas(pedido,context);
+                 _crearTarjetas(pedido,tokenDispositivo,context);
                  
   }
 
-   _crearTarjetas(PedidoDetalle pedido,context) {
+   _crearTarjetas(PedidoDetalle pedido,String tokenDispositivo,context) {
      
    final PedidoArguments args = ModalRoute.of(context).settings.arguments;
    MediaQueryData media = MediaQuery.of(context); 
@@ -251,10 +252,10 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
           ],
         ),
       SizedBox(height:10.0),                    
-        botonListoParaRetirar(pedido.estadoID,pedido.pedidoID,pedido.pedidoComercioID),
-        botonEntregado(pedido.estadoID,pedido.pedidoID,pedido.pedidoComercioID),
+        botonListoParaRetirar(pedido.estadoID,pedido.pedidoID,pedido.pedidoComercioID,tokenDispositivo,pedido.comercioNombre),
+        botonEntregado(pedido.estadoID,pedido.pedidoID,pedido.pedidoComercioID,tokenDispositivo,pedido.comercioNombre),
         SizedBox(height:5.0),
-        botonCancelar(pedido.estadoID,pedido.pedidoID,pedido.pedidoComercioID),
+        botonCancelar(pedido.estadoID,pedido.pedidoID,pedido.pedidoComercioID,tokenDispositivo,pedido.comercioNombre),
         
         SizedBox(height:10.0),
         
@@ -317,7 +318,7 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
 
   }
 
-  botonListoParaRetirar(estadoId,pedidoId,pedidoComercioId){
+  botonListoParaRetirar(estadoId,pedidoId,pedidoComercioId,tokenDispositivo,puesto){
 
     MediaQueryData media = MediaQuery.of(context);
     final PedidoArguments args = ModalRoute.of(context).settings.arguments;
@@ -351,6 +352,8 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
                           ),
                         barrierDismissible: true,
                           ).then((_) => setState((){}));
+                          
+                EnviarNotificaciones().sendAndRetrieveMessage(tokenDispositivo, 'Pedido Listo para retirar', 'Su pedido realizado en el puesto $puesto está listo para retirar');
                 await PedidoActualizar().updatePedido('3',pedidoId,pedidoComercioId,context);
                 Navigator.pushNamed(context, 'pedidosVendedor',arguments: PuestoArguments(args.userId, args.nombre, args.foto, args.mercadoId, args.idComercio,args.numNave,args.comercioPuesto,
               args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));
@@ -403,7 +406,7 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
   }
 
 
-  botonCancelar(estadoId,pedidoId,pedidoComercioId){
+  botonCancelar(estadoId,pedidoId,pedidoComercioId,tokenDispositivo,puesto){
 
     MediaQueryData media = MediaQuery.of(context);
     final PedidoArguments args = ModalRoute.of(context).settings.arguments;
@@ -437,6 +440,7 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
                           ),
                         barrierDismissible: true,
                           ).then((_) => setState((){}));
+                EnviarNotificaciones().sendAndRetrieveMessage(tokenDispositivo, 'Pedido Cancelado', 'Su pedido realizado en el puesto $puesto ha sido cancelado');                          
                 await PedidoActualizar().updatePedido('2',pedidoId,pedidoComercioId,context);
                 Navigator.pushNamed(context, 'pedidosVendedor',arguments: PuestoArguments(args.userId, args.nombre, args.foto, args.mercadoId, args.idComercio,args.numNave,args.comercioPuesto,
               args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));
@@ -489,7 +493,7 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
   }
 
 
-  botonEntregado(estadoId,pedidoId,pedidoComercioId){
+  botonEntregado(estadoId,pedidoId,pedidoComercioId,tokenDispositivo,puesto){
 
     MediaQueryData media = MediaQuery.of(context);
     final PedidoArguments args = ModalRoute.of(context).settings.arguments;
@@ -522,6 +526,7 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
                           ),
                         barrierDismissible: true,
                           ).then((_) => setState((){}));
+                EnviarNotificaciones().sendAndRetrieveMessage(tokenDispositivo, 'Pedido Entregado', 'Su pedido realizado en el puesto $puesto ha sido entregado');
                 await PedidoActualizar().updatePedido('4',pedidoId,pedidoComercioId,context);
                 Navigator.pushNamed(context, 'pedidosVendedor',arguments: PuestoArguments(args.userId, args.nombre, args.foto, args.mercadoId, args.idComercio,args.numNave,args.comercioPuesto,
               args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));

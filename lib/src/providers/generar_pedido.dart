@@ -37,10 +37,12 @@ class Pedido {
   final String pedidoExternalID;
   final String pedidoUserID;
   final String pedidoFullName;
+  final String pedidoTelefono;
+  final String pedidoTokenDispositivo;
   final List<ProductosPedido> productos;
 
 
-  Pedido({this.pedidoExternalID, this.pedidoUserID, this.pedidoFullName, this.productos});
+  Pedido({this.pedidoExternalID, this.pedidoUserID, this.pedidoFullName,this.pedidoTelefono, this.pedidoTokenDispositivo, this.productos});
 
   factory Pedido.fromJsonMap(Map<String, dynamic> parsedJson) {
 
@@ -52,6 +54,8 @@ class Pedido {
       pedidoExternalID: parsedJson['pedidoExternalID'],
       pedidoUserID: parsedJson['pedidoUserID'],
       pedidoFullName: parsedJson['pedidoFullName'],
+      pedidoTelefono: parsedJson['pedidoTelefono'],
+      pedidoTokenDispositivo: parsedJson['pedidoTokenDispositivo'],
       productos: productosList
 
     );
@@ -102,7 +106,7 @@ class GenerarPedido extends StatefulWidget {
   final String categoriaNombre;
 
   
-  Future<Pedido> createProducto(List<Carrito> productos,context) async {
+  Future<Pedido> createProducto(List<Carrito> productos,String telefono,context) async {
 
 
     final List<Carrito> maps = productos;
@@ -125,6 +129,7 @@ class GenerarPedido extends StatefulWidget {
     String externalId2 = prefs.getString('usuarioId');
     String userId2      = prefs.getString('usuarioId2');
     String nombreUser = prefs.getString('nombre');
+    String pedidoTokenDispositivo = prefs.getString('tokenDispositivo');
     
     String url = "https://agilemarket.com.ar/oauth/access_token";
     String urlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/oauth/access_token';
@@ -150,7 +155,7 @@ class GenerarPedido extends StatefulWidget {
     };
 
 
-    final responseToken = await http.post(url, body: bodyToken, headers: headers);
+    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -172,7 +177,7 @@ class GenerarPedido extends StatefulWidget {
 
     
      http.Response response = await http.post(
-        '$mercadosListAPIUrl',
+        '$mercadosListAPIUrlQA',
     
         headers: headers3,
         body: jsonEncode(<String, dynamic>{
@@ -180,6 +185,8 @@ class GenerarPedido extends StatefulWidget {
           "pedidoExternalID": externalId2,
           "pedidoUserID": userId2,
           "pedidoFullName": nombreUser,
+          "pedidoTelefono": telefono,
+          "pedidoTokenDispositivo": pedidoTokenDispositivo,
           "productos":list
     }}),
     ); 
