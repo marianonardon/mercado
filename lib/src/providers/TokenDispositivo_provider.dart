@@ -66,7 +66,7 @@ Future<void> guaradarTokenDispositivo() async {
     };
 
 
-    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
+    final responseToken = await http.post(url, body: bodyToken, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -82,11 +82,11 @@ Future<void> guaradarTokenDispositivo() async {
           "Authorization": "OAuth $token2"
         };
 
-    final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/comercio/';
+    final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/grabarComercioToken';
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/grabarComercioToken';
     
       final http.Response response = await http.post(
-        '$mercadosListAPIUrlQA',
+        '$mercadosListAPIUrl',
     
         headers: headers3,
         body: jsonEncode(<String, dynamic>{

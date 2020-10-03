@@ -32,6 +32,8 @@ class _PedidosCompradorPageState extends State<PedidosCompradorPage> {
           keepScrollOffset:true
         );
   int _index = 2;
+  bool yaPaso = false;
+  
   @override
   Widget build(BuildContext context) {
 
@@ -85,9 +87,11 @@ class _PedidosCompradorPageState extends State<PedidosCompradorPage> {
         currentIndex: _index,
         onTap: (newIndex) { setState(() => _index = newIndex);
             if(_index == 0) {
+              yaPaso = true;
               Navigator.pushNamed(context, 'productos',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre));
             }
             if(_index == 1) {
+              yaPaso = true;
               Navigator.pushNamed(context, 'carrito',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre));
             }
             },
@@ -147,6 +151,7 @@ class _PedidosCompradorPageState extends State<PedidosCompradorPage> {
           
           return ListadoProductosComprador(
             pedidos: data,
+            yaPaso: yaPaso,
             //siguientePagina: productosProvider.fetchProductos,
           );
           /* return ListadoProductosVendedor(

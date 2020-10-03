@@ -40,6 +40,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login_state.dart';
 
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -51,11 +52,16 @@ class _MyAppState extends State<MyApp> {
   
 
   @override
-  void initState() { 
+  Future<void> initState()  { 
     super.initState();
     
-    final pushProvider = new PushNotificationProvider();
-    pushProvider.initNotifications();
+    final  pushProvider  =  PushNotificationProvider();
+     pushProvider.initNotifications();
+
+     pushProvider.mensajesStram.listen((mensaje) {
+       print(mensaje);
+
+      });
     
   }
   bool login = false;
@@ -68,58 +74,60 @@ class _MyAppState extends State<MyApp> {
       ]);
     return ChangeNotifierProvider<LoginState>(
         builder: (BuildContext context) => LoginState(),
-        child: MaterialApp(
-        title: 'Agile Market',
-        debugShowCheckedModeBanner: false,
-        //home: LoginScreen(),
-        routes: {
-           '/': (BuildContext context) {
-             var state = Provider.of<LoginState>(context);
-            // Provider.of<LoginState>(context).isLogin();
-          if (state.isLoggedIn()) {
-            return MercadosPage();
-            } else{
-              Provider.of<LoginState>(context).isLogin();
-              return LoginPageFinal(
-            );}
-        },
-        'categorias'   : (BuildContext context) => CategoriasPage(),
-        'mercado'      : (BuildContext context) => MercadosPage(),
-        'productos'    : (BuildContext context) => ProductosPage(),
-        'carrito'      : (BuildContext context) => CarritoPage(),
-        'confRes'      : (BuildContext context) => ConfirmoReserva(),
-        'login'        : (BuildContext context) => LoginPageFinal(),
-        'altaVendedor' : (BuildContext context) => AltaVendedor(),
-        'vendedorProd' : (BuildContext context) => VendedorProductosPage(),
-        'errorRegPues' : (BuildContext context) => ErrorRegistrarPuesto(),
-        'altaComOk'    : (BuildContext context) => AltaComercioOk(),
-        'puestos'      : (BuildContext context) => PuestosPage(),
-        'altaProd'     : (BuildContext context) => AltaProducto(),
-        'detalleProd'  : (BuildContext context) => DetalleProducto(),
-        'altaProdOk'    : (BuildContext context) => AltaProductoOk(),
-        'errorRegProd' : (BuildContext context) => ErrorRegistrarProducto(),
-        'actProd'    : (BuildContext context) => ActualizarProducto(),
-        'actPues'    : (BuildContext context) => ActualizarPuesto(),
-        'actPuesOk'    : (BuildContext context) => ActPuestoOk(),
-        'errorActPues' : (BuildContext context) => ErrorActualizarPuesto(),
-        'buscarProducto' : (BuildContext context) => ProductosBusquedaPage(),
-        'resultadoProducto' : (BuildContext context) => ProductosResultadoPage(),
-        'puestoProd' : (BuildContext context) => ProductoXPuestoPage(),
-        'loginManual' : (BuildContext context) => LoginManualPageFinal(),
-        'registrarse' : (BuildContext context) => RegistroUserPageFinal(),
-        'detalleProdComp'  : (BuildContext context) => DetalleProductoComprador(),
-        'pedidoOk' : (BuildContext context) => PedidoOk(),
-        'pedidosComprador' : (BuildContext context) => PedidosCompradorPage(),
-        'pedidosVendedor' : (BuildContext context) => PedidosVendedorPage(),
-        'pedidosDetalle' : (BuildContext context) => PedidosDetallePage(),
-        'pedidosDetalleVendedor' : (BuildContext context) => PedidosDetalleVendedorPage(),
-        'buscarProductoVendedor' : (BuildContext context) => ProductosBusquedaVendedorPage(),
-        'resultadoProductoVendedor' : (BuildContext context) => VendedorProductosResultadoPage(),
+        child: OverlaySupport(
+                  child: MaterialApp(
+          title: 'Agile Market',
+          debugShowCheckedModeBanner: false,
+          //home: LoginScreen(),
+          routes: {
+             '/': (BuildContext context) {
+               var state = Provider.of<LoginState>(context);
+              // Provider.of<LoginState>(context).isLogin();
+            if (state.isLoggedIn()) {
+              return MercadosPage();
+              } else{
+                Provider.of<LoginState>(context).isLogin();
+                return LoginPageFinal(
+              );}
+          },
+          'categorias'   : (BuildContext context) => CategoriasPage(),
+          'mercado'      : (BuildContext context) => MercadosPage(),
+          'productos'    : (BuildContext context) => ProductosPage(),
+          'carrito'      : (BuildContext context) => CarritoPage(),
+          'confRes'      : (BuildContext context) => ConfirmoReserva(),
+          'login'        : (BuildContext context) => LoginPageFinal(),
+          'altaVendedor' : (BuildContext context) => AltaVendedor(),
+          'vendedorProd' : (BuildContext context) => VendedorProductosPage(),
+          'errorRegPues' : (BuildContext context) => ErrorRegistrarPuesto(),
+          'altaComOk'    : (BuildContext context) => AltaComercioOk(),
+          'puestos'      : (BuildContext context) => PuestosPage(),
+          'altaProd'     : (BuildContext context) => AltaProducto(),
+          'detalleProd'  : (BuildContext context) => DetalleProducto(),
+          'altaProdOk'    : (BuildContext context) => AltaProductoOk(),
+          'errorRegProd' : (BuildContext context) => ErrorRegistrarProducto(),
+          'actProd'    : (BuildContext context) => ActualizarProducto(),
+          'actPues'    : (BuildContext context) => ActualizarPuesto(),
+          'actPuesOk'    : (BuildContext context) => ActPuestoOk(),
+          'errorActPues' : (BuildContext context) => ErrorActualizarPuesto(),
+          'buscarProducto' : (BuildContext context) => ProductosBusquedaPage(),
+          'resultadoProducto' : (BuildContext context) => ProductosResultadoPage(),
+          'puestoProd' : (BuildContext context) => ProductoXPuestoPage(),
+          'loginManual' : (BuildContext context) => LoginManualPageFinal(),
+          'registrarse' : (BuildContext context) => RegistroUserPageFinal(),
+          'detalleProdComp'  : (BuildContext context) => DetalleProductoComprador(),
+          'pedidoOk' : (BuildContext context) => PedidoOk(),
+          'pedidosComprador' : (BuildContext context) => PedidosCompradorPage(),
+          'pedidosVendedor' : (BuildContext context) => PedidosVendedorPage(),
+          'pedidosDetalle' : (BuildContext context) => PedidosDetallePage(),
+          'pedidosDetalleVendedor' : (BuildContext context) => PedidosDetalleVendedorPage(),
+          'buscarProductoVendedor' : (BuildContext context) => ProductosBusquedaVendedorPage(),
+          'resultadoProductoVendedor' : (BuildContext context) => VendedorProductosResultadoPage(),
 
-        
-        
-        },
+          
+          
+          },
       ),
+        ),
     );
   }
 }

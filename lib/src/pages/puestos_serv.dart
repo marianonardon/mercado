@@ -175,7 +175,7 @@ class PuestosListView extends StatelessWidget {
     };
 
 
-    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
+    final responseToken = await http.post(url, body: bodyToken, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -188,7 +188,7 @@ class PuestosListView extends StatelessWidget {
     final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/consultarComercio';
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarComercio';
     final userPuesto = '?comercioExternalID=$externalId2&comercioUserID=$userId2';
-    final response = await http.get('$mercadosListAPIUrlQA$userPuesto', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrl$userPuesto', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);

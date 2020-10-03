@@ -13,18 +13,41 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ListadoProductosComprador extends StatelessWidget {
   List<PedidoComprador> pedidos;
+  bool yaPaso;
   //Function siguientePagina;
 
-  ListadoProductosComprador({@required this.pedidos});
+  ListadoProductosComprador({@required this.pedidos,this.yaPaso});
 
   final _pageController = new ScrollController(
     initialScrollOffset : 150.0,
   );
   int cantProd = 0;
+  
 
   @override
   Widget build(BuildContext context) {
     final _screenSize = MediaQuery.of(context).size;
+
+    if(yaPaso == false) {
+
+      yaPaso = true;
+
+      for(var i = 0; i< pedidos.length; i++) {
+        
+          DateTime fechaDePedido = DateTime.parse(pedidos[i].pedidoFecha);
+          DateTime fechaSumada = fechaDePedido.add(Duration(minutes: 01));
+          DateTime now = DateTime.now();
+          String usuario = pedidos[i].pedidoFullName;
+
+          if(fechaSumada.isAfter(now)){
+            
+            EnviarNotificaciones().sendAndRetrieveMessage(pedidos[i].comercioTokenDispositivo, 'Pedido Recibido', '$usuario le ha realizado un pedido');
+          }
+
+
+
+      }
+    }
 
     return Container(
       child: Column(
@@ -49,15 +72,7 @@ class ListadoProductosComprador extends StatelessWidget {
 
    Widget _tarjeta(BuildContext context, PedidoComprador pedido) {
 
-     DateTime fechaDePedido = DateTime.parse(pedido.pedidoFecha);
-    DateTime fechaSumada = fechaDePedido.add(Duration(minutes: 02));
-    DateTime now = DateTime.now();
-    String usuario = pedido.pedidoFullName;
-
-    if(fechaSumada.isAfter(now)){
-      
-      EnviarNotificaciones().sendAndRetrieveMessage(pedido.comercioTokenDispositivo, 'Pedido Recibido', '$usuario le ha realizado un pedido');
-    }
+    
 
       return _crearLista(pedido,context);
         

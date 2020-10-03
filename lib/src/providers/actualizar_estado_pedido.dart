@@ -153,7 +153,7 @@ Future<PedidoDetalleEstado> updatePedido(String idEstado,pedidoId,pedidoComercio
     };
 
 
-    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
+    final responseToken = await http.post(url, body: bodyToken, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -171,7 +171,7 @@ Future<PedidoDetalleEstado> updatePedido(String idEstado,pedidoId,pedidoComercio
 
     final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/pedidoComercio/$pedidoId,$pedidoComercioId';
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/pedidoComercio/$pedidoId,$pedidoComercioId';
-    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
@@ -181,7 +181,7 @@ Future<PedidoDetalleEstado> updatePedido(String idEstado,pedidoId,pedidoComercio
     
     
          http.Response response2 = await http.put(
-          '$actprodListAPIUrlQA',
+          '$actprodListAPIUrl',
       
           headers: headers3,
           body: jsonEncode(<String, dynamic>

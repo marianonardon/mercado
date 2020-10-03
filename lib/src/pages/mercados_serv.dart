@@ -196,7 +196,7 @@ class _MercadosListViewState extends State<MercadosListView> {
     };
 
 
-    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
+    final responseToken = await http.post(url, body: bodyToken, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -210,12 +210,12 @@ class _MercadosListViewState extends State<MercadosListView> {
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarMercado/';
 
     final mercadosHabilitados = '?habilitado=1';
-    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
       final mercados = new Mercados.fromJsonList(decodedData['mercados']);
-      GuardarTokenDispositivo().guaradarTokenDispositivo();
+      await GuardarTokenDispositivo().guaradarTokenDispositivo();
       return mercados.items;
       //List jsonResponse = json.decode(response.body);
       //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));

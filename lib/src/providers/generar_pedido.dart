@@ -155,7 +155,7 @@ class GenerarPedido extends StatefulWidget {
     };
 
 
-    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
+    final responseToken = await http.post(url, body: bodyToken, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -177,7 +177,7 @@ class GenerarPedido extends StatefulWidget {
 
     
      http.Response response = await http.post(
-        '$mercadosListAPIUrlQA',
+        '$mercadosListAPIUrl',
     
         headers: headers3,
         body: jsonEncode(<String, dynamic>{

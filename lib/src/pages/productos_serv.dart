@@ -1189,16 +1189,16 @@ class _ProductosListViewHorizontalState extends State<ProductosListViewHorizonta
                   if (mercadoHora != 'Cerrado'){
                     DateTime horaInicio = DateTime.parse(mercadoHora);
                     DateTime horaFin = DateTime.parse(mercadoHoraFin);
-                    if(now.hour > horaInicio.hour){
+                    if(now.hour >= horaInicio.hour){
                         if(now.hour < horaFin.hour){
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                              title:  Center(child: Text('Mercado abierto')),
+                              title:  Center(child: Text('DISCULPA!!!')),
                               content:  SizedBox(
                                         width: media.size.width * 0.005,
                                         height: media.size.height * 0.1,
-                                        child:  Center(child:  Text('Sólo pueden agregarse productos al carrito cuando el mercado se encuentra cerrado',
+                                        child:  Center(child:  Text('Los pedidos se realizan luego del cierre del Mercado',
                                         textAlign: TextAlign.center,)),
                                     ),
                               backgroundColor: Colors.white

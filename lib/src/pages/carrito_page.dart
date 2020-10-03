@@ -27,12 +27,7 @@ class _CarritoPageState extends State<CarritoPage> {
            leading: new IconButton(
             icon: new Icon(Icons.chevron_left, size:35),
             onPressed: () => Navigator.pushNamed(context, 'categorias', arguments: ScreenArguments(args.userId, args.nombreUser, args.fotoUser,args.mercadoId))),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.notifications, color: Colors.white),
-              onPressed: () {}
-            )
-          ],),
+          ),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
            child: Column(
