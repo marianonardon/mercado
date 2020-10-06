@@ -6,11 +6,11 @@ import 'dart:async';
 
 class PushNotificationProvider {
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
-  final _mensajeStreamController = StreamController<String>.broadcast();
+  final mensajeStreamController = StreamController<String>.broadcast();
 
-  Stream<String> get mensajesStram => _mensajeStreamController.stream;
+  Stream<String> get mensajesStram => mensajeStreamController.stream;
 
 
 
@@ -32,15 +32,15 @@ class PushNotificationProvider {
 
   initNotifications() async {
 
-    await _firebaseMessaging.requestNotificationPermissions();
-    final token = await _firebaseMessaging.getToken();
+    await firebaseMessaging.requestNotificationPermissions();
+    final token = await firebaseMessaging.getToken();
     print('==FCM Toke =====');
     print(token);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('tokenDispositivo',token );
 
 
-    _firebaseMessaging.configure(
+    firebaseMessaging.configure(
       onMessage: onMessage,
       onBackgroundMessage: onBackgroundMessage,
       onLaunch: onLaunch,
@@ -56,7 +56,7 @@ class PushNotificationProvider {
     final notificacionTitulo = message['notification'] ['title'];
     final notificacionBody = message['notification'] ['body'];
     String mensaje = '$notificacionTitulo $notificacionBody';
-    _mensajeStreamController.sink.add(mensaje);
+    mensajeStreamController.sink.add(mensaje);
   }
 
   Future<dynamic> onLaunch(Map<String, dynamic> message) async {
@@ -72,7 +72,7 @@ class PushNotificationProvider {
   }
 
   dispose() {
-    _mensajeStreamController?.close();
+    mensajeStreamController?.close();
   }
 
 }

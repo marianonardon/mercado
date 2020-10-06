@@ -32,12 +32,13 @@ import 'package:flutter_login_ui/src/pages/alta_producto_err.dart';
 import 'package:flutter_login_ui/src/pages/actualizar_producto.dart';
 import 'package:flutter_login_ui/src/pages/detalle_producto_comprador.dart';
 import 'package:flutter_login_ui/src/pages/vendedor_resultado_page.dart';
+import 'package:flutter_login_ui/src/providers/enviar_notificaciones.dart';
 
 import 'package:flutter_login_ui/src/providers/push_notifications_provider.dart';
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:overlay_support/overlay_support.dart';
 import 'login_state.dart';
 
 
@@ -53,15 +54,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Future<void> initState()  { 
+    
     super.initState();
     
     final  pushProvider  =  PushNotificationProvider();
+    final pushProvider2 = EnviarNotificaciones();
      pushProvider.initNotifications();
+     //pushProvider2.initNotifications();
 
      pushProvider.mensajesStram.listen((mensaje) {
        print(mensaje);
+       //show a notification at top of screen
+        showSimpleNotification(
+            Text(mensaje),
+          background: Colors.green,
+           duration: kNotificationDuration = const Duration(seconds: 5),
+           slideDismiss: true
+           );
 
       });
+
+      
     
   }
   bool login = false;
