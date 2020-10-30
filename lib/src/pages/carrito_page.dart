@@ -78,10 +78,10 @@ class _CarritoPageState extends State<CarritoPage> {
         currentIndex: _index,
         onTap: (newIndex) { setState(() => _index = newIndex);
             if(_index == 2) {
-              Navigator.pushNamed(context, 'pedidosComprador',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre));
+              Navigator.pushNamed(context, 'pedidosComprador',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,''));
             }
             if(_index == 0) {
-              Navigator.pushNamed(context, 'productos',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre));
+              Navigator.pushNamed(context, 'productos',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,''));
             }},
                 items: [
                     BottomNavigationBarItem(

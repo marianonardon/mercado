@@ -7,6 +7,7 @@ import 'package:flutter_login_ui/src/widgets/listado_productos.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'categorias_serv.dart';
+import 'mercados_serv.dart';
 
 
 
@@ -33,12 +34,12 @@ class _ProductosResultadoPageState extends State<ProductosResultadoPage> {
     final ProductosArguments args = ModalRoute.of(context).settings.arguments;
     String productoBuscado = args.productoBuscado;
 
-    productosProvider.fetchProductos(args.categoriaId,args.mercadoId,productoBuscado);
+    productosProvider.fetchProductos(args.categoriaId,args.mercadoId,productoBuscado,args.comercioId);
 
     _scrollController.addListener(() {
             if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 20) {
               siguientePagina = productosProvider.fetchProductos;
-              siguientePagina(args.categoriaId,args.mercadoId,productoBuscado);
+              siguientePagina(args.categoriaId,args.mercadoId,productoBuscado,args.comercioId);
               //ProductosListView(args.categoriaId,args.mercadoId,'').siguientePagina();
             }
           });
@@ -52,11 +53,17 @@ class _ProductosResultadoPageState extends State<ProductosResultadoPage> {
         backgroundColor: Color.fromRGBO(29, 233, 182, 1),
         leading: new IconButton(
           icon: new Icon(Icons.backspace, size:35),
-          onPressed: () => Navigator.pushNamed(context, 'productos', arguments: ProductosArguments(args.categoriaId,args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre))),
+          onPressed: () {
+            if(args.categoriaId == ''){
+               Navigator.pushNamed(context, 'categorias', arguments: ScreenArguments(args.userId, args.nombreUser, args.fotoUser,args.mercadoId));
+             } else {
+               Navigator.pushNamed(context, 'productos', arguments: ProductosArguments(args.categoriaId,args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,''));
+             }
+             }),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search, color: Colors.white),
-            onPressed: () { Navigator.pushNamed(context, 'buscarProducto', arguments: ProductosArguments(args.categoriaId,args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre));
+            onPressed: () { Navigator.pushNamed(context, 'buscarProducto', arguments: ProductosArguments(args.categoriaId,args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,''));
 
 
             }

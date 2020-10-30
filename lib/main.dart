@@ -8,6 +8,7 @@ import 'package:flutter_login_ui/src/pages/alta_vendedor.dart';
 import 'package:flutter_login_ui/src/pages/alta_vendedor_ok.dart';
 import 'package:flutter_login_ui/src/pages/carrito_page.dart';
 import 'package:flutter_login_ui/src/pages/confirmoReserva.dart';
+import 'package:flutter_login_ui/src/pages/delete_producto_ok.dart';
 import 'package:flutter_login_ui/src/pages/detalle_producto.dart';
 import 'package:flutter_login_ui/src/pages/error_registrar_puesto.dart';
 import 'package:flutter_login_ui/src/pages/login.dart';
@@ -96,10 +97,10 @@ class _MyAppState extends State<MyApp> {
              '/': (BuildContext context) {
                var state = Provider.of<LoginState>(context);
               // Provider.of<LoginState>(context).isLogin();
-            if (state.isLoggedIn()) {
+            if (state.  isLoggedIn()) {
               return MercadosPage();
               } else{
-                Provider.of<LoginState>(context).isLogin();
+                Provider.of<LoginState>(context).isLogin(context);
                 return LoginPageFinal(
               );}
           },
@@ -135,6 +136,7 @@ class _MyAppState extends State<MyApp> {
           'pedidosDetalleVendedor' : (BuildContext context) => PedidosDetalleVendedorPage(),
           'buscarProductoVendedor' : (BuildContext context) => ProductosBusquedaVendedorPage(),
           'resultadoProductoVendedor' : (BuildContext context) => VendedorProductosResultadoPage(),
+          'deleteProdOk'    : (BuildContext context) => DeleteProductoOk(),
 
           
           

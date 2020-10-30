@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_login_ui/src/providers/TokenDispositivo_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -182,7 +183,7 @@ class PuestosListView extends StatelessWidget {
 
 
     Map<String, String> headers2 = {
-      "Authorization": "OAuth $token2"
+      "Authorization": "OAuth $token2" 
       };
 
     final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/consultarComercio';
@@ -191,6 +192,7 @@ class PuestosListView extends StatelessWidget {
     final response = await http.get('$mercadosListAPIUrl$userPuesto', headers: headers2);
 
     if (response.statusCode == 200) {
+      await GuardarTokenDispositivo().guaradarTokenDispositivo();
       final decodedData = json.decode(response.body);
       final comercios = new Puestos.fromJsonList(decodedData['comercios']);
       return comercios.items;

@@ -22,7 +22,7 @@ class ListadoProductos extends StatefulWidget {
 
 class _ListadoProductosState extends State<ListadoProductos> {
   final _pageController = new ScrollController(
-    initialScrollOffset : 150.0,
+    initialScrollOffset : 120.0,
   );
 
   int cantProd = 0;
@@ -347,6 +347,18 @@ class _ListadoProductosState extends State<ListadoProductos> {
                           
                         ],
                       ),
+                       SizedBox(height:6.0),
+                      Row(
+                        children: <Widget>[
+                           Flexible(
+                                child: Text(
+                                'Stock: $stock', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                  fontSize: 12.0, fontWeight: FontWeight.w600,
+                          ))),
+                           ),
+                          
+                        ],
+                      ),
                       SizedBox(height:6.0),
                       Row(
                         children: <Widget>[
@@ -394,7 +406,7 @@ class _ListadoProductosState extends State<ListadoProductos> {
                                 fontSize: 12.0, fontWeight: FontWeight.w400,
                           ))),
                         ],
-                      )
+                      ),
                     ]
                   ),
                 ),

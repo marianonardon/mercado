@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_ui/src/pages/actualizar_producto_serv.dart';
 import 'dart:convert';
 import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
 import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
@@ -384,7 +385,35 @@ class _DetalleProductoState extends State<DetalleProducto> {
                                                   color: Color.fromRGBO(29, 233, 182, 1),
                                                   onPressed: () async {
                                                     String productoId2;
-                                                    productoId2 = await deleteProducto(args.idProducto,args);
+                                                    int calidad = args.calidad.toInt();
+                                                    DateTime fechaHoy = DateTime.now();
+                                                    String fechaBaja = fechaHoy.toString();
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(
+                                                        title: Center(child: Text('Eliminando producto')),
+                                                        content:  SizedBox(
+                                                                  width: media.size.width * 0.005,
+                                                                  height: media.size.height * 0.05,
+                                                                  child: Center(
+                                                                    child: CircularProgressIndicator(
+                                                                      strokeWidth: 3.0,
+                                                                      valueColor : AlwaysStoppedAnimation(Color.fromRGBO(29, 233, 182, 1),),
+                                                                    ),
+                                                                  ),
+                                                              ),
+                                                        backgroundColor: Colors.white
+
+                                                    ),
+                                                    barrierDismissible: false,
+                                                      ).then((_) => setState((){})); 
+                                                   
+
+                                                    ProductoActualizar().producto(args.nombre,args.descripcion, args.categoria,args.stock,calidad,args.foto, args.unidadId, args.comercioId, args.precio1, args.cantidad1,
+                                  args.precio2, args.cantidad2, args.precio3,args.cantidad3, args.mercadoId,
+                                  args.fotoUser,args.nombreUser,args.userId,args.idProducto,args.numNave ,args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,fechaBaja,context);
+
+
                                                   },
                                                   child: Text('Si'),
                                                   textColor: Colors.black,

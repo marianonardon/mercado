@@ -107,14 +107,7 @@ class _VendedorProductosPageState extends State<VendedorProductosPage> {
                   color: Colors.black,
                 ),
               ),
-              ListTile(
-                title: Row(
-                  children: [
-                  Icon(Icons.home),
-                  Text('Home'),]),
-
-                onTap: () {Navigator.pushNamed(context, 'mercado');},
-              ),
+              
               ListTile(
                 title: Row(
                   children: [

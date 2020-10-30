@@ -9,6 +9,7 @@ import 'dart:async';
 class ProductosProvider {
 
   List<Producto> _productos = new List();
+  List<Producto> _productosSinPrecio = new List();
   bool _cargando     = false;
   int _page = 0;
 
@@ -25,7 +26,13 @@ class ProductosProvider {
     _productosStreamController?.close();
   }
 
-  Future<List<Producto>> fetchProductos(categoriaId,mercadoId,productoBuscado) async { 
+  Future<List<Producto>> fetchProductos(categoriaId,mercadoId,productoBuscado,puestosId) async { 
+    String filtroPuesto;
+    if (puestosId == ''){
+      filtroPuesto = '';
+    } else{
+      filtroPuesto = '&comercioID=$puestosId';
+    }
 
     if (_cargando) return [];
 
@@ -69,14 +76,15 @@ class ProductosProvider {
 
     _page++;
 
-
+    if(categoriaId != ''){
     int categoria = int.parse(categoriaId);
+    }
     int mercado   = int.parse(mercadoId); 
-    final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/consultaProducto?pageNumber=$_page&pageSize=6&categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
+    final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/consultaProducto?pageNumber=$_page&pageSize=6&categoriaID=$categoriaId&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
     //final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
-    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?pageNumber=$_page&pageSize=6&categoriaID=$categoria&destacado=0&mercadoID=4&productoNombre=$productoBuscado';
+    final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?pageNumber=$_page&pageSize=6&categoriaID=$categoriaId&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
 
-    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrl$filtroPuesto', headers: headers2);
 
     print('servicio');
     _cargando = false;
@@ -85,7 +93,15 @@ class ProductosProvider {
       final decodedData = json.decode(response.body);
       final productos = new Productos.fromJsonList(decodedData);
       final productosLista = productos.items;
+      final productosSprec = productosLista.where((element) => element.precios.isEmpty == true).toList();
+      productosLista.removeWhere((element) => element.precios.isEmpty == true);
+
       _productos.addAll(productosLista);
+      _productosSinPrecio.addAll(productosSprec);
+      if(productosLista.isEmpty == true){
+        _productos.addAll(_productosSinPrecio);
+        _productosSinPrecio.clear();
+      }
       productosSink(_productos);
       return productos.items;
       //List jsonResponse = json.decode(response.body);

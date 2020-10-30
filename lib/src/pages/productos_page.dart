@@ -36,12 +36,12 @@ class _ProductosPageState extends State<ProductosPage> {
 
     final ProductosArguments args = ModalRoute.of(context).settings.arguments;
 
-    productosProvider.fetchProductos(args.categoriaId,args.mercadoId,'');
+    productosProvider.fetchProductos(args.categoriaId,args.mercadoId,'','');
 
     _scrollController.addListener(() {
             if(_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 20) {
               siguientePagina = productosProvider.fetchProductos;
-              siguientePagina(args.categoriaId,args.mercadoId,'');
+              siguientePagina(args.categoriaId,args.mercadoId,'','');
               //ProductosListView(args.categoriaId,args.mercadoId,'').siguientePagina();
             }
           });
@@ -64,63 +64,13 @@ class _ProductosPageState extends State<ProductosPage> {
           onPressed: () => Navigator.pushNamed(context, 'categorias', arguments: ScreenArguments(args.userId, args.nombreUser, args.fotoUser,args.mercadoId))),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.search, color: Colors.white),
-              onPressed: () { Navigator.pushNamed(context, 'buscarProducto', arguments: ProductosArguments(args.categoriaId,args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre));
-
-
-              }
-            ),
-            IconButton(
               icon: Icon(Icons.filter_list, color: Colors.white),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: Center(child: Text('Filtro por puesto',
-                    textAlign: TextAlign.center,)),
-                    actions: [
-                      Padding(
-                        padding: const EdgeInsets.only(right:0.0),
-                        child: Column(
-                          children: <Widget>[
-                            ComboPuesto(args.mercadoId),
-                            SizedBox(height: 10.0),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                //SizedBox(width: media.size.width * 0.2,),
-                                FlatButton(
-                                  color: Color.fromRGBO(29, 233, 182, 1),
-                                  onPressed: () async {
-                                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                                    String puestoId = prefs.getString('idPuesto');
-                                    if (puestoId != '') {
-                                    Navigator.pushNamed(context, 'puestoProd', arguments: ProductosPuestoArguments(args.categoriaId,args.mercadoId,puestoId));
-                                    //Navigator.pop(context);
-                                    setState((){});}
-                                    
-                                    //String productoId2;
-                                    //productoId2 = await deleteProducto(args.idProducto,args);
-                                  },
-                                  child: Text('Buscar'),
-                                  textColor: Colors.black,
-                                
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      
-                    ],
-                    backgroundColor: Colors.white
+              onPressed: () { Navigator.pushNamed(context, 'buscarProducto', arguments: ProductosArguments(args.categoriaId,args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,''));
 
-                ),
-                barrierDismissible: true,
-                  ).then((_) => setState((){}));
 
               }
             ),
+            
           ],
           ),
         backgroundColor: Colors.white,
@@ -162,10 +112,10 @@ class _ProductosPageState extends State<ProductosPage> {
         currentIndex: _index,
         onTap: (newIndex) { setState(() => _index = newIndex);
             if(_index == 2) {
-              Navigator.pushNamed(context, 'pedidosComprador',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre));
+              Navigator.pushNamed(context, 'pedidosComprador',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,''));
             }
             if(_index == 1) {
-              Navigator.pushNamed(context, 'carrito',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre));
+              Navigator.pushNamed(context, 'carrito',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,''));
             }
             },
             

@@ -1,5 +1,8 @@
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_login_ui/src/pages/mercados_serv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -8,6 +11,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:flutter_login_ui/src/pages/carrito_db.dart';
+import 'package:apple_sign_in/apple_sign_in.dart';
 
 
 
@@ -15,6 +19,7 @@ import 'package:flutter_login_ui/src/pages/carrito_db.dart';
 enum LoginProvider{
   google,
   facebook,
+  apple,
 }
 
 
@@ -36,12 +41,21 @@ class LoginState with ChangeNotifier {
   
 
 
- Future<void> isLogin() async {
+ Future<void> isLogin(context) async {
+   
     SharedPreferences prefs = await SharedPreferences.getInstance();
     //Return String
     String loginEstado = prefs.getString('login');
+    String usuarioId = prefs.getString('usuarioId2');
+    String nombreUser = prefs.getString('nombre');
+    String fotoUser = prefs.getString('fotoUser');
     if (loginEstado == 'true' ) {
       _loggedIn = true;
+      notifyListeners();
+    }
+    if (loginEstado == 'trueManual'){
+       _loggedIn = true;
+      Navigator.pushNamed(context, 'puestos',arguments: ScreenArguments(usuarioId,nombreUser,fotoUser,''));
       notifyListeners();
     }
   }
@@ -58,6 +72,22 @@ class LoginState with ChangeNotifier {
         break;
       case LoginProvider.facebook:
         _user = await handleFacebookSignIn();
+        break;
+      case LoginProvider.apple:
+
+      final authResult = await signInWithApple();
+       _user = authResult.user;
+       SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('usuarioId', _user.uid).catchError((onError) =>
+              print("Error $onError")
+            );
+        prefs.setString('nombre', _user.displayName);
+        prefs.setString('fotoUser', _user.photoUrl);
+        prefs.setString('usuarioId2', '');
+        prefs.setString('login', 'true');
+        print(_user.uid + _user.email + _user.displayName);  
+       
+
         break;
 
     }
@@ -77,6 +107,8 @@ class LoginState with ChangeNotifier {
   Future<void> logout() async {
     _googleSignIn.signOut();
     FacebookLogin().logOut();
+    
+    
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('login', 'false');
     _loggedIn = false;
@@ -114,9 +146,9 @@ class LoginState with ChangeNotifier {
 
     );
 
-    final FirebaseUser user = await _auth.signInWithCredential(credential);
-    print("signed in " + user.displayName +' ' + user.uid + '  ' + user.providerId + ' ' + user.email);
-    return user;
+    final AuthResult user = await _auth.signInWithCredential(credential);
+    print("signed in " + user.user.displayName +' ' + user.user.uid + '  ' + user.user.providerId + ' ' + user.user.email);
+    return user.user;
 }
 
   Future<FirebaseUser> handleFacebookSignIn() async {
@@ -141,8 +173,8 @@ class LoginState with ChangeNotifier {
       accessToken: result.accessToken.token,
     );
 
-    final FirebaseUser user = await _auth.signInWithCredential(credential);
-    print("signed in " + user.displayName +' ' + user.uid + '  ' + user.providerId + ' ' + user.email);
+    final AuthResult user = await _auth.signInWithCredential(credential);
+    print("signed in " + user.user.displayName +' ' + user.user.uid + '  ' + user.user.providerId + ' ' + user.user.email);
     final token = result.accessToken.token;
     final graphResponse = await http.get(
                 'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
@@ -154,20 +186,123 @@ class LoginState with ChangeNotifier {
     prefs.setString('usuarioId', idUsuario).catchError((onError) =>
           print("Error $onError")
         );
-    prefs.setString('nombre', user.  displayName);
-    prefs.setString('fotoUser', user.photoUrl);
+    prefs.setString('nombre', user.user.displayName);
+    prefs.setString('fotoUser', user.user.photoUrl);
     prefs.setString('usuarioId2', '');
     prefs.setString('login', 'true');
-    print(user.uid + user.email + user.displayName);
+    print(user.user.uid + user.user.email + user.user.displayName);
     
-    return user;
+    return user.user;
 }
+
+ 
 
     Widget loginCancelado() {
       _loading = false;
                 _loggedIn = false;
                 notifyListeners();
     }
+
+  Future<FirebaseUser> signInWithAppleee({List<Scope> scopes = const []}) async {
+    final _firebaseAuth = FirebaseAuth.instance;
+    
+    // 1. perform the sign-in request
+    final result = await AppleSignIn.performRequests(
+        [AppleIdRequest(requestedScopes: scopes)]);
+    // 2. check the result
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        final appleIdCredential = result.credential;
+        final oAuthProvider = OAuthProvider(providerId: 'apple.com');
+        final credential = oAuthProvider.getCredential(
+          idToken: String.fromCharCodes(appleIdCredential.identityToken),
+          accessToken:
+              String.fromCharCodes(appleIdCredential.authorizationCode),
+        );
+        final authResult = await _firebaseAuth.signInWithCredential(credential);
+        final firebaseUser = authResult.user;
+        
+        if (scopes.contains(Scope.fullName)) {
+          final updateUser = UserUpdateInfo();
+          updateUser.displayName =
+              '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
+          await firebaseUser.updateProfile(updateUser);
+        }
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('usuarioId', firebaseUser.uid).catchError((onError) =>
+              print("Error $onError")
+            );
+        prefs.setString('nombre', firebaseUser.displayName);
+        prefs.setString('fotoUser', firebaseUser.photoUrl);
+        prefs.setString('usuarioId2', '');
+        prefs.setString('login', 'true');
+        print(firebaseUser.uid + firebaseUser.email + firebaseUser.displayName);  
+
+        return firebaseUser;
+      case AuthorizationStatus.error:
+        print(result.error.toString());
+        throw PlatformException(
+          code: 'ERROR_AUTHORIZATION_DENIED',
+          message: result.error.toString(),
+        );
+
+      case AuthorizationStatus.cancelled:
+        throw PlatformException(
+          code: 'ERROR_ABORTED_BY_USER',
+          message: 'Sign in aborted by user',
+        );
+    }
+    return null;
+  }
+
+  Future<AuthResult> signInWithApple() async {
+
+    final AuthorizationResult result = await AppleSignIn.performRequests([
+      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        try {
+          print("successfull sign in");
+          final AppleIdCredential appleIdCredential = result.credential;
+          OAuthProvider oAuthProvider = new OAuthProvider(providerId: "apple.com");
+          final AuthCredential credential = oAuthProvider.getCredential(
+            idToken: String.fromCharCodes(appleIdCredential.identityToken),
+            accessToken: String.fromCharCodes(appleIdCredential.authorizationCode),
+          );
+          final AuthResult _res = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+
+        FirebaseAuth.instance.currentUser().then((val) async {
+         
+          UserUpdateInfo updateUser = UserUpdateInfo();
+          updateUser.displayName =
+              "${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}";
+          updateUser.photoUrl =
+              "define a photo url here"; 
+          await val.updateProfile(updateUser);
+          
+        });
+         return _res;
+        
+              
+        
+        } catch (e) {
+          print("error");
+        }
+        
+        break;
+      case AuthorizationStatus.error:
+        print('User auth error');
+        break;
+      case AuthorizationStatus.cancelled:
+        print('User cancelled');
+        break;
+    }
+   
+  }
+
+
 }
 
 class Profile {

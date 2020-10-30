@@ -784,7 +784,7 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
          ProductoActualizar().producto(nombreController.text, descripcionController.text, categoriaId, stockController.text,
                                   calidad, urlFoto , tipoUnidadId, comercioId, precio1Controller.text, cantidad1Controller.text,
                                   precio2Controller.text,cantidad2Controller.text,precio3Controller.text,cantidad3Controller.text,mercado,
-                                  fotoUser,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context);
+                                  fotoUser,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,'',context);
        }
       },
         

@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'mercados_serv.dart';
+
 
 class UserInfo {
   final String guid;
@@ -139,9 +141,9 @@ Future<Token> createLogin(String nombreUsuario, contrasenia,BuildContext context
             prefs.setString('usuarioId', '');
             prefs.setString('nombre', nombreCompleto);
             prefs.setString('fotoUser', userFoto);
-            prefs.setString('login', 'true');
+            prefs.setString('login', 'trueManual');
 
-            Navigator.pushNamed(context, 'mercado');
+            Navigator.pushNamed(context, 'puestos',arguments: ScreenArguments(userId,nombreCompleto,userFoto,''));
             //List jsonResponse = json.decode(response.body);
             //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));
           } else {

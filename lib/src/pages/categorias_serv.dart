@@ -200,7 +200,7 @@ class _CategoriasListViewState extends State<CategoriasListView> {
           //  _crearTitulo(),
             SizedBox(height: 15.0),
             GestureDetector(
-              onTap: () {Navigator.pushNamed(context, 'productos', arguments: ProductosArguments(categoriaID, widget.mercadoId,'',widget.userId,widget.nombreUser,widget.fotoUser,title));},
+              onTap: () {Navigator.pushNamed(context, 'productos', arguments: ProductosArguments(categoriaID, widget.mercadoId,'',widget.userId,widget.nombreUser,widget.fotoUser,title,''));},
             child:_crearTarjetas(title, imagen,context))
           ],
         ),
@@ -266,7 +266,8 @@ class ProductosArguments {
   final String nombreUser;
   final String fotoUser; 
   final String categoriaNombre;
+  final String comercioId;
 
 
-  ProductosArguments(this.categoriaId, this.mercadoId,this.productoBuscado,this.userId,this.nombreUser,this.fotoUser,this.categoriaNombre);
+  ProductosArguments(this.categoriaId, this.mercadoId,this.productoBuscado,this.userId,this.nombreUser,this.fotoUser,this.categoriaNombre,this.comercioId);
 }

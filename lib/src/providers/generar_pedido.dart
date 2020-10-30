@@ -197,7 +197,7 @@ class GenerarPedido extends StatefulWidget {
       
       if (response.statusCode == 200) {
           DBProvider().deleteCarrito(1);
-          Navigator.pushNamed(context, 'pedidoOk',arguments: ProductosArguments(categoriaId, mercadoId,'',userId,nombreUser,fotoUser,categoriaNombre));
+          Navigator.pushNamed(context, 'pedidoOk',arguments: ProductosArguments(categoriaId, mercadoId,'',userId,nombreUser,fotoUser,categoriaNombre,''));
                     //String comercio = producto.comercioID;
                     //Navigator.pushNamed(context, 'altaProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,));
               

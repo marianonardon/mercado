@@ -102,11 +102,11 @@ class Precio {
 
 class ProductoActualizar extends StatefulWidget {
   Widget producto(String nombre, descripcion, categoria, stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,BuildContext context ) {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,fechaBaja,BuildContext context ) {
     
     return FutureBuilder<Producto>(
       future: updateProducto( nombre, descripcion, categoria, stock, calidad, urlFoto, tipoUnidadId, comercioId,precio1,cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context),
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,fechaBaja,context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data.comercioNombre);
@@ -121,7 +121,7 @@ class ProductoActualizar extends StatefulWidget {
   }
 
 Future<Producto> updateProducto(String nombre, descripcion, categoria, String stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,BuildContext context) async {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,fechaBaja,BuildContext context) async {
     
     
     String url = "https://agilemarket.com.ar/oauth/access_token";
@@ -174,6 +174,9 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
       final actprodListAPIUrl = 'https://agilemarket.com.ar/rest/Producto/$productoId';
       final actprodListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/Producto/$productoId';
       double calidadProd = calidad.toDouble();
+      if(fechaBaja == ''){
+        fechaBaja = '0000-00-00';
+      }
     
          http.Response response2 = await http.put(
           '$actprodListAPIUrl',
@@ -192,6 +195,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
             "ComercioID": comercioId,
             "MercadoID": mercado ,
             "ProductoDestacado": false,
+            "ProductoFechaBaja": fechaBaja,
             "Precio": [
                 {
                     "PrecioCantidad": cantidad1,
@@ -230,6 +234,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
             "ComercioID": comercioId,
             "MercadoID": mercado ,
             "ProductoDestacado": false,
+            "ProductoFechaBaja": fechaBaja,
             "gx_md5_hash": productos.gx
           }
           
@@ -255,6 +260,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
             "ComercioID": comercioId,
             "MercadoID": mercado ,
             "ProductoDestacado": false,
+            "ProductoFechaBaja": fechaBaja,
             "Precio": [
                 {
                     "PrecioCantidad": cantidad1,
@@ -285,6 +291,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
             "ComercioID": comercioId,
             "MercadoID": mercado ,
             "ProductoDestacado": false,
+            "ProductoFechaBaja": fechaBaja,
             "Precio": [
                 {
                     "PrecioCantidad": cantidad1,
@@ -305,11 +312,20 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
         }
         
         if (response2.statusCode == 200) {
+          if (fechaBaja == '0000-00-00') {
             Navigator.of(context).pop();
             final decodedData2 = json.decode(response2.body);
             final producto =  Producto.fromJsonMap(decodedData2);
             String comercio = producto.comercioID;
             Navigator.pushNamed(context, 'altaProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre));
+            } else {
+              Navigator.of(context).pop();
+              final decodedData2 = json.decode(response2.body);
+              final producto =  Producto.fromJsonMap(decodedData2);
+              String comercio = producto.comercioID;
+              Navigator.pushNamed(context, 'deleteProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre));
+            }
+
       
           //return Puesto.fromJson(json.decode(response.body));
         } else {

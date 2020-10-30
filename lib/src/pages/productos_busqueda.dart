@@ -1,10 +1,17 @@
 
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_login_ui/src/pages/productos_serv.dart';
+import 'package:flutter_login_ui/src/pages/productos_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'categorias_serv.dart';
+import 'combo_puestos.dart';
+import 'combo_puestos_multi.dart';
+import 'mercados_serv.dart';
 
 
 
@@ -35,9 +42,25 @@ class _ProductosBusquedaPageState extends State<ProductosBusquedaPage> {
 
     
 
-    return SafeArea(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: SafeArea(
             child: Scaffold(
           backgroundColor: Colors.white,
+          appBar: AppBar(
+            
+        backgroundColor: Color.fromRGBO(29, 233, 182, 1),
+        title: Text('Filtros de búsqueda',style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.black, fontWeight: FontWeight.w600))),
+        leading: new IconButton(
+          icon: new Icon(Icons.backspace, size:35),
+          onPressed: () {
+            if(args.categoriaId == ''){
+               Navigator.pushNamed(context, 'categorias', arguments: ScreenArguments(args.userId, args.nombreUser, args.fotoUser,args.mercadoId));
+             } else {
+               Navigator.pushNamed(context, 'productos', arguments: ProductosArguments(args.categoriaId,args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,''));
+             }
+             }),
+        ),
           body: Container(
               child: SingleChildScrollView(
                   child: Column(
@@ -45,15 +68,15 @@ class _ProductosBusquedaPageState extends State<ProductosBusquedaPage> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 30.0),
                     
 
                     Row(
                       children: <Widget>[
                         Container(
                           alignment: Alignment.centerLeft,
-                          width: media.size.width * 0.80,
-                          padding: EdgeInsets.only(left:10.0),
+                          width: media.size.width * 0.95,
+                          padding: EdgeInsets.all(16),
               
                   child: TextFormField(
                         validator: (nombre) {if (nombre.isEmpty) {
@@ -85,20 +108,61 @@ class _ProductosBusquedaPageState extends State<ProductosBusquedaPage> {
                                     ),
                         ),
                   ),),
-                  SizedBox(width: media.size.width * 0.03,),
-                  GestureDetector(
-                    onTap: () {Navigator.pushNamed(context, 'resultadoProducto', arguments: ProductosArguments(args.categoriaId,args.mercadoId,nombreController.text,
-                    args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre));},
-                                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50.0),
-                      child: Container(
-                        width: 45.0,
-                        height: 45.0,
-                        color: Color.fromRGBO(29, 233, 182, 1),
-                        child:  Center(child: Icon(Icons.search, size:35.0)),)),
-                  )
+                  
                       ],
-                    )
+                    ),
+                    SizedBox(height: media.size.height * 0.05),
+
+                    Column(
+                          children: <Widget>[
+                            ComboPuesto2(args.mercadoId),
+                            SizedBox(height: media.size.height * 0.08),
+                                Center(
+                                  child: FlatButton(
+                                    color: Color.fromRGBO(29, 233, 182, 1),
+                                    onPressed: () async {
+                                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                                      String puestosId = prefs.getString('idPuesto');
+                                      String puesto2;
+                                      List<dynamic> puestoLista;
+                                      puesto2 = '[$puestosId]';
+                                      puestoLista = json.decode(puesto2);
+                                      String puestosId2 = puestoLista.toString();
+                                      puestosId2 = puestosId2.replaceAll('[', '').replaceAll(']', '');
+                                      Navigator.pushNamed(context, 'resultadoProducto', arguments: ProductosArguments(args.categoriaId,args.mercadoId,nombreController.text,
+                                      args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,puestosId2));
+                                      
+                                      //String productoId2;
+                                      //productoId2 = await deleteProducto(args.idProducto,args);
+                                    },
+                                    child: Text('Buscar'),
+                                    textColor: Colors.black,
+                                  
+                                  ),
+                                ),
+                                SizedBox(height: media.size.height * 0.02),
+                                Center(
+                                  child: FlatButton(
+                                    color: Colors.red[400],
+                                    onPressed: ()  async {
+
+                                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                                      prefs.setString('idPuesto', '' );
+                                      Navigator.pushNamed(context, 'buscarProducto', arguments: ProductosArguments(args.categoriaId,args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,''));
+                                      
+                                      
+                                      //String productoId2;
+                                      //productoId2 = await deleteProducto(args.idProducto,args);
+                                    },
+                                    child: Text('Limpiar filtros'),
+                                    textColor: Colors.white,
+                                  
+                                  ),
+                                ),
+                              
+                          ],
+                        ),
+
                   ],
                 ),
               ),
@@ -106,6 +170,6 @@ class _ProductosBusquedaPageState extends State<ProductosBusquedaPage> {
          // bottomNavigationBar: _bottomNavigationBar(context)
         ),
 
-    );
+    ));
   }
 }

@@ -31,6 +31,14 @@ class _CategoriasPageState extends State<CategoriasPage> {
         appBar: AppBar(
           title: Text('Inicio',style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.black, fontWeight: FontWeight.w600))),
           backgroundColor: Color.fromRGBO(29, 233, 182, 1),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.filter_list, color: Colors.white),
+              onPressed: () { Navigator.pushNamed(context, 'buscarProducto', arguments: ProductosArguments('',args.mercadoId,'',args.userId,args.nombre,args.foto,'',''));
+
+
+              }
+            ),]
 
         ),
         backgroundColor: Colors.white,
@@ -93,17 +101,7 @@ class _CategoriasPageState extends State<CategoriasPage> {
                 onTap: () {Navigator.pushNamed(context, 'carrito');},
               ), */
 
-              ListTile(
-                title: Row(
-                  children: [
-                  Icon(Icons.store),
-                  SizedBox(width:10.0),
-                  Text('Ir perfil vendedor',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
-                        fontSize: 14.0, fontWeight: FontWeight.w600,
-                        ))),]),
-
-                onTap: () {Navigator.pushNamed(context, 'puestos',arguments: args);},
-              ),
+              
                ListTile(
                 title: Row(
                   children: [

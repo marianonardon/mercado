@@ -358,7 +358,7 @@ class _ListadoPedidosDetalleState extends State<ListadoPedidosDetalle> {
                         barrierDismissible: true,
                           ).then((_) => setState((){}));
                 await PedidoActualizar().updatePedido('2',pedidoId,pedidoComercioId,context);
-                Navigator.pushNamed(context, 'pedidosComprador',arguments: ProductosArguments(args.categoriaId,args.mercadoId,'',args.userId,args.nombre,args.foto,args.categoriaNombre));
+                Navigator.pushNamed(context, 'pedidosComprador',arguments: ProductosArguments(args.categoriaId,args.mercadoId,'',args.userId,args.nombre,args.foto,args.categoriaNombre,''));
                 }
                 
             },

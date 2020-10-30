@@ -88,11 +88,11 @@ class _PedidosCompradorPageState extends State<PedidosCompradorPage> {
         onTap: (newIndex) { setState(() => _index = newIndex);
             if(_index == 0) {
               yaPaso = true;
-              Navigator.pushNamed(context, 'productos',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre));
+              Navigator.pushNamed(context, 'productos',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,''));
             }
             if(_index == 1) {
               yaPaso = true;
-              Navigator.pushNamed(context, 'carrito',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre));
+              Navigator.pushNamed(context, 'carrito',arguments: ProductosArguments(args.categoriaId, args.mercadoId,'',args.userId,args.nombreUser,args.fotoUser,args.categoriaNombre,''));
             }
             },
             
