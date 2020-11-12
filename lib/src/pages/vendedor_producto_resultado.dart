@@ -430,12 +430,12 @@ class _VendedorProductosResultadoListViewState extends State<VendedorProductosRe
                         data[index].comercioNombre,
                         data[index].tipoUnidadNombre, data[index].productoCalidad,comercioId, data[index].productoStock,
                         data[index].productoID,data[index].categoriaID,data[index].tipoUnidadID,numNave,comercioPuesto,comercioCuit,
-                        comercioTelefono,comercioMail,comercioNombre,context);
+                        comercioTelefono,comercioMail,comercioNombre,data[index].productoDestacado,context);
         });
   }
 
     Widget _crearLista(String title,String prodDesc, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,comercioId,String stock,String productoID, String categoriaId,String unidadId,
-    numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre, context) {
+    numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado, context) {
     MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
@@ -448,7 +448,7 @@ class _VendedorProductosResultadoListViewState extends State<VendedorProductosRe
           //  _crearTitulo(),
             SizedBox(height: 15.0),
            _crearTarjetas(title,prodDesc, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,stock,productoID,categoriaId,unidadId,
-           numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context)
+           numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,productoDestacado,context)
           ],
         ),
       ),
@@ -456,7 +456,7 @@ class _VendedorProductosResultadoListViewState extends State<VendedorProductosRe
   }
 
   Widget _crearTarjetas(title,prodDesc,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,stock,productoID,categoriaId,unidadId,
-  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context) {
+  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado,context) {
  MediaQueryData media = MediaQuery.of(context); 
   String unidad1;
   String unidad2;
@@ -491,7 +491,7 @@ class _VendedorProductosResultadoListViewState extends State<VendedorProductosRe
               onTap: () {
                 Navigator.pushNamed(context, 'detalleProd', arguments: ProductoDetalleArg(productoID, title,prodDesc,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,mercadoId,userId,ratingProd,categoriaId,unidadId,fotoUser,nombreUser,
-                                  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre));
+                                  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,productoDestacado));
 
               },
               child: Container(

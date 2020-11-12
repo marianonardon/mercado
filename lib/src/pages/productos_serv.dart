@@ -266,7 +266,7 @@ class _ProductosListViewState extends State<ProductosListView> {
           }
           }
           if(data[index].productoFoto == '') {
-            foto = 'https://uy.emedemujer.com/wp-content/uploads/sites/4/2015/10/674262.jpg';
+            foto = 'https://res.cloudinary.com/agilemarket/image/upload/v1594599858/m3wh5dxmlwmyjbpit3cr.png';
           }else{
             
             foto = data[index].productoFoto;}
@@ -370,7 +370,7 @@ class _ProductosListViewState extends State<ProductosListView> {
                 onTap: () {
                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,widget.mercadoId,'',ratingProd,widget.categoriaId,'','','',
-                                  '',comercioPuesto,'','','',''));
+                                  '',comercioPuesto,'','','','',false));
 
               },
                 child: Column(
@@ -446,7 +446,7 @@ class _ProductosListViewState extends State<ProductosListView> {
                 onTap: () {
                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,widget.mercadoId,'',ratingProd,widget.categoriaId,'','','',
-                                  '',comercioPuesto,'','','',''));
+                                  '',comercioPuesto,'','','','',false));
 
               },
                 child: Container(
@@ -1121,7 +1121,7 @@ class _ProductosListViewHorizontalState extends State<ProductosListViewHorizonta
     }
 
     if (producto.productoFoto == '') {
-      foto = 'https://uy.emedemujer.com/wp-content/uploads/sites/4/2015/10/674262.jpg';
+      foto = 'https://res.cloudinary.com/agilemarket/image/upload/v1594599858/m3wh5dxmlwmyjbpit3cr.png';
     }else{
        foto = producto.productoFoto;}
 
@@ -1133,7 +1133,7 @@ class _ProductosListViewHorizontalState extends State<ProductosListViewHorizonta
                   Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', producto.productoNombre,producto.productoDescripcion,
                   producto.productoFoto,preciox1,cantidad1,preciox2,cantidad2,
                                     preciox3,cantidad3,producto.productoStock,unidad1,unidad2,unidad3,'',widget.mercadoId,'',0.0,widget.categoriaId,'','','',
-                                    producto.comercioNumNave,producto.comercioPuesto,'','','',producto.comercioNombre));
+                                    producto.comercioNumNave,producto.comercioPuesto,'','','',producto.comercioNombre,false));
 
                 },
           child: Container(

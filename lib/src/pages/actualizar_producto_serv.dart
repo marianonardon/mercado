@@ -102,11 +102,11 @@ class Precio {
 
 class ProductoActualizar extends StatefulWidget {
   Widget producto(String nombre, descripcion, categoria, stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,fechaBaja,BuildContext context ) {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,fechaBaja,bool productoDestacado,BuildContext context ) {
     
     return FutureBuilder<Producto>(
       future: updateProducto( nombre, descripcion, categoria, stock, calidad, urlFoto, tipoUnidadId, comercioId,precio1,cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,fechaBaja,context),
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,fechaBaja,productoDestacado,context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data.comercioNombre);
@@ -121,7 +121,7 @@ class ProductoActualizar extends StatefulWidget {
   }
 
 Future<Producto> updateProducto(String nombre, descripcion, categoria, String stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,fechaBaja,BuildContext context) async {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,fechaBaja,bool productoDestacado,BuildContext context) async {
     
     
     String url = "https://agilemarket.com.ar/oauth/access_token";
@@ -194,7 +194,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
             "TipoUnidadID": tipoUnidadId,
             "ComercioID": comercioId,
             "MercadoID": mercado ,
-            "ProductoDestacado": false,
+            "ProductoDestacado": productoDestacado,
             "ProductoFechaBaja": fechaBaja,
             "Precio": [
                 {
@@ -233,7 +233,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
             "TipoUnidadID": tipoUnidadId,
             "ComercioID": comercioId,
             "MercadoID": mercado ,
-            "ProductoDestacado": false,
+            "ProductoDestacado": productoDestacado,
             "ProductoFechaBaja": fechaBaja,
             "gx_md5_hash": productos.gx
           }
@@ -259,7 +259,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
             "TipoUnidadID": tipoUnidadId,
             "ComercioID": comercioId,
             "MercadoID": mercado ,
-            "ProductoDestacado": false,
+            "ProductoDestacado": productoDestacado,
             "ProductoFechaBaja": fechaBaja,
             "Precio": [
                 {
@@ -290,7 +290,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
             "TipoUnidadID": tipoUnidadId,
             "ComercioID": comercioId,
             "MercadoID": mercado ,
-            "ProductoDestacado": false,
+            "ProductoDestacado": productoDestacado,
             "ProductoFechaBaja": fechaBaja,
             "Precio": [
                 {

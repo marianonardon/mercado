@@ -58,8 +58,11 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
   final cantidad3Controller = TextEditingController();
   String externalId;
   final formKey = GlobalKey<FormState>();
+  bool primeraVez = true;
+  bool checkboxValue = false;
 
   int calidad;
+  
 
 
   @override
@@ -86,6 +89,9 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
 
     
     final ProductoDetalleArg args = ModalRoute.of(context).settings.arguments;
+    if (primeraVez == true){
+       checkboxValue = args.productoDestacado;
+    }
     MediaQueryData media = MediaQuery.of(context);
 
     return Scaffold(
@@ -124,12 +130,42 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
               _inputPrecioCantidad2(args.precio2,args.cantidad2),
               SizedBox(height: 10.0),
               _inputPrecioCantidad3(args.precio3,args.cantidad3),
+              SizedBox(height: 10.0),
+              Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Column(
+                            children: [
+                              Text('Producto desctacado', style: new TextStyle(color: Colors.black, fontSize: 14.0),),
+                            ],
+                          ),
+                        ),
+                        
+                        Container(
+                            child: Column(
+                              children: <Widget>[
+                              new Checkbox(
+                                value: checkboxValue,
+                                activeColor: Colors.green,
+                                onChanged:( newValue){
+                                  setState(() {
+                                    checkboxValue = newValue;
+                                    primeraVez = false;
+                                    
+                                  });
+                                }),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
 
               
               SizedBox(height: 25.0),
                 
               _botonConfirmar(context,args.comercioId,args.mercadoId,args.fotoUser,args.nombreUser,args.userId,args.idProducto,args.numNave,args.comercioPuesto,args.comercioCuit,
-              args.comercioTelefono,args.comercioMail,args.comercioNombre),
+              args.comercioTelefono,args.comercioMail,args.comercioNombre,checkboxValue),
   
               SizedBox(height: 10.0),
 
@@ -736,7 +772,7 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
 
 
 
-  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre) {
+  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado) {
     MediaQueryData media = MediaQuery.of(context);
     return GestureDetector(
       onTap: () async {
@@ -784,7 +820,7 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
          ProductoActualizar().producto(nombreController.text, descripcionController.text, categoriaId, stockController.text,
                                   calidad, urlFoto , tipoUnidadId, comercioId, precio1Controller.text, cantidad1Controller.text,
                                   precio2Controller.text,cantidad2Controller.text,precio3Controller.text,cantidad3Controller.text,mercado,
-                                  fotoUser,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,'',context);
+                                  fotoUser,nombreUser,user,productoId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,'',productoDestacado,context);
        }
       },
         

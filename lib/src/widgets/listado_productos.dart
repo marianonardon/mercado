@@ -105,7 +105,7 @@ class _ListadoProductosState extends State<ListadoProductos> {
       }
       }
       if(producto.productoFoto == '') {
-        foto = 'https://uy.emedemujer.com/wp-content/uploads/sites/4/2015/10/674262.jpg';
+        foto = 'https://res.cloudinary.com/agilemarket/image/upload/v1594599858/m3wh5dxmlwmyjbpit3cr.png';
       }else{
         
         foto = producto.productoFoto;}
@@ -212,7 +212,7 @@ class _ListadoProductosState extends State<ListadoProductos> {
                 onTap: () {
                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
-                                  comercioNave,comercioPuesto,'','','',comercio)); 
+                                  comercioNave,comercioPuesto,'','','',comercio,false)); 
 
               },
                 child: Column(
@@ -288,7 +288,7 @@ class _ListadoProductosState extends State<ListadoProductos> {
                 onTap: () {
                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
-                                  comercioNave,comercioPuesto,'','','',comercio)); 
+                                  comercioNave,comercioPuesto,'','','',comercio,false)); 
 
               },
                 child: Container(

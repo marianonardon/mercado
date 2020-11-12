@@ -100,11 +100,11 @@ class Precio {
 
 class ProductoCrear extends StatefulWidget {
   Widget producto(String nombre, descripcion, categoria, stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,BuildContext context ) {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado,BuildContext context ) {
     
     return FutureBuilder<Producto>(
       future: createProducto( nombre, descripcion, categoria, stock, calidad, urlFoto, tipoUnidadId, comercioId,precio1,cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context),
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre, productoDestacado,context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data.comercioNombre);
@@ -119,7 +119,7 @@ class ProductoCrear extends StatefulWidget {
   }
 
 Future<Producto> createProducto(String nombre, descripcion, categoria, stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,BuildContext context) async {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado,BuildContext context) async {
     
     
     String url = "https://agilemarket.com.ar/oauth/access_token";
@@ -181,7 +181,7 @@ Future<Producto> createProducto(String nombre, descripcion, categoria, stock, in
         "TipoUnidadID": tipoUnidadId,
         "ComercioID": comercioId,
         "MercadoID": mercado,
-        "ProductoDestacado": false,
+        "ProductoDestacado": productoDestacado,
         "Precio": [
             {
                 "PrecioCantidad": cantidad1,
@@ -214,7 +214,7 @@ Future<Producto> createProducto(String nombre, descripcion, categoria, stock, in
         "TipoUnidadID": tipoUnidadId,
         "ComercioID": comercioId,
         "MercadoID": mercado,
-        "ProductoDestacado": false,
+        "ProductoDestacado": productoDestacado,
     }),
     );
       
@@ -235,7 +235,7 @@ Future<Producto> createProducto(String nombre, descripcion, categoria, stock, in
         "TipoUnidadID": tipoUnidadId,
         "ComercioID": comercioId,
         "MercadoID": mercado,
-        "ProductoDestacado": false,
+        "ProductoDestacado": productoDestacado,
         "Precio": [
             {
                 "PrecioCantidad": cantidad1,
@@ -261,7 +261,7 @@ Future<Producto> createProducto(String nombre, descripcion, categoria, stock, in
         "TipoUnidadID": tipoUnidadId,
         "ComercioID": comercioId,
         "MercadoID": mercado,
-        "ProductoDestacado": false,
+        "ProductoDestacado": productoDestacado,
         "Precio": [
             {
                 "PrecioCantidad": cantidad1,

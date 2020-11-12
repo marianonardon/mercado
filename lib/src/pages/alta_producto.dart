@@ -36,6 +36,7 @@ class _AltaProductoState extends State<AltaProducto> {
   String cantidad2;
   String precio3;
   String cantidad3;
+  bool checkboxValue = false;
 
   File foto;
 
@@ -126,12 +127,40 @@ class _AltaProductoState extends State<AltaProducto> {
               _inputPrecioCantidad2(),
               SizedBox(height: 10.0),
               _inputPrecioCantidad3(),
+              SizedBox(height: 10.0),
+              Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Column(
+                            children: [
+                              Text('Producto desctacado', style: new TextStyle(color: Colors.black, fontSize: 14.0),),
+                            ],
+                          ),
+                        ),
+                        
+                        Container(
+                            child: Column(
+                              children: <Widget>[
+                              new Checkbox(
+                                value: checkboxValue,
+                                activeColor: Colors.green,
+                                onChanged:( newValue){
+                                  setState(() {
+                                    checkboxValue = newValue;
+                                  });
+                                }),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
 
               
               SizedBox(height: 25.0),
                 
               _botonConfirmar(context,args.idComercio,args.mercadoId,args.foto,args.nombre,args.userId,args.numNave,args.comercioPuesto,args.comercioCuit,
-              args.comercioTelefono,args.comercioMail,args.comercioNombre),
+              args.comercioTelefono,args.comercioMail,args.comercioNombre,checkboxValue),
               SizedBox(height: 10.0),
               ]
             ),
@@ -652,7 +681,7 @@ class _AltaProductoState extends State<AltaProducto> {
 
 
 
-  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre) {
+  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre, bool productoDestacado) {
     MediaQueryData media = MediaQuery.of(context);
     return GestureDetector(
       onTap: () async {
@@ -705,7 +734,7 @@ class _AltaProductoState extends State<AltaProducto> {
          ProductoCrear().producto(nombreController.text, descripcionController.text, categoriaId, stockController.text,
                                   calidad, urlFoto , tipoUnidadId, comercioId, precio1Controller.text, cantidad1Controller.text,
                                   precio2Controller.text,cantidad2Controller.text,precio3Controller.text,cantidad3Controller.text,mercado,
-                                  fotoUser,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,context);
+                                  fotoUser,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,productoDestacado,context);
        }
       },
         
