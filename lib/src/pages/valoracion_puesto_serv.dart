@@ -42,10 +42,13 @@ class Puesto {
   final String comercioEmail;
   final String comercioPuesto;
   final String comercioNumNave;
+  final String comercioFoto;
+  final String comercioCantPuntaje;
+  final String comercioPuntaje;
   final String gx;
 
   Puesto({this.idComercio,this.id,this.id2, this.comercioNombre,this.comercioCuit, this.comercioDireccion,this.comercioDireccionEntrega,
-         this.comercioTelefono,this.comercioEmail, this.comercioPuesto,this.comercioNumNave,this.gx});
+         this.comercioTelefono,this.comercioEmail, this.comercioPuesto,this.comercioNumNave,this.comercioFoto,this.comercioCantPuntaje,this.comercioPuntaje,this.gx});
 
   factory Puesto.fromJsonMap(Map<String, dynamic> parsedJson) {
     return Puesto(
@@ -60,6 +63,9 @@ class Puesto {
       comercioEmail: parsedJson['ComercioEmail'], 
       comercioPuesto: parsedJson['ComercioPuesto'], 
       comercioNumNave: parsedJson['ComercioNumNave'], 
+      comercioFoto: parsedJson['ComercioFoto'],
+      comercioCantPuntaje: parsedJson['ComercioCantPuntaje'],
+      comercioPuntaje: parsedJson['ComercioPuntaje'],
       gx: parsedJson['gx_md5_hash']
       
       
@@ -68,11 +74,11 @@ class Puesto {
   }
 }
 
-class PuestoActualizar extends StatefulWidget {
-  Widget puesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,idComercio,comercioFoto,BuildContext context ) {
+class PuestoValoracion extends StatefulWidget {
+  Widget puesto(idComercio,idMercado,valoracion,BuildContext context ) {
     
     return FutureBuilder<Puesto>(
-      future: updatePuesto(nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,idComercio,comercioFoto,context),
+      future: valoracion(idComercio,idMercado,valoracion,context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data.comercioNombre);
@@ -86,20 +92,9 @@ class PuestoActualizar extends StatefulWidget {
     );
   }
 
-Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,userNombre,fotoUser,idComercio,comercioFoto,BuildContext context) async {
+Future<Puesto> valoracion(idComercio,mercadoId,valoracion,BuildContext context) async {
 
-  
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-  //Return String
-    String externalId2 = prefs.getString('usuarioId');
-    String userId      = prefs.getString('usuarioId2');
-    setState(() {
-      idUser = externalId2;
-    }); 
 
-    if(externalId2 == ''){
-      idUser = userId;
-    }
     
     
     String url = "https://agilemarket.com.ar/oauth/access_token";
@@ -126,7 +121,7 @@ Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, pue
     };
 
 
-    final responseToken = await http.post(url, body: bodyToken, headers: headers);
+    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -145,28 +140,43 @@ Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, pue
     final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/comercio/$mercadoId,$idComercio';
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/comercio/$mercadoId,$idComercio';
 
-    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
 
     if (response.statusCode == 200) {
+      int comercioPuntaje;
+      int comercioCantPuntaje;
+
       final decodedData2 = json.decode(response.body);
-      final puesto2 =  Puesto.fromJsonMap(decodedData2);
+      final puesto2 =  Puesto.fromJsonMap(decodedData2);  
+
+      comercioPuntaje = int.parse(puesto2.comercioPuntaje);
+      comercioCantPuntaje = int.parse(puesto2.comercioCantPuntaje);
+
+      int puntaje = comercioPuntaje + valoracion;
+      int cantidadPuntaje = comercioCantPuntaje + 1;
+
+      String puntajeServ = puntaje.toString();
+      String cantidadServ =cantidadPuntaje.toString();
+
     
       final http.Response response2 = await http.put(
-        '$mercadosListAPIUrl',
+        '$mercadosListAPIUrlQA',
     
         headers: headers3,
         body: jsonEncode(<String, String>{
           'MercadoID': mercadoId,
           'ComercioID': idComercio,
-          "ComercioUserID": userId,
-          'ComercioExternalID': externalId2,
-          'ComercioNombre': nombre,
-          'ComercioCuit': cuit,
-          'ComercioTelefono': telefono,
-          'ComercioEmail': email,
-          'ComercioPuesto': puesto,
-          'ComercioNumNave': nave,
-          'ComercioFoto':comercioFoto,
+          "ComercioUserID": puesto2.id2,
+          'ComercioExternalID': puesto2.id,
+          'ComercioNombre': puesto2.comercioNombre,
+          'ComercioCuit': puesto2.comercioCuit,
+          'ComercioTelefono': puesto2.comercioTelefono,
+          'ComercioEmail': puesto2.comercioEmail,
+          'ComercioPuesto': puesto2.comercioPuesto,
+          'ComercioNumNave': puesto2.comercioNumNave,
+          'ComercioFoto':puesto2.comercioFoto,
+          "ComercioCantPuntaje":cantidadServ,
+          "ComercioPuntaje":puntajeServ,
           "gx_md5_hash": puesto2.gx
         }),
       );
@@ -176,14 +186,12 @@ Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, pue
           final decodedData3 = json.decode(response2.body);
           final puesto =  Puesto.fromJsonMap(decodedData3);
           String comercio = puesto.idComercio;
-          Navigator.pushNamed(context, 'actPuesOk' ,arguments: PuestoArguments(userId,userNombre,fotoUser, mercadoId, comercio,puesto.comercioNumNave,puesto.comercioPuesto,
-          puesto.comercioCuit,puesto.comercioTelefono,puesto.comercioEmail,puesto.comercioNombre,comercioFoto));
+          Navigator.pushNamed(context, 'valoracionOk');
          
     
         //return Puesto.fromJson(json.decode(response.body));
       } else {
         Navigator.pop(context);
-        Navigator.pushNamed(context, 'errorActPues');
       }
     }
 }
@@ -199,13 +207,10 @@ Future<Puesto> updatePuesto(String nombre, cuit, direccion, telefono, email, pue
 
 }
 
-class ScreensArguments {
-  final String userId;
-  final String nombre;
-  final String foto;
+class ValoracionArguments {
   final String mercadoId;
   final String comercioId;
 
 
-  ScreensArguments(this.userId, this.nombre,this.foto,this.mercadoId,this.comercioId);
+  ValoracionArguments(this.mercadoId, this.comercioId);
 }

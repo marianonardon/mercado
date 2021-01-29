@@ -89,7 +89,7 @@ class _ProductosBusquedaVendedorPageState extends State<ProductosBusquedaVendedo
                   SizedBox(width: media.size.width * 0.03,),
                   GestureDetector(
                     onTap: () {Navigator.pushNamed(context, 'resultadoProductoVendedor', arguments: PuestoBusquedaArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio,args.numNave,
-          args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,nombreController.text));},
+          args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,nombreController.text,args.comercioFoto));},
                                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(50.0),
                       child: Container(
@@ -126,7 +126,8 @@ class PuestoBusquedaArguments {
   final String comercioMail;
   final String comercioNombre;
   final String productoBuscado;
+  final String comercioFoto;
 
 
-  PuestoBusquedaArguments(this.userId, this.nombre,this.foto,this.mercadoId,this.idComercio,this.numNave,this.comercioPuesto,this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre,this.productoBuscado);
+  PuestoBusquedaArguments(this.userId, this.nombre,this.foto,this.mercadoId,this.idComercio,this.numNave,this.comercioPuesto,this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre,this.productoBuscado,this.comercioFoto);
 }

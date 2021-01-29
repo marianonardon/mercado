@@ -6,18 +6,23 @@ import 'package:flutter_login_ui/src/pages/actualizar_puesto_ok.dart';
 import 'package:flutter_login_ui/src/pages/alta_producto.dart';
 import 'package:flutter_login_ui/src/pages/alta_vendedor.dart';
 import 'package:flutter_login_ui/src/pages/alta_vendedor_ok.dart';
+import 'package:flutter_login_ui/src/pages/carrito_mercado_page.dart';
 import 'package:flutter_login_ui/src/pages/carrito_page.dart';
 import 'package:flutter_login_ui/src/pages/confirmoReserva.dart';
 import 'package:flutter_login_ui/src/pages/delete_producto_ok.dart';
 import 'package:flutter_login_ui/src/pages/detalle_producto.dart';
 import 'package:flutter_login_ui/src/pages/error_registrar_puesto.dart';
 import 'package:flutter_login_ui/src/pages/login.dart';
+import 'package:flutter_login_ui/src/pages/login_comprador_vendedor.dart';
 import 'package:flutter_login_ui/src/pages/login_manual.dart';
 import 'package:flutter_login_ui/src/pages/mercado_page.dart';
 import 'package:flutter_login_ui/src/pages/categorias_page.dart';
+import 'package:flutter_login_ui/src/pages/pedido_comprador_mercado_page.dart';
+import 'package:flutter_login_ui/src/pages/pedido_detalle_mercado.dart';
 import 'package:flutter_login_ui/src/pages/pedido_detalle_page.dart';
 import 'package:flutter_login_ui/src/pages/pedido_detalle_vendedor.dart';
 import 'package:flutter_login_ui/src/pages/pedido_ok.dart';
+import 'package:flutter_login_ui/src/pages/pedido_ok_mercado.dart';
 import 'package:flutter_login_ui/src/pages/pedidos_comprador_page.dart';
 import 'package:flutter_login_ui/src/pages/pedidos_vendedor_page.dart';
 import 'package:flutter_login_ui/src/pages/producto_resultado.dart';
@@ -27,6 +32,8 @@ import 'package:flutter_login_ui/src/pages/productos_busqueda_vendedor.dart';
 import 'package:flutter_login_ui/src/pages/productos_page.dart';
 import 'package:flutter_login_ui/src/pages/puestos_page.dart';
 import 'package:flutter_login_ui/src/pages/registro_user_page.dart';
+import 'package:flutter_login_ui/src/pages/valoracion_ok.dart';
+import 'package:flutter_login_ui/src/pages/valoracion_puesto_page.dart';
 import 'package:flutter_login_ui/src/pages/vendedor_prod_page.dart';
 import 'package:flutter_login_ui/src/pages/alta_producto_ok.dart';
 import 'package:flutter_login_ui/src/pages/alta_producto_err.dart';
@@ -94,14 +101,16 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           //home: LoginScreen(),
           routes: {
+            
              '/': (BuildContext context) {
                var state = Provider.of<LoginState>(context);
               // Provider.of<LoginState>(context).isLogin();
-            if (state.  isLoggedIn()) {
+            if (state.isLoggedIn()) {
+              //Navigator.pushNamed(context, 'mercado');
               return MercadosPage();
               } else{
                 Provider.of<LoginState>(context).isLogin(context);
-                return LoginPageFinal(
+                return LoginCompradorVendedor(
               );}
           },
           'categorias'   : (BuildContext context) => CategoriasPage(),
@@ -110,6 +119,7 @@ class _MyAppState extends State<MyApp> {
           'carrito'      : (BuildContext context) => CarritoPage(),
           'confRes'      : (BuildContext context) => ConfirmoReserva(),
           'login'        : (BuildContext context) => LoginPageFinal(),
+          'loginInicio'  : (BuildContext context) => LoginCompradorVendedor(),
           'altaVendedor' : (BuildContext context) => AltaVendedor(),
           'vendedorProd' : (BuildContext context) => VendedorProductosPage(),
           'errorRegPues' : (BuildContext context) => ErrorRegistrarPuesto(),
@@ -137,6 +147,18 @@ class _MyAppState extends State<MyApp> {
           'buscarProductoVendedor' : (BuildContext context) => ProductosBusquedaVendedorPage(),
           'resultadoProductoVendedor' : (BuildContext context) => VendedorProductosResultadoPage(),
           'deleteProdOk'    : (BuildContext context) => DeleteProductoOk(),
+          'pedidosMercado'    : (BuildContext context) => PedidosCompradorMercadoPage(),
+          'pedidosDetalleMercado' : (BuildContext context) => PedidosDetalleMercadoPage(),
+          'valoracionOk'    : (BuildContext context) => ValoracionOk(),
+          'valoracionPuesto'    : (BuildContext context) => ValoracionPuesto(),
+          'pedidoOkMercado' : (BuildContext context) => PedidoOkMercado(),
+          'carritoMercado' : (BuildContext context) => CarritoMercadoPage(),
+
+          
+
+          
+
+          
 
           
           

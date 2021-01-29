@@ -62,6 +62,7 @@ class LoginState with ChangeNotifier {
 
 
   void login(LoginProvider loginProvider) async{
+    BuildContext context;
     _loading = true;
     _loggedIn = false;
     notifyListeners();
@@ -95,7 +96,8 @@ class LoginState with ChangeNotifier {
 
     _loading = false;
     if (_user != null) {
-      _loggedIn = true;   
+      _loggedIn = true;  
+      
       notifyListeners();
     } else {
       _loggedIn = false;

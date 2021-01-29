@@ -100,11 +100,11 @@ class Precio {
 
 class ProductoCrear extends StatefulWidget {
   Widget producto(String nombre, descripcion, categoria, stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado,BuildContext context ) {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado,comercioFoto,BuildContext context ) {
     
     return FutureBuilder<Producto>(
       future: createProducto( nombre, descripcion, categoria, stock, calidad, urlFoto, tipoUnidadId, comercioId,precio1,cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre, productoDestacado,context),
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre, productoDestacado,comercioFoto,context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data.comercioNombre);
@@ -119,7 +119,7 @@ class ProductoCrear extends StatefulWidget {
   }
 
 Future<Producto> createProducto(String nombre, descripcion, categoria, stock, int calidad,String urlFoto, tipoUnidadId, comercioId,precio1, cantidad1,
-                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado,BuildContext context) async {
+                  precio2,cantidad2,precio3,cantidad3,mercado,foto,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado,String comercioFoto,BuildContext context) async {
     
     
     String url = "https://agilemarket.com.ar/oauth/access_token";
@@ -165,9 +165,12 @@ Future<Producto> createProducto(String nombre, descripcion, categoria, stock, in
     final mercadosListAPIUrl = 'https://agilemarket.com.ar/rest/producto/0';
     
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/producto/0';
+    http.Response response;
+
+    if(precio3 != '') {
 
     
-     http.Response response = await http.post(
+     response = await http.post(
         '$mercadosListAPIUrl',
     
         headers: headers3,
@@ -198,6 +201,7 @@ Future<Producto> createProducto(String nombre, descripcion, categoria, stock, in
         ]
     }),
       );
+      }
 
     if (precio1 == ''){
          response = await http.post(
@@ -288,12 +292,12 @@ Future<Producto> createProducto(String nombre, descripcion, categoria, stock, in
           final decodedData2 = json.decode(response.body);
           final producto =  Producto.fromJsonMap(decodedData2);
           String comercio = producto.comercioID;
-          Navigator.pushNamed(context, 'altaProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,));
+          Navigator.pushNamed(context, 'altaProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,comercioFoto));
     
         //return Puesto.fromJson(json.decode(response.body));
       } else {
             Navigator.of(context).pop();
-            Navigator.pushNamed(context, 'errorRegProd', arguments: PuestoArguments(user,nombreUser,foto,mercado,comercioId,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,));
+            Navigator.pushNamed(context, 'errorRegProd', arguments: PuestoArguments(user,nombreUser,foto,mercado,comercioId,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,comercioFoto));
       }
     }
     

@@ -48,10 +48,10 @@ class _LoginPageFinalState extends State<LoginPageFinal>  {
             body: Stack(
             //fit: StackFit.,
             children: <Widget>[
-              Image(image: AssetImage('assets/img/Login2.png'),
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,),
+                Image(image: AssetImage('assets/img/Login2.png'),
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,),
               //fit: BoxFit.fill,),
                 //width: double.infinity,
                 //height: double.infinity,),
@@ -83,13 +83,11 @@ class _LoginPageFinalState extends State<LoginPageFinal>  {
                   _iniciarSesionApple(context),
                   SizedBox(height: 20.0),
                   GestureDetector(
-                    onTap: () {Navigator.pushNamed(context, 'loginManual');},
-                    child: Text('Iniciar con tu cuenta', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0,fontWeight: FontWeight.bold),)),
+                    onTap: () {Navigator.pushNamed(context, 'loginInicio');},
+                    child: Text('Volver a seleccionar perfil', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0,fontWeight: FontWeight.bold),)),
                   SizedBox(height: 5.0),
-                  GestureDetector(
-                    onTap: () {Navigator.pushNamed(context, 'registrarse');},
-                    child: Text('Registrarse', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0,fontWeight: FontWeight.bold),)),
-                  SizedBox(height: 5.0),
+                  
+                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -174,6 +172,7 @@ class _LoginPageFinalState extends State<LoginPageFinal>  {
                     ],
                 );
               } else {
+                
                 return child;
               }
               },
@@ -182,6 +181,8 @@ class _LoginPageFinalState extends State<LoginPageFinal>  {
               onPressed: () {
                 if(checkboxValue == true){
                 Provider.of<LoginState>(context).login(LoginProvider.google);
+                Navigator.pushNamed(context, 'mercado'); 
+                
                 }},
               padding: EdgeInsets.all(15.0),
               shape: RoundedRectangleBorder(

@@ -319,7 +319,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
                    GestureDetector(
                      onTap: () { Navigator.pushNamed(context, 'actProd', arguments: ProductoDetalleArg(args.idProducto, args.nombre,args.descripcion,args.foto,args.precio1
                                 ,args.cantidad1,args.precio2,args.cantidad2,args.precio3,args.cantidad3,args.stock,args.unidad,args.unidad2,args.unidad3,args.comercioId,args.mercadoId,args.userId,
-                                args.calidad,args.categoria,args.unidadId,args.fotoUser,args.nombreUser,args.numNave,args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,args.productoDestacado));
+                                args.calidad,args.categoria,args.unidadId,args.fotoUser,args.nombreUser,args.numNave,args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,args.productoDestacado,args.comercioFoto));
 
                      },
                      child: Container(
@@ -587,7 +587,7 @@ class _DetalleProductoState extends State<DetalleProducto> {
                           color: Color.fromRGBO(29, 233, 182, 1),
                           onPressed: () {
                           Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombreUser,args.fotoUser,args.mercadoId,args.comercioId,
-                          args.numNave,args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));},
+                          args.numNave,args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,args.comercioFoto));},
                           child: Text('Ir a mis productos'),
                           textColor: Colors.black,
                         

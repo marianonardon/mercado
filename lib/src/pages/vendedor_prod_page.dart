@@ -29,7 +29,7 @@ class _VendedorProductosPageState extends State<VendedorProductosPage> {
           child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {Navigator.pushNamed(context, 'altaProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio,args.numNave,
-          args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));},
+          args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,args.comercioFoto));},
 
           backgroundColor: Color.fromRGBO(29, 233, 182, 1),
           child: Icon(Icons.add, color: Colors.black, size: 40.0,),
@@ -44,7 +44,7 @@ class _VendedorProductosPageState extends State<VendedorProductosPage> {
             IconButton(
               icon: Icon(Icons.search, color: Colors.white),
               onPressed: () { Navigator.pushNamed(context, 'buscarProductoVendedor', arguments:  PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio,args.numNave,
-          args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));
+          args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,args.comercioFoto));
 
 
               }
@@ -67,7 +67,7 @@ class _VendedorProductosPageState extends State<VendedorProductosPage> {
                 children: <Widget>[
                  // SizedBox(height: 20.0),
                   Container(child: VendedorProductosListView(args.idComercio,args.mercadoId,args.userId,args.foto,args.nombre,args.numNave,args.comercioPuesto,args.comercioCuit,
-                  args.comercioTelefono,args.comercioMail,args.comercioNombre)),
+                  args.comercioTelefono,args.comercioMail,args.comercioNombre,args.comercioFoto)),
                 ],
               ),
             ),
@@ -123,7 +123,7 @@ class _VendedorProductosPageState extends State<VendedorProductosPage> {
                   Text('Mis pedidos'),]),
 
                 onTap: () {Navigator.pushNamed(context, 'pedidosVendedor',arguments: PuestoArguments(args.userId, args.nombre, args.foto, args.mercadoId, args.idComercio,args.numNave,args.comercioPuesto,
-              args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));},
+              args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,args.comercioFoto));},
               ),
                ListTile(
                 title: Row(

@@ -6,7 +6,12 @@ import 'package:provider/provider.dart';
 import '../../login_state.dart';
 import 'mercados_serv.dart';
 
-class PuestosPage extends StatelessWidget {
+class PuestosPage extends StatefulWidget {
+  @override
+  _PuestosPageState createState() => _PuestosPageState();
+}
+
+class _PuestosPageState extends State<PuestosPage> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData media = MediaQuery.of(context);
@@ -16,7 +21,28 @@ class PuestosPage extends StatelessWidget {
       return true;},
           child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: (){Navigator.pushNamed(context, 'altaVendedor', arguments: ScreenArguments(args.userId,args.nombre,args.foto,args.mercadoId));},
+          onPressed: (){
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                  title:  Center(child: Text('Alta de comercio')),
+                  content:  SizedBox(
+                            width: media.size.width * 0.005,
+                            height: media.size.height * 0.1,
+                            child:  Center(child:  Text('Para generar un usuario escríbanos al 3517194176',
+                            textAlign: TextAlign.center,)),
+                        ),
+                  backgroundColor: Colors.white
+
+            ),
+            barrierDismissible: true
+              ).then((_) => setState((){}));
+            
+            
+            
+            
+            //Navigator.pushNamed(context, 'altaVendedor', arguments: ScreenArguments(args.userId,args.nombre,args.foto,args.mercadoId));
+            },
           backgroundColor: Color.fromRGBO(29, 233, 182, 1),
           child: Icon(Icons.add, color: Colors.black, size: 40.0,),
           ),
@@ -83,11 +109,9 @@ class PuestosPage extends StatelessWidget {
           
   }
 
-
   Widget _puestoLista(args) {
     return Container(
       
       child: PuestosListView(args),);
   }
-
 }

@@ -108,7 +108,7 @@ class Precio {
 
 class VendedorProductosResultadoListView extends StatefulWidget {
   VendedorProductosResultadoListView(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser,this.numNave,this.comercioPuesto,
-  this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre,this.productoBuscado);
+  this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre,this.productoBuscado,this.comercioFoto);
   final String comercioId;
   final String mercadoId;
   final String userId;
@@ -121,15 +121,16 @@ class VendedorProductosResultadoListView extends StatefulWidget {
   final String comercioMail;
   final String comercioNombre;
   final String productoBuscado;
+  final String comercioFoto;
 
   @override
   _VendedorProductosResultadoListViewState createState() => _VendedorProductosResultadoListViewState(comercioId,mercadoId,userId,fotoUser,nombreUser,numNave,comercioPuesto,comercioCuit,comercioTelefono,
-  comercioMail,comercioNombre,productoBuscado);
+  comercioMail,comercioNombre,productoBuscado,comercioFoto);
 }
 
 class _VendedorProductosResultadoListViewState extends State<VendedorProductosResultadoListView> {
    _VendedorProductosResultadoListViewState(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser,this.numNave,this.comercioPuesto,this.comercioCuit,
-   this.comercioTelefono,this.comercioMail,this.comercioNombre,this.productoBuscado);
+   this.comercioTelefono,this.comercioMail,this.comercioNombre,this.productoBuscado,this.comercioFoto);
   final String comercioId;
   final String mercadoId;
   final String userId;
@@ -142,6 +143,7 @@ class _VendedorProductosResultadoListViewState extends State<VendedorProductosRe
   final String comercioMail;
   final String comercioNombre;
   final String productoBuscado;
+  final String comercioFoto;
   @override
   Widget build(BuildContext context){
     return FutureBuilder<List<Producto>>(
@@ -153,6 +155,7 @@ class _VendedorProductosResultadoListViewState extends State<VendedorProductosRe
 /*             if (productoValidacion == true) {
               return Container();
             } else { */
+            if(comercioFoto == '') {
             return Center(
               child: Container(
                 child: Column(
@@ -177,7 +180,7 @@ class _VendedorProductosResultadoListViewState extends State<VendedorProductosRe
                         
                         GestureDetector(
                           onTap: () {Navigator.pushNamed(context, 'actPues', arguments: PuestoArguments(userId, nombreUser, fotoUser, mercadoId, comercioId,numNave,comercioPuesto,
-              comercioCuit,comercioTelefono,comercioMail,comercioNombre)); },
+              comercioCuit,comercioTelefono,comercioMail,comercioNombre,comercioFoto)); },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(40.0),
                             child: Container(
@@ -263,9 +266,122 @@ class _VendedorProductosResultadoListViewState extends State<VendedorProductosRe
                 
                 ),
             );
+            } else {
+              return Center(
+              child: Container(
+                child: Column(
+                   children: <Widget>[
+                     Container(
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Column(
+                    children: <Widget>[
+                    Stack(
+                      fit: StackFit.loose,
+                      alignment: Alignment.topRight,
+                      children: <Widget> [
+                        Image(
+                          //height: media.size.height * 0.23,
+                          //width: media.size.width * 0.93,
+                          fit: BoxFit.fill,
+                          image: NetworkImage(comercioFoto),
+
+                          //placeholder: AssetImage('assets/img/loader.gif')),
+                        ),
+                        
+                        GestureDetector(
+                          onTap: () {Navigator.pushNamed(context, 'actPues', arguments: PuestoArguments(userId, nombreUser, fotoUser, mercadoId, comercioId,numNave,comercioPuesto,
+              comercioCuit,comercioTelefono,comercioMail,comercioNombre,comercioFoto)); },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(40.0),
+                            child: Container(
+                              color: Colors.black38,
+                              child: Icon(Icons.mode_edit, color: Colors.white, size: 30.0)))
+                        ),
+
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child:  Container(
+                              color: Colors.black26,
+                              child: Column(
+                                children:<Widget>[ 
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start ,
+                                    children: <Widget>[
+                                      SizedBox(width:10.0),
+                                      Flexible(
+                                      child: Text(
+                                        comercioNombre, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                          fontSize: 24.0, fontWeight: FontWeight.w600,
+                                          )),
+                                        ),
+                                      ),
+                                      SizedBox(width: 30.0),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start ,
+                                    children: <Widget>[
+                                      SizedBox(width:10.0),
+                                      Icon(Icons.location_on,color:Colors.white),
+                                      SizedBox(width: 5.0),
+                                      Flexible(
+                                        child: Text(
+                                        'Puesto / Nombre $comercioPuesto Nave / Sector $numNave', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                          fontSize: 14.0, fontWeight: FontWeight.normal,
+                                          )),
+                                        ),
+                                      ),
+                                      SizedBox(width: 13.0),
+                                      Icon(Icons.phone,color:Colors.white),
+                                      SizedBox(width: 5.0),
+                                      Text(
+                                      comercioTelefono, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                        fontSize: 14.0, fontWeight: FontWeight.normal,
+                                        )),
+                                      ),
+                                      SizedBox(width: 30.0),
+                                    ],
+                                  ),
+                                  SizedBox(height: 15.0),
+                                ]
+                              ),
+                            ),
+                        ),
+                        
+                        ]
+                    ),
+                    ])),
+                     Image(
+                       height: media.size.height * 0.45,
+                       image: AssetImage('assets/img/SinProductos.gif'),
+                     ),
+                    Text(
+                    'No existe producto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                    Text(
+                    'para los filtros buscados', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                      fontSize: 24.0, fontWeight: FontWeight.w600,
+                      ))                 
+                    ),
+                    SizedBox(height: 15.0),
+                     
+
+                  ]
+                )
+                
+                ),
+            );
+            }
             //}
           } else {
           List<Producto> data = snapshot.data;
+          if(comercioFoto == '') {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -290,7 +406,7 @@ class _VendedorProductosResultadoListViewState extends State<VendedorProductosRe
                         
                         GestureDetector(
                           onTap: () {Navigator.pushNamed(context, 'actPues', arguments: PuestoArguments(userId, nombreUser, fotoUser, mercadoId, comercioId,numNave,comercioPuesto,
-              comercioCuit,comercioTelefono,comercioMail,comercioNombre)); },
+              comercioCuit,comercioTelefono,comercioMail,comercioNombre,comercioFoto)); },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(40.0),
                             child: Container(
@@ -363,6 +479,107 @@ class _VendedorProductosResultadoListViewState extends State<VendedorProductosRe
            _productosListView(data,comercioId)
             ]
           );
+          }else{
+
+            return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+
+               Container(
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Column(
+                    children: <Widget>[
+                    Stack(
+                      fit: StackFit.loose,
+                      alignment: Alignment.topRight,
+                      children: <Widget> [
+                        Image(
+                          //height: media.size.height * 0.23,
+                          //width: media.size.width * 0.93,
+                          fit: BoxFit.fill,
+                          image: NetworkImage(comercioFoto),
+
+                          //placeholder: AssetImage('assets/img/loader.gif')),
+                        ),
+                        
+                        GestureDetector(
+                          onTap: () {Navigator.pushNamed(context, 'actPues', arguments: PuestoArguments(userId, nombreUser, fotoUser, mercadoId, comercioId,numNave,comercioPuesto,
+              comercioCuit,comercioTelefono,comercioMail,comercioNombre,comercioFoto)); },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(40.0),
+                            child: Container(
+                              color: Colors.black38,
+                              child: Icon(Icons.mode_edit, color: Colors.white, size: 30.0)))
+                        ),
+
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child:  Container(
+                              color: Colors.black26,
+                              child: Column(
+                                children:<Widget>[ 
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start ,
+                                    children: <Widget>[
+                                      SizedBox(width:10.0),
+                                      Flexible(
+                                        child: Text(
+                                        comercioNombre, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                          fontSize: 24.0, fontWeight: FontWeight.w600,
+                                          )),
+                                        ),
+                                      ),
+                                      SizedBox(width: 30.0),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10.0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start ,
+                                    children: <Widget>[
+                                      SizedBox(width:10.0),
+                                      Icon(Icons.location_on,color:Colors.white),
+                                      SizedBox(width: 5.0),
+                                      Flexible(
+                                       child: Text(
+                                        'Puesto / Nombre $comercioPuesto Nave / Sector $numNave', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                          fontSize: 14.0, fontWeight: FontWeight.normal,
+                                          )),
+                                        ),
+                                      ),
+                                      SizedBox(width: 13.0),
+                                      Icon(Icons.phone,color:Colors.white),
+                                      SizedBox(width: 5.0),
+                                      Text(
+                                      comercioTelefono, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                        fontSize: 14.0, fontWeight: FontWeight.normal,
+                                        )),
+                                      ),
+                                      SizedBox(width: 30.0),
+                                    ],
+                                  ),
+                                  SizedBox(height: 15.0),
+                                ]
+                              ),
+                            ),
+                        ),
+                        
+                        ]
+                    ),
+                    ])),
+
+                    SizedBox(height: 20.0),
+              
+              Text('  Catálogo de productos',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                fontSize: 16.0, fontWeight: FontWeight.w600,
+                ))),
+           _productosListView(data,comercioId)
+            ]
+          );
+
+          }
           }
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
@@ -491,7 +708,7 @@ class _VendedorProductosResultadoListViewState extends State<VendedorProductosRe
               onTap: () {
                 Navigator.pushNamed(context, 'detalleProd', arguments: ProductoDetalleArg(productoID, title,prodDesc,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,mercadoId,userId,ratingProd,categoriaId,unidadId,fotoUser,nombreUser,
-                                  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,productoDestacado));
+                                  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,productoDestacado,comercioFoto));
 
               },
               child: Container(

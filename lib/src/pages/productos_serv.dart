@@ -54,6 +54,7 @@ class Producto {
   final String comercioNombre;
   final String comercioPuesto;
   final String comercioNumNave;
+  final String comercioCalificacion;
   final String mercadoID;
   final String mercadoNombre;
   final bool   productoDestacado;
@@ -62,7 +63,7 @@ class Producto {
 
   Producto({this.productoID, this.productoNombre, this.productoDescripcion, this.productoStock,
           this.productoCalidad, this.productoFoto,this.categoriaID, this.categoriaNombre, this.tipoUnidadID,
-          this.tipoUnidadNombre, this.comercioID, this.comercioNombre,this.comercioPuesto,this.comercioNumNave, this.mercadoID,
+          this.tipoUnidadNombre, this.comercioID, this.comercioNombre,this.comercioPuesto,this.comercioNumNave,this.comercioCalificacion, this.mercadoID,
           this.mercadoNombre, this.productoDestacado, this.precios});
 
   factory Producto.fromJsonMap(Map<String, dynamic> parsedJson) {
@@ -88,6 +89,7 @@ class Producto {
       comercioNombre: parsedJson['comercioNombre'],
       comercioPuesto: parsedJson['comercioPuesto'],
       comercioNumNave: parsedJson['comercioNumNave'],
+      comercioCalificacion: parsedJson['comercioCalificacion'],
       mercadoID: parsedJson['mercadoID'],
       mercadoNombre: parsedJson['mercadoNombre'],
       productoDestacado: parsedJson['productoDestacado'],
@@ -370,7 +372,7 @@ class _ProductosListViewState extends State<ProductosListView> {
                 onTap: () {
                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,widget.mercadoId,'',ratingProd,widget.categoriaId,'','','',
-                                  '',comercioPuesto,'','','','',false));
+                                  '',comercioPuesto,'','','','',false,''));
 
               },
                 child: Column(
@@ -446,7 +448,7 @@ class _ProductosListViewState extends State<ProductosListView> {
                 onTap: () {
                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad,unidad2,unidad3,comercioId,widget.mercadoId,'',ratingProd,widget.categoriaId,'','','',
-                                  '',comercioPuesto,'','','','',false));
+                                  '',comercioPuesto,'','','','',false,''));
 
               },
                 child: Container(
@@ -1133,7 +1135,7 @@ class _ProductosListViewHorizontalState extends State<ProductosListViewHorizonta
                   Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', producto.productoNombre,producto.productoDescripcion,
                   producto.productoFoto,preciox1,cantidad1,preciox2,cantidad2,
                                     preciox3,cantidad3,producto.productoStock,unidad1,unidad2,unidad3,'',widget.mercadoId,'',0.0,widget.categoriaId,'','','',
-                                    producto.comercioNumNave,producto.comercioPuesto,'','','',producto.comercioNombre,false));
+                                    producto.comercioNumNave,producto.comercioPuesto,'','','',producto.comercioNombre,false,''));
 
                 },
           child: Container(

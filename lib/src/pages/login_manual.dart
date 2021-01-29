@@ -100,9 +100,12 @@ class _LoginManualPageFinalState extends State<LoginManualPageFinal> {
                     _botonConfirmar(context),
                     SizedBox(height: 25.0),
                     GestureDetector(
-                     onTap: () {Navigator.pushNamed(context,'/');},
-                     child: Text('Login con redes', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 16.0),)),
+                     onTap: () {Navigator.pushNamed(context,'loginInicio');},
+                     child: Text('Volver a seleccionar perfil', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0,fontWeight: FontWeight.bold),)),
                      SizedBox(height: 5.0),
+                     GestureDetector(
+                    onTap: () {Navigator.pushNamed(context, 'registrarse');},
+                    child: Text('Registrarse', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0,fontWeight: FontWeight.bold),)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

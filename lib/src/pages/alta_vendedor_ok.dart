@@ -49,7 +49,7 @@ class AltaComercioOk extends StatelessWidget {
             SizedBox(height: 50.0,),
             GestureDetector(
              onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId, args.idComercio,args.numNave,args.comercioPuesto,
-             args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));},
+             args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,args.comercioFoto));},
              child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0) ,
                 child:Container(

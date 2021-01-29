@@ -107,7 +107,7 @@ class _RegistroUserPageFinalState extends State<RegistroUserPageFinal> {
                     SizedBox(height: 25.0),
                     GestureDetector(
                      onTap: () {Navigator.pushNamed(context,'/');},
-                     child: Text('Login con redes', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 16.0),)),
+                     child: Text('Volver a seleccionar perfil', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 16.0),)),
                     SizedBox(height: 25.0),
                     ]
                   ),

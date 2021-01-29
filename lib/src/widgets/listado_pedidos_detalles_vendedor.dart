@@ -353,10 +353,10 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
                         barrierDismissible: true,
                           ).then((_) => setState((){}));
                           
-                EnviarNotificaciones().sendAndRetrieveMessage(tokenDispositivo, 'Pedido Listo para retirar', 'Su pedido realizado en el puesto $puesto está listo para retirar');
+                EnviarNotificaciones().sendAndRetrieveMessage(tokenDispositivo, 'Pedido Listo para entregar', 'Su pedido realizado en el puesto $puesto está listo para entregar');
                 await PedidoActualizar().updatePedido('3',pedidoId,pedidoComercioId,context);
                 Navigator.pushNamed(context, 'pedidosVendedor',arguments: PuestoArguments(args.userId, args.nombre, args.foto, args.mercadoId, args.idComercio,args.numNave,args.comercioPuesto,
-              args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));
+              args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,''));
             },
             child: Container(
             width: double.infinity,
@@ -387,7 +387,7 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
                   height: media.size.height * 0.06,
                   //width: media.size.width * 0.95,
                   child: Center(
-                    child: Text('Listo para retirar',style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71,79, 1),
+                    child: Text('Listo para entregar',style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71,79, 1),
                     fontSize: 16.0, fontWeight: FontWeight.w600,
                     ))),
                   )
@@ -443,7 +443,7 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
                 EnviarNotificaciones().sendAndRetrieveMessage(tokenDispositivo, 'Pedido Cancelado', 'Su pedido realizado en el puesto $puesto ha sido cancelado');                          
                 await PedidoActualizar().updatePedido('2',pedidoId,pedidoComercioId,context);
                 Navigator.pushNamed(context, 'pedidosVendedor',arguments: PuestoArguments(args.userId, args.nombre, args.foto, args.mercadoId, args.idComercio,args.numNave,args.comercioPuesto,
-              args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));
+              args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,''));
             },
             child: Container(
             width: double.infinity,
@@ -526,10 +526,10 @@ class _ListadoPedidosDetalleVendedorState extends State<ListadoPedidosDetalleVen
                           ),
                         barrierDismissible: true,
                           ).then((_) => setState((){}));
-                EnviarNotificaciones().sendAndRetrieveMessage(tokenDispositivo, 'Pedido Entregado', 'Su pedido realizado en el puesto $puesto ha sido entregado');
+                EnviarNotificaciones().sendAndRetrieveMessage(tokenDispositivo, 'Pedido Entregado', 'Su pedido realizado en el puesto $puesto ha sido entregado, por favor realice una valoración en el detalle del pedido');
                 await PedidoActualizar().updatePedido('4',pedidoId,pedidoComercioId,context);
                 Navigator.pushNamed(context, 'pedidosVendedor',arguments: PuestoArguments(args.userId, args.nombre, args.foto, args.mercadoId, args.idComercio,args.numNave,args.comercioPuesto,
-              args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));
+              args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,''));
             },
             child: Container(
             width: double.infinity,

@@ -42,9 +42,10 @@ class Puesto {
   final String comercioEmail;
   final String comercioPuesto;
   final String comercioNumNave;
+  final String comercioFoto;
 
   Puesto({this.idComercio,this.id, this.id2,this.comercioNombre,this.comercioCuit, this.comercioDireccion,this.comercioDireccionEntrega,
-         this.comercioTelefono,this.comercioEmail, this.comercioPuesto,this.comercioNumNave});
+         this.comercioTelefono,this.comercioEmail, this.comercioPuesto,this.comercioNumNave,this.comercioFoto});
 
   factory Puesto.fromJsonMap(Map<String, dynamic> parsedJson) {
     return Puesto(
@@ -59,6 +60,7 @@ class Puesto {
       comercioEmail: parsedJson['ComercioEmail'], 
       comercioPuesto: parsedJson['ComercioPuesto'], 
       comercioNumNave: parsedJson['ComercioNumNave'], 
+      comercioFoto: parsedJson['ComercioFoto'], 
       
       
       
@@ -67,10 +69,10 @@ class Puesto {
 }
 
 class PuestoCrear extends StatefulWidget {
-  Widget puesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,BuildContext context ) {
+  Widget puesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,fotoPuesto,BuildContext context ) {
     
     return FutureBuilder<Puesto>(
-      future: createPuesto(nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,context),
+      future: createPuesto(nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,nombreUser,fotoUser,fotoPuesto,context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Text(snapshot.data.comercioNombre);
@@ -84,7 +86,7 @@ class PuestoCrear extends StatefulWidget {
     );
   }
 
-Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,userNombre,fotoUser,BuildContext context) async {
+Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, puesto, nave, idUser,mercadoId,userId,userNombre,fotoUser,fotoPuesto,BuildContext context) async {
 
   
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -160,6 +162,7 @@ Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, pue
           'ComercioEmail': email,
           'ComercioPuesto': puesto,
           'ComercioNumNave': nave,
+          'ComercioFoto':fotoPuesto,
         }),
       );
       
@@ -169,7 +172,7 @@ Future<Puesto> createPuesto(String nombre, cuit, direccion, telefono, email, pue
           final puesto =  Puesto.fromJsonMap(decodedData2);
           String comercio = puesto.idComercio;
           Navigator.pushNamed(context, 'altaComOk' ,arguments: PuestoArguments(userId,userNombre,fotoUser, mercadoId, comercio,puesto.comercioNumNave,puesto.comercioPuesto,
-          puesto.comercioCuit,puesto.comercioTelefono,puesto.comercioEmail,puesto.comercioNombre));
+          puesto.comercioCuit,puesto.comercioTelefono,puesto.comercioEmail,puesto.comercioNombre,fotoPuesto));
          
     
         //return Puesto.fromJson(json.decode(response.body));

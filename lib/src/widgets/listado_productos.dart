@@ -105,7 +105,7 @@ class _ListadoProductosState extends State<ListadoProductos> {
       }
       }
       if(producto.productoFoto == '') {
-        foto = 'https://res.cloudinary.com/agilemarket/image/upload/v1594599858/m3wh5dxmlwmyjbpit3cr.png';
+        foto = 'https://res.cloudinary.com/agilemarket/image/upload/v1611946564/no_image_cz0rp1.png';
       }else{
         
         foto = producto.productoFoto;}
@@ -113,14 +113,14 @@ class _ListadoProductosState extends State<ListadoProductos> {
                     foto,preciox1,preciox2,preciox3,cantidad1,cantidad2,cantidad3,
                     producto.comercioNombre,
                     producto.tipoUnidadNombre, producto.productoCalidad,producto.comercioID,producto.comercioPuesto,producto.productoDescripcion,
-                    producto.productoStock,producto.comercioNumNave,producto.categoriaID,producto.mercadoID,producto.productoID,context);
+                    producto.productoStock,producto.comercioNumNave,producto.categoriaID,producto.mercadoID,producto.productoID,producto.comercioCalificacion,context);
         
     
    
    }
 
    Widget _crearLista(String title, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,String comercioId, 
-   String comercioPuesto,descripcion,stock,comercioNave, categoriaId,mercadoId,productoId,context) {
+   String comercioPuesto,descripcion,stock,comercioNave, categoriaId,mercadoId,productoId,comercioCalificacion,context) {
     MediaQueryData media = MediaQuery.of(context);
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,7 +137,7 @@ class _ListadoProductosState extends State<ListadoProductos> {
                 
               //  _crearTitulo(),
                 SizedBox(height: 8.0),
-               _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,descripcion,stock,comercioNave,categoriaId,mercadoId,productoId,context)
+               _crearTarjetas(title, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,descripcion,stock,comercioNave,categoriaId,mercadoId,productoId,comercioCalificacion,context)
               ],
             ),
           ),
@@ -146,7 +146,7 @@ class _ListadoProductosState extends State<ListadoProductos> {
     );
   }
 
-   _crearTarjetas(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,descripcion,stock,comercioNave,categoriaId,mercadoId,productoId,context) {
+   _crearTarjetas(title,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,comercioPuesto,descripcion,stock,comercioNave,categoriaId,mercadoId,productoId,comercioCalificacion,context) {
 
 /*     String puestos;
     List<Puesto> data;
@@ -212,7 +212,7 @@ class _ListadoProductosState extends State<ListadoProductos> {
                 onTap: () {
                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
-                                  comercioNave,comercioPuesto,'','','',comercio,false)); 
+                                  comercioNave,comercioPuesto,'','','',comercio,false,'')); 
 
               },
                 child: Column(
@@ -288,7 +288,7 @@ class _ListadoProductosState extends State<ListadoProductos> {
                 onTap: () {
                 Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,descripcion,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
-                                  comercioNave,comercioPuesto,'','','',comercio,false)); 
+                                  comercioNave,comercioPuesto,'','','',comercio,false,'')); 
 
               },
                 child: Container(
@@ -348,6 +348,19 @@ class _ListadoProductosState extends State<ListadoProductos> {
                         ],
                       ),
                        SizedBox(height:6.0),
+                       Row(
+                                  children: <Widget>[
+                                    SizedBox(width: 4.0),
+                                    Text(
+                                      comercioCalificacion, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                        fontSize: 12.0, fontWeight: FontWeight.w500
+                          ))),
+                          SizedBox(width: 5.0),
+                          Icon(Icons.star, color:Colors.white, size: 15.0 ),
+                          SizedBox(width: 4.0),
+                                  ],
+                                ),
+                      SizedBox(height:6.0),
                       Row(
                         children: <Widget>[
                            Flexible(

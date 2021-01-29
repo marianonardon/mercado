@@ -177,8 +177,12 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
       if(fechaBaja == ''){
         fechaBaja = '0000-00-00';
       }
+
+      http.Response response2;
+
+      if(precio3 != '') {
     
-         http.Response response2 = await http.put(
+          response2 = await http.put(
           '$actprodListAPIUrl',
       
           headers: headers3,
@@ -215,6 +219,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
           
           ),
         );
+      }
 
         if (precio1 == '') {
           response2 = await http.put(
@@ -317,13 +322,13 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
             final decodedData2 = json.decode(response2.body);
             final producto =  Producto.fromJsonMap(decodedData2);
             String comercio = producto.comercioID;
-            Navigator.pushNamed(context, 'altaProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre));
+            Navigator.pushNamed(context, 'altaProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,''));
             } else {
               Navigator.of(context).pop();
               final decodedData2 = json.decode(response2.body);
               final producto =  Producto.fromJsonMap(decodedData2);
               String comercio = producto.comercioID;
-              Navigator.pushNamed(context, 'deleteProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre));
+              Navigator.pushNamed(context, 'deleteProdOk' ,arguments: PuestoArguments(user,nombreUser,foto,mercado,comercio,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,''));
             }
 
       
@@ -340,7 +345,7 @@ Future<Producto> updateProducto(String nombre, descripcion, categoria, String st
       //return jsonResponse.map<dynamic>((mercado) => new Mercados.fromJsonList(mercado));
     } else {
       Navigator.of(context).pop();
-      Navigator.pushNamed(context, 'errorRegProd', arguments: PuestoArguments(user,nombreUser,foto,mercado,comercioId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre));
+      Navigator.pushNamed(context, 'errorRegProd', arguments: PuestoArguments(user,nombreUser,foto,mercado,comercioId,numNave, comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,''));
     }
 
     }

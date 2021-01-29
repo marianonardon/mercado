@@ -253,7 +253,7 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
                           onTap: () {
                                  Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,prodDesc,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
-                                  '','','','','','',false));
+                                  '','','','','','',false,''));
 
                          },
 
@@ -277,7 +277,7 @@ class _PuestoProductosListViewState extends State<PuestoProductosListView> {
                           onTap: () {
                                  Navigator.pushNamed(context, 'detalleProdComp', arguments: ProductoDetalleArg('', title,prodDesc,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,'',unidad1,unidad2,unidad3,comercioId,mercadoId,'',ratingProd,categoriaId,'','','',
-                                  '','','','','','',false));
+                                  '','','','','','',false,''));
 
                          },
 

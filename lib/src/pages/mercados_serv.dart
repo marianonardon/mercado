@@ -169,6 +169,9 @@ class _MercadosListViewState extends State<MercadosListView> {
       }); 
     }
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('idPuesto', '' );
+
 
 
 

@@ -1,13 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_login_ui/src/pages/comboMercado.dart';
 import 'package:flutter_login_ui/src/pages/comboMercado2.dart';
 import 'package:flutter_login_ui/src/pages/registrar_serv_serv.dart';
 import 'package:flutter_login_ui/src/pages/mercados_serv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mime_type/mime_type.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../login_state.dart';
@@ -32,6 +37,8 @@ class _AltaVendedorState extends State<AltaVendedor> {
   String mail;
   String nave;
   String puesto;
+
+  File foto;
 
   final comercioController = TextEditingController();
   final cuitController = TextEditingController();
@@ -89,6 +96,8 @@ class _AltaVendedorState extends State<AltaVendedor> {
               SizedBox(
               height: 10.0),
               _inputNombreComercio(),
+               SizedBox(height: 10.0),
+               _inputFotoProducto(),
                SizedBox(height: 10.0),
               _inputCuit(context),
               SizedBox(height: 10.0),
@@ -556,6 +565,150 @@ class _AltaVendedorState extends State<AltaVendedor> {
         );
   }
 
+  Widget _inputFotoProducto() {
+  MediaQueryData media = MediaQuery.of(context);
+
+    if (foto != null) {
+      imageCache.clear();
+      return  Stack(
+         alignment: Alignment.topRight,
+        children:<Widget>[Container(
+          width: media.size.width * 0.90,
+          height: media.size.height * 0.17,
+          color: Colors.grey[100],
+          child: Image.file(
+            foto,
+            fit: BoxFit.contain
+          )
+        ),
+        GestureDetector(
+          onTap: () { _cargarFoto();},
+          child: Icon(Icons.edit, color: Colors.black, size: 30.0)
+        )
+        ]
+      );
+
+    }
+
+    return GestureDetector(
+      onTap: () {
+        _cargarFoto();
+        
+       // _tomarFoto();
+      },
+      child: Container(
+        width: media.size.width * 0.90,
+        height: media.size.height * 0.17,
+        color: Colors.grey[100],
+        child: Center(
+          child: Icon(Icons.add_a_photo, size: 40,)
+        ),
+      )
+    );
+
+
+
+  }
+
+  _cargarFoto(){
+    showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Cargar foto:'),
+            content: Text('¿De dónde desea cargar la foto?'),
+            actions: [
+              FlatButton(
+                onPressed: () {_tomarFoto();
+                Navigator.of(context).pop();},
+                child: Text('Cámara'),
+              
+              ),
+              FlatButton(
+                onPressed: () {_seleccionarFoto();
+                Navigator.of(context).pop();
+                },
+                child: Text('Galería'),
+              
+              ),
+            ],
+            backgroundColor: Colors.white
+
+        ),
+        barrierDismissible: true,
+          ).then((_) => setState((){}));
+
+  }
+
+   _seleccionarFoto() async {
+     foto = await ImagePicker.pickImage(
+       maxHeight: 480.0,
+       maxWidth: 640.0,
+       imageQuality: 30,
+      source: ImageSource.gallery
+      
+      
+      );
+
+      if (foto != null) {
+
+      }
+
+      setState(() {
+      });
+
+
+  }
+
+  _tomarFoto() async {
+    foto = await ImagePicker.pickImage(
+      maxHeight: 480.0,
+       maxWidth: 640.0,
+       imageQuality: 30,
+      source: ImageSource.camera
+      
+      
+      );
+
+      if (foto != null) {
+
+      }
+
+      setState(() {
+      });
+
+  }
+
+  Future<String> subirImagen(File foto) async {
+
+    final url = Uri.parse('https://api.cloudinary.com/v1_1/agilemarket/image/upload?upload_preset=derqlox3');
+    final mimeType = mime(foto.path).split('/');
+
+    final imageUploadRequest = http.MultipartRequest(
+      'POST',
+      url
+    );
+
+    final file = await http.MultipartFile.fromPath(
+      'file', 
+      foto.path,
+      contentType: MediaType(mimeType[0],mimeType[1])
+      );
+
+      imageUploadRequest.files.add(file);
+
+      final streamResponse = await imageUploadRequest.send();
+
+      final resp = await http.Response.fromStream(streamResponse);
+
+      if (resp.statusCode != 200 && resp.statusCode != 201) {
+        print('algo salio mal');
+        return null;
+      }
+
+      final respData = json.decode(resp.body);
+      return respData['secure_url'];
+  }
+
 
 
   Widget _botonConfirmar(context,mercadoId,nombreUser,userId,fotoUser) {
@@ -566,6 +719,7 @@ class _AltaVendedorState extends State<AltaVendedor> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
     //Return String
        String mercadoId = prefs.getString('idMercado');
+       String urlFoto;
         
 
         if (formKey.currentState.validate()) {
@@ -590,8 +744,16 @@ class _AltaVendedorState extends State<AltaVendedor> {
         barrierDismissible: false,
           ).then((_) => setState((){})); 
 
+          if (foto != null) {
+            String fotoUrl;
+            fotoUrl = await subirImagen(foto);
+            urlFoto = fotoUrl;
+          } else {
+            urlFoto = '';
+          }
+
             PuestoCrear().puesto(comercioController.text, cuitController.text, comercioController.text, telefonoController.text,
-                                            emailController.text ,puestoController.text, naveController.text, externalId,mercadoId,userId,nombreUser,fotoUser,context); 
+                                            emailController.text ,puestoController.text, naveController.text, externalId,mercadoId,userId,nombreUser,fotoUser,urlFoto,context); 
 
         }
 /*         Column(

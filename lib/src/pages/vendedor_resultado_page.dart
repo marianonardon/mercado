@@ -27,7 +27,7 @@ class _VendedorProductosResultadoPageState extends State<VendedorProductosResult
     final PuestoBusquedaArguments args = ModalRoute.of(context).settings.arguments;
     return WillPopScope(
       onWillPop: () async {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio,args.numNave,
-          args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre));
+          args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,args.comercioFoto));
       return true;},
           child: Scaffold(
         
@@ -40,7 +40,7 @@ class _VendedorProductosResultadoPageState extends State<VendedorProductosResult
            leading: new IconButton(
           icon: new Icon(Icons.backspace, size:35),
           onPressed: () => Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio,args.numNave,
-          args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre))),
+          args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,args.comercioFoto))),
 /*         actions: <Widget>[
             IconButton(
               icon: Icon(Icons.notifications, color: Colors.white),
@@ -59,7 +59,7 @@ class _VendedorProductosResultadoPageState extends State<VendedorProductosResult
                 children: <Widget>[
                  // SizedBox(height: 20.0),
                   Container(child: VendedorProductosResultadoListView(args.idComercio,args.mercadoId,args.userId,args.foto,args.nombre,args.numNave,args.comercioPuesto,args.comercioCuit,
-                  args.comercioTelefono,args.comercioMail,args.comercioNombre,args.productoBuscado)),
+                  args.comercioTelefono,args.comercioMail,args.comercioNombre,args.productoBuscado,args.comercioFoto)),
                 ],
               ),
             ),

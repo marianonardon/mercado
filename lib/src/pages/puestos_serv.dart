@@ -49,10 +49,11 @@ class Puesto {
   final String comercioFechaAlta;
   final String comercioExternalId;
   final String comercioEmail;
+  final String comercioFoto;
 
 
   Puesto({this.mercadoId, this.mercadoNombre,this.comercioId, this.comercioNombre,this.comercioTelefono, this.comercioCuit,
-          this.comercioPuesto,this.comercioNumNave,this.comercioFechaAlta,this.comercioExternalId,this.comercioEmail});
+          this.comercioPuesto,this.comercioNumNave,this.comercioFechaAlta,this.comercioExternalId,this.comercioEmail,this.comercioFoto});
 
   factory Puesto.fromJson(Map<String, dynamic> json) {
     return Puesto(
@@ -67,6 +68,7 @@ class Puesto {
       comercioFechaAlta: json['comercioFechaAlta'], 
       comercioExternalId: json['comercioExternalID'], 
       comercioEmail: json['comercioEmail'], 
+      comercioFoto: json['comercioFoto'], 
 
       
       
@@ -210,13 +212,14 @@ class PuestosListView extends StatelessWidget {
         itemBuilder: (context, index) {
           return _crearLista(data[index].comercioNombre, data[index].mercadoNombre, data[index].comercioPuesto,
                         data[index].comercioNumNave,data[index].comercioId,data[index].mercadoId,
-                        data[index].comercioCuit,data[index].comercioTelefono, data[index].comercioEmail,data[index].comercioPuesto,context);
+                        data[index].comercioCuit,data[index].comercioTelefono, data[index].comercioEmail,data[index].comercioPuesto,
+                        data[index].comercioFoto,context);
         });
   }
 
 
 
-  Widget _crearLista(String title, String subtitle, String numPuesto, String numNave,comercioId,mercadoId,comercioCuit,comercioTelefono,comercioMail,comercioPuesto,context) {
+  Widget _crearLista(String title, String subtitle, String numPuesto, String numNave,comercioId,mercadoId,comercioCuit,comercioTelefono,comercioMail,comercioPuesto,comercioFoto,context) {
     MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
@@ -230,79 +233,149 @@ class PuestosListView extends StatelessWidget {
             SizedBox(height: 20.0),
             GestureDetector(
               onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId, args.nombre, args.foto, mercadoId, comercioId,numNave,comercioPuesto,
-              comercioCuit,comercioTelefono,comercioMail,title));},
-            child:_crearTarjetas(title, subtitle, numPuesto, numNave,context))
+              comercioCuit,comercioTelefono,comercioMail,title,comercioFoto));},
+            child:_crearTarjetas(title, subtitle, numPuesto, numNave,comercioFoto,context))
           ],
         ),
       ),
     );
   }
-  _crearTarjetas(title, subtitle, numPuesto, numNave,context) {
+  _crearTarjetas(title, subtitle, numPuesto, numNave,comercioFoto,context) {
     MediaQueryData media = MediaQuery.of(context);
-  return Stack(
-    fit: StackFit.loose,
-    children: <Widget> [
-      ClipRRect(
-        borderRadius: BorderRadius.circular(15.0),
-        child: Image(
-        height: media.size.height * 0.22 ,
-        width: media.size.width * 0.93,
-        fit: BoxFit.fill,
-        image: AssetImage('assets/img/PuestoImg.png'),
 
-       // placeholder: AssetImage('assets/img/loader.gif')),
-      )),
+    if(comercioFoto == ''){
 
-      Positioned(
-        bottom: 10,
-        left: 0,
-        right: 0,
-        child: Container(
-          color: Colors.black12,
-          //borderRadius: BorderRadius.circular(15.0), 
-          child: Column(
-              children:<Widget>[ 
-                Row(
-                  children: <Widget>[
-                    SizedBox(width: 20.0),
-                    Text(
-                    title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                      fontSize: 21.0, fontWeight: FontWeight.w600,
-                      ))
-                    
-                    ),
-                  ],
+      return Stack(
+      fit: StackFit.loose,
+      children: <Widget> [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(15.0),
+          child: Image(
+          height: media.size.height * 0.22 ,
+          width: media.size.width * 0.93,
+          fit: BoxFit.fill,
+          image: AssetImage('assets/img/PuestoImg.png'),
+
+        // placeholder: AssetImage('assets/img/loader.gif')),
+        )),
+
+        Positioned(
+          bottom: 10,
+          left: 0,
+          right: 0,
+          child: Container(
+            color: Colors.black12,
+            //borderRadius: BorderRadius.circular(15.0), 
+            child: Column(
+                children:<Widget>[ 
+                  Row(
+                    children: <Widget>[
+                      SizedBox(width: 20.0),
+                      Text(
+                      title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                        fontSize: 21.0, fontWeight: FontWeight.w600,
+                        ))
+                      
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      SizedBox(width: 20.0),
+                      Icon(Icons.location_on, color: Colors.white,),
+                      Text(
+                      subtitle, style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
+                        fontSize: 15.0, fontWeight: FontWeight.w600)),
                 ),
+                    ],
+                  ),
                 Row(
                   children: <Widget>[
                     SizedBox(width: 20.0),
                     Icon(Icons.location_on, color: Colors.white,),
-                    Text(
-                    subtitle, style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
-                      fontSize: 15.0, fontWeight: FontWeight.w600)),
-              ),
-                  ],
-                ),
-              Row(
-                children: <Widget>[
-                  SizedBox(width: 20.0),
-                  Icon(Icons.location_on, color: Colors.white,),
-                  Flexible(
-                    child: Text(
-                    'Puesto / Nombre: $numPuesto   Nave / Sector: $numNave', style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
-                      fontSize: 15.0, fontWeight: FontWeight.w600)),
+                    Flexible(
+                      child: Text(
+                      'Puesto / Nombre: $numPuesto   Nave / Sector: $numNave', style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
+                        fontSize: 15.0, fontWeight: FontWeight.w600)),
+                      ),
                     ),
-                  ),
-                ],
-              )
-              ]
-            ),
-          
+                  ],
+                )
+                ]
+              ),
+            
+          ),
         ),
-      ),
-      SizedBox(height: 20.0),
-      ]
-  );
+        SizedBox(height: 20.0),
+        ]
+    );
+
+    } else{
+      return Stack(
+        fit: StackFit.loose,
+        children: <Widget> [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15.0),
+            child: Image(
+            height: media.size.height * 0.22 ,
+            width: media.size.width * 0.93,
+            fit: BoxFit.fill,
+            image: NetworkImage(comercioFoto),
+
+          // placeholder: AssetImage('assets/img/loader.gif')),
+          )),
+
+          Positioned(
+            bottom: 10,
+            left: 0,
+            right: 0,
+            child: Container(
+              color: Colors.black12,
+              //borderRadius: BorderRadius.circular(15.0), 
+              child: Column(
+                  children:<Widget>[ 
+                    Row(
+                      children: <Widget>[
+                        SizedBox(width: 20.0),
+                        Text(
+                        title, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                          fontSize: 21.0, fontWeight: FontWeight.w600,
+                          ))
+                        
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        SizedBox(width: 20.0),
+                        Icon(Icons.location_on, color: Colors.white,),
+                        Text(
+                        subtitle, style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
+                          fontSize: 15.0, fontWeight: FontWeight.w600)),
+                  ),
+                      ],
+                    ),
+                  Row(
+                    children: <Widget>[
+                      SizedBox(width: 20.0),
+                      Icon(Icons.location_on, color: Colors.white,),
+                      Flexible(
+                        child: Text(
+                        'Puesto / Nombre: $numPuesto   Nave / Sector: $numNave', style: GoogleFonts.rubik(textStyle: TextStyle(color:Colors.white,
+                          fontSize: 15.0, fontWeight: FontWeight.w600)),
+                        ),
+                      ),
+                    ],
+                  )
+                  ]
+                ),
+              
+            ),
+          ),
+          SizedBox(height: 20.0),
+          ]
+      );
+  }
 
   }
 
@@ -320,7 +393,8 @@ class PuestoArguments {
   final String comercioTelefono;
   final String comercioMail;
   final String comercioNombre;
+  final String comercioFoto;
 
 
-  PuestoArguments(this.userId, this.nombre,this.foto,this.mercadoId,this.idComercio,this.numNave,this.comercioPuesto,this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre);
+  PuestoArguments(this.userId, this.nombre,this.foto,this.mercadoId,this.idComercio,this.numNave,this.comercioPuesto,this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre,this.comercioFoto);
 }

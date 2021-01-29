@@ -107,7 +107,7 @@ class Precio {
 
 class VendedorProductosListView extends StatefulWidget {
   VendedorProductosListView(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser,this.numNave,this.comercioPuesto,
-  this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre);
+  this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre,this.comercioFoto);
   final String comercioId;
   final String mercadoId;
   final String userId;
@@ -119,15 +119,16 @@ class VendedorProductosListView extends StatefulWidget {
   final String comercioTelefono;
   final String comercioMail;
   final String comercioNombre;
+  final String comercioFoto;
 
   @override
   _ProductosListViewState createState() => _ProductosListViewState(comercioId,mercadoId,userId,fotoUser,nombreUser,numNave,comercioPuesto,comercioCuit,comercioTelefono,
-  comercioMail,comercioNombre);
+  comercioMail,comercioNombre,comercioFoto);
 }
 
 class _ProductosListViewState extends State<VendedorProductosListView> {
    _ProductosListViewState(this.comercioId,this.mercadoId,this.userId,this.fotoUser,this.nombreUser,this.numNave,this.comercioPuesto,this.comercioCuit,
-   this.comercioTelefono,this.comercioMail,this.comercioNombre);
+   this.comercioTelefono,this.comercioMail,this.comercioNombre,this.comercioFoto);
   final String comercioId;
   final String mercadoId;
   final String userId;
@@ -139,6 +140,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
   final String comercioTelefono;
   final String comercioMail;
   final String comercioNombre;
+  final String comercioFoto;
   @override
   Widget build(BuildContext context){
     return FutureBuilder<List<Producto>>(
@@ -148,8 +150,10 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
         if (snapshot.hasData) {
           if(snapshot.requireData.isEmpty){
 /*             if (productoValidacion == true) {
-              return Container();
+              return Co{ntainer();
             } else { */
+
+            if(comercioFoto == ''){
             return Center(
               child: Container(
                 child: Column(
@@ -174,7 +178,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
                         
                         GestureDetector(
                           onTap: () {Navigator.pushNamed(context, 'actPues', arguments: PuestoArguments(userId, nombreUser, fotoUser, mercadoId, comercioId,numNave,comercioPuesto,
-              comercioCuit,comercioTelefono,comercioMail,comercioNombre)); },
+              comercioCuit,comercioTelefono,comercioMail,comercioNombre,comercioFoto)); },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(40.0),
                             child: Container(
@@ -260,9 +264,123 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
                 
                 ),
             );
+            } else{
+              return Center(
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                    width: double.infinity,
+                    color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                      Stack(
+                        fit: StackFit.loose,
+                        alignment: Alignment.topRight,
+                        children: <Widget> [
+                          Image(
+                            //height: media.size.height * 0.23,
+                            //width: media.size.width * 0.93,
+                            fit: BoxFit.fill,
+                            image: NetworkImage(comercioFoto),
+
+                            //placeholder: AssetImage('assets/img/loader.gif')),
+                          ),
+                          
+                          GestureDetector(
+                            onTap: () {Navigator.pushNamed(context, 'actPues', arguments: PuestoArguments(userId, nombreUser, fotoUser, mercadoId, comercioId,numNave,comercioPuesto,
+                comercioCuit,comercioTelefono,comercioMail,comercioNombre,comercioFoto)); },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(40.0),
+                              child: Container(
+                                color: Colors.black38,
+                                child: Icon(Icons.mode_edit, color: Colors.white, size: 30.0)))
+                          ),
+
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child:  Container(
+                                color: Colors.black26,
+                                child: Column(
+                                  children:<Widget>[ 
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start ,
+                                      children: <Widget>[
+                                        SizedBox(width:10.0),
+                                        Flexible(
+                                        child: Text(
+                                          comercioNombre, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                            fontSize: 24.0, fontWeight: FontWeight.w600,
+                                            )),
+                                          ),
+                                        ),
+                                        SizedBox(width: 30.0),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.0),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start ,
+                                      children: <Widget>[
+                                        SizedBox(width:10.0),
+                                        Icon(Icons.location_on,color:Colors.white),
+                                        SizedBox(width: 5.0),
+                                        Flexible(
+                                          child: Text(
+                                          'Puesto / Nombre $comercioPuesto Nave / Sector $numNave', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                            fontSize: 14.0, fontWeight: FontWeight.normal,
+                                            )),
+                                          ),
+                                        ),
+                                        SizedBox(width: 13.0),
+                                        Icon(Icons.phone,color:Colors.white),
+                                        SizedBox(width: 5.0),
+                                        Text(
+                                        comercioTelefono, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                          fontSize: 14.0, fontWeight: FontWeight.normal,
+                                          )),
+                                        ),
+                                        SizedBox(width: 30.0),
+                                      ],
+                                    ),
+                                    SizedBox(height: 15.0),
+                                  ]
+                                ),
+                              ),
+                          ),
+                          
+                          ]
+                      ),
+                      ])),
+                      Image(
+                        height: media.size.height * 0.45,
+                        image: AssetImage('assets/img/SinProductos.gif'),
+                      ),
+                      Text(
+                      'Cree un producto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                        fontSize: 24.0, fontWeight: FontWeight.w600,
+                        ))                 
+                      ),
+                      Text(
+                      'para su puesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(98, 114, 123, 1),
+                        fontSize: 24.0, fontWeight: FontWeight.w600,
+                        ))                 
+                      ),
+                      SizedBox(height: 15.0),
+                      
+
+                    ]
+                  )
+                  
+                  ),
+              );
+
+            }
             //}
           } else {
           List<Producto> data = snapshot.data;
+          if(comercioFoto == ''){
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -287,7 +405,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
                         
                         GestureDetector(
                           onTap: () {Navigator.pushNamed(context, 'actPues', arguments: PuestoArguments(userId, nombreUser, fotoUser, mercadoId, comercioId,numNave,comercioPuesto,
-              comercioCuit,comercioTelefono,comercioMail,comercioNombre)); },
+              comercioCuit,comercioTelefono,comercioMail,comercioNombre,comercioFoto)); },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(40.0),
                             child: Container(
@@ -360,6 +478,107 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
            _productosListView(data,comercioId)
             ]
           );
+          } else {
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+
+                Container(
+                    width: double.infinity,
+                    color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                      Stack(
+                        fit: StackFit.loose,
+                        alignment: Alignment.topRight,
+                        children: <Widget> [
+                          Image(
+                            //height: media.size.height * 0.23,
+                            //width: media.size.width * 0.93,
+                            fit: BoxFit.fill,
+                            image: NetworkImage(comercioFoto),
+
+                            //placeholder: AssetImage('assets/img/loader.gif')),
+                          ),
+                          
+                          GestureDetector(
+                            onTap: () {Navigator.pushNamed(context, 'actPues', arguments: PuestoArguments(userId, nombreUser, fotoUser, mercadoId, comercioId,numNave,comercioPuesto,
+                comercioCuit,comercioTelefono,comercioMail,comercioNombre,comercioFoto)); },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(40.0),
+                              child: Container(
+                                color: Colors.black38,
+                                child: Icon(Icons.mode_edit, color: Colors.white, size: 30.0)))
+                          ),
+
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child:  Container(
+                                color: Colors.black26,
+                                child: Column(
+                                  children:<Widget>[ 
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start ,
+                                      children: <Widget>[
+                                        SizedBox(width:10.0),
+                                        Flexible(
+                                          child: Text(
+                                          comercioNombre, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                            fontSize: 24.0, fontWeight: FontWeight.w600,
+                                            )),
+                                          ),
+                                        ),
+                                        SizedBox(width: 30.0),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.0),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start ,
+                                      children: <Widget>[
+                                        SizedBox(width:10.0),
+                                        Icon(Icons.location_on,color:Colors.white),
+                                        SizedBox(width: 5.0),
+                                        Flexible(
+                                        child: Text(
+                                          'Puesto / Nombre $comercioPuesto Nave / Sector $numNave', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                            fontSize: 14.0, fontWeight: FontWeight.normal,
+                                            )),
+                                          ),
+                                        ),
+                                        SizedBox(width: 13.0),
+                                        Icon(Icons.phone,color:Colors.white),
+                                        SizedBox(width: 5.0),
+                                        Text(
+                                        comercioTelefono, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
+                                          fontSize: 14.0, fontWeight: FontWeight.normal,
+                                          )),
+                                        ),
+                                        SizedBox(width: 30.0),
+                                      ],
+                                    ),
+                                    SizedBox(height: 15.0),
+                                  ]
+                                ),
+                              ),
+                          ),
+                          
+                          ]
+                      ),
+                      ])),
+
+                      SizedBox(height: 20.0),
+                
+                Text('  Catálogo de productos',style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                  fontSize: 16.0, fontWeight: FontWeight.w600,
+                  ))),
+            _productosListView(data,comercioId)
+              ]
+            );
+
+          }
           }
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
@@ -419,7 +638,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
           }
           }
           if(data[index].productoFoto == '') {
-            foto = 'https://res.cloudinary.com/agilemarket/image/upload/v1594599858/m3wh5dxmlwmyjbpit3cr.png';
+            foto = 'https://res.cloudinary.com/agilemarket/image/upload/v1611946564/no_image_cz0rp1.png';
           }else{
             foto = data[index].productoFoto;}
           return _crearLista(data[index].productoNombre, data[index].productoDescripcion,
@@ -427,12 +646,12 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
                         data[index].comercioNombre,
                         data[index].tipoUnidadNombre, data[index].productoCalidad,comercioId, data[index].productoStock,
                         data[index].productoID,data[index].categoriaID,data[index].tipoUnidadID,numNave,comercioPuesto,comercioCuit,
-                        comercioTelefono,comercioMail,comercioNombre,data[index].productoDestacado,context);
+                        comercioTelefono,comercioMail,comercioNombre,data[index].productoDestacado,comercioFoto,context);
         });
   }
 
     Widget _crearLista(String title,String prodDesc, String imagen,String precio1,String precio2,String precio3,String cantidad1,String cantidad2,String cantidad3, String comercio, String unidad,double ratingProd,comercioId,String stock,String productoID, String categoriaId,String unidadId,
-    numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado, context) {
+    numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado,comercioFoto, context) {
     MediaQueryData media = MediaQuery.of(context);
     return  ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
@@ -445,7 +664,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
           //  _crearTitulo(),
             SizedBox(height: 15.0),
            _crearTarjetas(title,prodDesc, imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,stock,productoID,categoriaId,unidadId,
-           numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,productoDestacado,context)
+           numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,productoDestacado,comercioFoto,context)
           ],
         ),
       ),
@@ -453,7 +672,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
   }
 
   Widget _crearTarjetas(title,prodDesc,imagen,precio1,precio2,precio3,cantidad1,cantidad2,cantidad3,comercio,unidad,ratingProd,comercioId,stock,productoID,categoriaId,unidadId,
-  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado,context) {
+  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,bool productoDestacado,comercioFoto,context) {
  MediaQueryData media = MediaQuery.of(context); 
   String unidad1;
   String unidad2;
@@ -488,7 +707,7 @@ class _ProductosListViewState extends State<VendedorProductosListView> {
               onTap: () {
                 Navigator.pushNamed(context, 'detalleProd', arguments: ProductoDetalleArg(productoID, title,prodDesc,imagen,precio1,cantidad1,precio2,cantidad2,
                                   precio3,cantidad3,stock,unidad1,unidad2,unidad3,comercioId,mercadoId,userId,ratingProd,categoriaId,unidadId,fotoUser,nombreUser,
-                                  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,productoDestacado));
+                                  numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,productoDestacado,comercioFoto));
 
               },
               child: Container(
@@ -738,10 +957,11 @@ class ProductoDetalleArg {
   final String comercioMail;
   final String comercioNombre;
   final bool productoDestacado;
+  final String comercioFoto;
   
 
 
   ProductoDetalleArg(this.idProducto, this.nombre,this.descripcion,this.foto,this.precio1,this.cantidad1,this.precio2,this.cantidad2,this.precio3,this.cantidad3,
   this.stock,this.unidad,this.unidad2,this.unidad3,this.comercioId,this.mercadoId,this.userId,this.calidad,this.categoria,this.unidadId,this.fotoUser,this.nombreUser,
-  this.numNave,this.comercioPuesto,this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre,this.productoDestacado);
+  this.numNave,this.comercioPuesto,this.comercioCuit,this.comercioTelefono,this.comercioMail,this.comercioNombre,this.productoDestacado,this.comercioFoto);
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_ui/src/pages/actualizar_puesto.dart';
 import 'package:flutter_login_ui/src/pages/carrito_db.dart';
 import 'package:flutter_login_ui/src/pages/categorias_serv.dart';
 import 'package:flutter_login_ui/src/pages/productos_serv.dart';
@@ -11,20 +12,20 @@ import 'package:flutter_login_ui/src/providers/pedidos_comprador_provider.dart';
 //import 'package:flutter_login_ui/src/pages/vendedor_prod_serv.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'listado_pedidos_comprador.dart';
+import 'listado_pedido_mercado.dart';
 
 
-class ListadoPedidosDetalle extends StatefulWidget {
+class ListadoPedidosDetalleMercado extends StatefulWidget {
   PedidoDetalle pedidos;
   //Function siguientePagina;
 
-  ListadoPedidosDetalle({@required this.pedidos});
+  ListadoPedidosDetalleMercado({@required this.pedidos});
 
   @override
-  _ListadoPedidosDetalleState createState() => _ListadoPedidosDetalleState();
+  _ListadoPedidosDetalleMercadoState createState() => _ListadoPedidosDetalleMercadoState();
 }
 
-class _ListadoPedidosDetalleState extends State<ListadoPedidosDetalle> {
+class _ListadoPedidosDetalleMercadoState extends State<ListadoPedidosDetalleMercado> {
   final _pageController = new ScrollController(
     initialScrollOffset : 150.0,
   );
@@ -61,6 +62,7 @@ class _ListadoPedidosDetalleState extends State<ListadoPedidosDetalle> {
    final PedidoArguments args = ModalRoute.of(context).settings.arguments;
    String pedidoId = pedido.pedidoComercioID;
    String estado   = pedido.estadoNombre;
+   String mercado = pedido.mercadoID;
    DateTime horarioPedido = DateTime.parse(pedido.pedidoFecha);
     String horaPedido = horarioPedido.hour.toString();
     String minPedido  = horarioPedido.minute.toString();
@@ -72,7 +74,6 @@ class _ListadoPedidosDetalleState extends State<ListadoPedidosDetalle> {
     String anioPedido = horarioPedido.year.toString();
     String peso = '\$';
     String precioTotalPedido = pedido.pedidoPrecioTotal;
-    String mercado = pedido.mercadoID;
 
   return Container(
     width: double.infinity,
@@ -362,7 +363,7 @@ class _ListadoPedidosDetalleState extends State<ListadoPedidosDetalle> {
                         barrierDismissible: true,
                           ).then((_) => setState((){}));
                 await PedidoActualizar().updatePedido('2',pedidoId,pedidoComercioId,context);
-                Navigator.pushNamed(context, 'pedidosComprador',arguments: ProductosArguments(args.categoriaId,args.mercadoId,'',args.userId,args.nombre,args.foto,args.categoriaNombre,''));
+                Navigator.pushNamed(context, 'pedidosMercado');
                 }
                 
             },

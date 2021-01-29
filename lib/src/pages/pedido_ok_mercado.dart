@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_ui/src/pages/categorias_serv.dart';
+import 'package:flutter_login_ui/src/widgets/listado_pedidos_comprador.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_login_ui/src/pages/puestos_serv.dart';
 
-class AltaProductoOk extends StatelessWidget {
+class PedidoOkMercado extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final PuestoArguments args = ModalRoute.of(context).settings.arguments;
+    
     return WillPopScope(
       onWillPop: () async => false,
           child: Scaffold(
@@ -34,19 +36,22 @@ class AltaProductoOk extends StatelessWidget {
               ),
             ),
             SizedBox(height: 50,),
-            Text('Tu producto ha sido', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+            Text('Tu pedido ha sido', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                   fontSize: 24.0, fontWeight: FontWeight.bold,))),
             Text('creado con éxito', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                   fontSize: 24.0, fontWeight: FontWeight.bold,))),
             SizedBox(height: 20.0,),
-            Text('Entra en "Mis productos"', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
+            Text('Entra en "Mis pedidos"', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
                   fontSize: 16.0, fontWeight: FontWeight.normal,))),
-            Text('para visualizarlo ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
+            Text('para visualizar ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
+                  fontSize: 16.0, fontWeight: FontWeight.normal,))),
+            Text('todos tus pedidos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(209, 209, 209, 1),
                   fontSize: 16.0, fontWeight: FontWeight.normal,))),
             SizedBox(height: 50.0,),
             GestureDetector(
-             onTap: () {Navigator.pushNamed(context, 'vendedorProd', arguments: PuestoArguments(args.userId,args.nombre,args.foto,args.mercadoId,args.idComercio,
-             args.numNave,args.comercioPuesto,args.comercioCuit,args.comercioTelefono,args.comercioMail,args.comercioNombre,args.comercioFoto));},
+             onTap: () {
+               Navigator.pushNamed(context, 'pedidosMercado' );},
+            
              child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0) ,
                 child:Container(
@@ -54,7 +59,7 @@ class AltaProductoOk extends StatelessWidget {
                   width: 200.0,
                   color: Color.fromRGBO(29, 233, 182, 1),
                   child: Center(child: 
-                  Text('Ir a Mis productos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                  Text('Ir a Mis pedidos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
                   fontSize: 14.0, fontWeight: FontWeight.w700,))),
                   )
                   )

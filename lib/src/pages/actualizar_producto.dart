@@ -816,6 +816,21 @@ class _ActualizarProductoState extends State<ActualizarProducto> {
          urlFoto = fotoUrl;
        }
 
+       if(precio1Controller.text == '' || cantidad1Controller.text == '0'){
+         precio1Controller.text = '';
+         cantidad1Controller.text == '';
+       }
+
+       if(precio2Controller.text == '' || cantidad2Controller.text == '0'){
+         precio2Controller.text = '';
+         cantidad2Controller.text == '';
+       }
+
+       if(precio3Controller.text == '' || cantidad3Controller.text == '0'){
+         precio3Controller.text = '';
+         cantidad3Controller.text == '';
+       }
+
         
          ProductoActualizar().producto(nombreController.text, descripcionController.text, categoriaId, stockController.text,
                                   calidad, urlFoto , tipoUnidadId, comercioId, precio1Controller.text, cantidad1Controller.text,

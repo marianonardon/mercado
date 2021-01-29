@@ -160,7 +160,7 @@ class _AltaProductoState extends State<AltaProducto> {
               SizedBox(height: 25.0),
                 
               _botonConfirmar(context,args.idComercio,args.mercadoId,args.foto,args.nombre,args.userId,args.numNave,args.comercioPuesto,args.comercioCuit,
-              args.comercioTelefono,args.comercioMail,args.comercioNombre,checkboxValue),
+              args.comercioTelefono,args.comercioMail,args.comercioNombre,checkboxValue,args.comercioFoto),
               SizedBox(height: 10.0),
               ]
             ),
@@ -185,6 +185,7 @@ class _AltaProductoState extends State<AltaProducto> {
           alignment: Alignment.centerLeft,
           width: media.size.width * 0.90,
           child: TextFormField(
+             autofocus: true,
             validator: (nombre) {if (nombre.isEmpty) {
                 return 'El campo Nombre no puede estar vacío!';
                 }else {
@@ -231,6 +232,7 @@ class _AltaProductoState extends State<AltaProducto> {
           alignment: Alignment.centerLeft,
           width: media.size.width * 0.90,
           child: TextFormField(
+             autofocus: true,
             validator: (descripcion) {if (descripcion.isEmpty) {
                 return 'El campo Descripción no puede estar vacío!';
                 }else {
@@ -313,6 +315,7 @@ class _AltaProductoState extends State<AltaProducto> {
           alignment: Alignment.centerLeft,
           width: media.size.width * 0.90,
           child: TextFormField(
+             autofocus: true,
             validator: (stock) {if (stock.isEmpty) {
                 return null;
                 }else {
@@ -376,6 +379,7 @@ class _AltaProductoState extends State<AltaProducto> {
               alignment: Alignment.centerLeft,
               width: media.size.width * 0.43,
               child: TextFormField(
+                 autofocus: true,
                 validator: (precio) 
                 { if (precio.isNotEmpty) {
                   if (isNumeric(precio)) {
@@ -425,6 +429,7 @@ class _AltaProductoState extends State<AltaProducto> {
               alignment: Alignment.centerLeft,
               width: media.size.width * 0.43,
               child: TextFormField(
+                 autofocus: true,
                 validator: (cantidad) 
                 { if(cantidad.isNotEmpty) {
                    if (isNumeric(cantidad)) {
@@ -480,6 +485,7 @@ class _AltaProductoState extends State<AltaProducto> {
               alignment: Alignment.centerLeft,
               width: media.size.width * 0.43,
               child: TextFormField(
+                 autofocus: true,
                 validator: (precio2) {if (precio2.isEmpty) {
                   return null;
                 }else {
@@ -531,6 +537,7 @@ class _AltaProductoState extends State<AltaProducto> {
               alignment: Alignment.centerLeft,
               width: media.size.width * 0.43,
               child: TextFormField(
+                 autofocus: true,
                 validator: (cantidad2) {if (cantidad2.isEmpty) {
                   return null;
                 }else {
@@ -587,6 +594,7 @@ class _AltaProductoState extends State<AltaProducto> {
               alignment: Alignment.centerLeft,
               width: media.size.width * 0.43,
               child: TextFormField(
+                 autofocus: true,
                 validator: (precio3) {if (precio3.isEmpty) {
                   return null;
                 }else {
@@ -638,6 +646,7 @@ class _AltaProductoState extends State<AltaProducto> {
               alignment: Alignment.centerLeft,
               width: media.size.width * 0.43,
               child: TextFormField(
+                 autofocus: true,
                 validator: (cantidad3) {if (cantidad3.isEmpty) {
                   return null;
                 }else {
@@ -681,7 +690,7 @@ class _AltaProductoState extends State<AltaProducto> {
 
 
 
-  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre, bool productoDestacado) {
+  Widget _botonConfirmar(context,comercioId,mercado,fotoUser,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre, bool productoDestacado,String comercioFoto) {
     MediaQueryData media = MediaQuery.of(context);
     return GestureDetector(
       onTap: () async {
@@ -727,14 +736,29 @@ class _AltaProductoState extends State<AltaProducto> {
          fotoUrl = await subirImagen(foto);
          urlFoto = fotoUrl;
        } else {
-         urlFoto = 'https://res.cloudinary.com/agilemarket/image/upload/v1594599858/m3wh5dxmlwmyjbpit3cr.png';
+         urlFoto = 'https://res.cloudinary.com/agilemarket/image/upload/v1611946564/no_image_cz0rp1.png';
+       }
+
+       if(precio1Controller.text == '' || cantidad1Controller.text == '0'){
+         precio1Controller.text = '';
+         cantidad1Controller.text == '';
+       }
+
+       if(precio2Controller.text == '' || cantidad2Controller.text == '0'){
+         precio2Controller.text = '';
+         cantidad2Controller.text == '';
+       }
+
+       if(precio3Controller.text == '' || cantidad3Controller.text == '0'){
+         precio3Controller.text = '';
+         cantidad3Controller.text == '';
        }
 
         
          ProductoCrear().producto(nombreController.text, descripcionController.text, categoriaId, stockController.text,
                                   calidad, urlFoto , tipoUnidadId, comercioId, precio1Controller.text, cantidad1Controller.text,
                                   precio2Controller.text,cantidad2Controller.text,precio3Controller.text,cantidad3Controller.text,mercado,
-                                  fotoUser,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,productoDestacado,context);
+                                  fotoUser,nombreUser,user,numNave,comercioPuesto,comercioCuit,comercioTelefono,comercioMail,comercioNombre,productoDestacado,comercioFoto,context);
        }
       },
         
