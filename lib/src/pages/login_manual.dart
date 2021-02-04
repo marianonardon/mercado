@@ -104,7 +104,27 @@ class _LoginManualPageFinalState extends State<LoginManualPageFinal> {
                      child: Text('Volver a seleccionar perfil', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0,fontWeight: FontWeight.bold),)),
                      SizedBox(height: 5.0),
                      GestureDetector(
-                    onTap: () {Navigator.pushNamed(context, 'registrarse');},
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                            title:  Center(child: Text('Alta de comercio')),
+                            content:  SizedBox(
+                                      width: media.size.width * 0.005,
+                                      height: media.size.height * 0.1,
+                                      child:  Center(child:  Text('Para generar un comercio escríbanos al 3517194176',
+                                      textAlign: TextAlign.center,)),
+                                  ),
+                            backgroundColor: Colors.white
+
+                      ),
+                      barrierDismissible: true
+                        ).then((_) => setState((){}));
+            
+                      
+                      //Navigator.pushNamed(context, 'registrarse');
+                      
+                      },
                     child: Text('Registrarse', style: new TextStyle(color: Color.fromRGBO(0, 182, 134, 1), decoration: TextDecoration.underline, fontSize: 18.0,fontWeight: FontWeight.bold),)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

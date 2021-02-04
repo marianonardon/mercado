@@ -117,7 +117,7 @@ class PedidosCompradorProvider {
     };
 
 
-    final responseToken = await http.post(urlQA, body: bodyTokenQA, headers: headers);
+    final responseToken = await http.post(url, body: bodyToken, headers: headers);
     final decodedData = json.decode(responseToken.body);
     final token = new Token.fromJsonMap(decodedData);
     String token2 = token.accessToken.toString();
@@ -134,7 +134,7 @@ class PedidosCompradorProvider {
     //final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultaProducto?categoriaID=$categoria&destacado=0&mercadoID=$mercado&productoNombre=$productoBuscado';
     final mercadosListAPIUrlQA = 'https://apps5.genexus.com/Id6a4d916c1bc10ddd02cdffe8222d0eac/rest/consultarPedido?PedidoExternalID=$externalId2&pedidoUserID=$userId2';
 
-    final response = await http.get('$mercadosListAPIUrlQA', headers: headers2);
+    final response = await http.get('$mercadosListAPIUrl', headers: headers2);
 
 
     if (response.statusCode == 200) {

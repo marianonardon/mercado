@@ -29,7 +29,7 @@ class _PuestosPageState extends State<PuestosPage> {
                   content:  SizedBox(
                             width: media.size.width * 0.005,
                             height: media.size.height * 0.1,
-                            child:  Center(child:  Text('Para generar un usuario escríbanos al 3517194176',
+                            child:  Center(child:  Text('Para generar un comercio escríbanos al 3517194176',
                             textAlign: TextAlign.center,)),
                         ),
                   backgroundColor: Colors.white

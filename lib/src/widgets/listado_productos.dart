@@ -340,24 +340,25 @@ class _ListadoProductosState extends State<ListadoProductos> {
                         children: <Widget>[
                            Flexible(
                                 child: Text(
-                                '$comercio   Puesto:$comercioPuesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                '$comercio  $comercioCalificacion  ', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                                   fontSize: 12.0, fontWeight: FontWeight.w400,
-                          ))),
-                           ),
+                          )),
+                          ),
                           
+                           ),
+                        
+                          Icon(Icons.star, color:Colors.yellow, size: 15.0 ),
                         ],
                       ),
                        SizedBox(height:6.0),
                        Row(
                                   children: <Widget>[
-                                    SizedBox(width: 4.0),
-                                    Text(
-                                      comercioCalificacion, style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.white,
-                                        fontSize: 12.0, fontWeight: FontWeight.w500
+                                    Flexible(
+                                                                          child: Text(
+                                        'Puesto:$comercioPuesto', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                          fontSize: 12.0, fontWeight: FontWeight.w500
                           ))),
-                          SizedBox(width: 5.0),
-                          Icon(Icons.star, color:Colors.white, size: 15.0 ),
-                          SizedBox(width: 4.0),
+                                    ),
                                   ],
                                 ),
                       SizedBox(height:6.0),
