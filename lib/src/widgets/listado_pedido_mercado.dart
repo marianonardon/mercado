@@ -35,7 +35,7 @@ class ListadoProductosMercado extends StatelessWidget {
       for(var i = 0; i< pedidos.length; i++) {
         
           DateTime fechaDePedido = DateTime.parse(pedidos[i].pedidoFecha);
-          DateTime fechaSumada = fechaDePedido.add(Duration(minutes: 01));
+          DateTime fechaSumada = fechaDePedido.add(Duration(minutes: 02));
           DateTime now = DateTime.now();
           String usuario = pedidos[i].pedidoFullName;
 

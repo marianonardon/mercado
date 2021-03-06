@@ -59,7 +59,7 @@ class PedidoOk extends StatelessWidget {
                   width: 200.0,
                   color: Color.fromRGBO(29, 233, 182, 1),
                   child: Center(child: 
-                  Text('Ir a Mis pedidos', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
+                  Text('Enviar Pedido', style: GoogleFonts.rubik(textStyle:TextStyle(color:Color.fromRGBO(55, 71, 79, 1),
                   fontSize: 14.0, fontWeight: FontWeight.w700,))),
                   )
                   )

@@ -106,7 +106,7 @@ class GenerarPedido extends StatefulWidget {
   final String categoriaNombre;
 
   
-  Future<Pedido> createProducto(List<Carrito> productos,String telefono,context) async {
+  Future<Pedido> createProducto(List<Carrito> productos,String telefono,String nombre, String direccion, String comentarios,context) async {
 
 
     final List<Carrito> maps = productos;
@@ -187,6 +187,9 @@ class GenerarPedido extends StatefulWidget {
           "pedidoFullName": nombreUser,
           "pedidoTelefono": telefono,
           "pedidoTokenDispositivo": pedidoTokenDispositivo,
+          "pedidoNombre": nombre,
+          "pedidoDireccion": direccion,
+          "pedidoComentarios": comentarios,          
           "productos":list
     }}),
     ); 

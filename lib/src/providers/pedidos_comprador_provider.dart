@@ -47,12 +47,15 @@ class PedidoComprador {
   final String mercadoNombre;
   final String estadoID;
   final String estadoNombre;
+  final String pedidoNombre;
+  final String pedidoDireccion;
+  final String pedidoComentarios;
   final String pedidoPrecioTotal;
 
 
   PedidoComprador({this.pedidoID, this.pedidoFecha, this.pedidoExternalID, this.pedidoUserID,
           this.pedidoFullName, this.pedidoTokenDispositivo, this.pedidoTelefono, this.pedidoComercioID,this.comercioID, this.comercioNombre, this.comercioTelefono, this.comercioTokenDispositivo,this.mercadoID,
-          this.mercadoNombre, this.estadoID, this.estadoNombre,this.pedidoPrecioTotal});
+          this.mercadoNombre, this.estadoID, this.estadoNombre,this.pedidoNombre,this.pedidoDireccion,this.pedidoComentarios,this.pedidoPrecioTotal});
 
   factory PedidoComprador.fromJsonMap(Map<String, dynamic> parsedJson) {
 
@@ -73,6 +76,9 @@ class PedidoComprador {
       mercadoNombre: parsedJson['mercadoNombre'],
       estadoID: parsedJson['estadoID'],
       estadoNombre: parsedJson['estadoNombre'],
+      pedidoNombre: parsedJson['pedidoNombre'],
+      pedidoDireccion: parsedJson['pedidoDireccion'],
+      pedidoComentarios: parsedJson['pedidoComentarios'],
       pedidoPrecioTotal: parsedJson['pedidoPrecioTotal'],
 
     );

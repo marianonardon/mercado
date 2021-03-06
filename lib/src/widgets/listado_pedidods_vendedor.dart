@@ -104,6 +104,9 @@ class ListadoProductosVendedor extends StatelessWidget {
     String mesPedido = horarioPedido.month.toString();
     String anioPedido = horarioPedido.year.toString();
     String telefonoPedido = pedido.pedidoTelefono;
+    String empresa = pedido.pedidoNombre;
+    String direccion = pedido.pedidoDireccion;
+    String comentarios = pedido.pedidoComentarios;
 
   return Container(
     width: media.size.width * 0.93,
@@ -211,6 +214,42 @@ class ListadoProductosVendedor extends StatelessWidget {
                                 child: Text(
                                 'Teléfono: $telefonoPedido', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
                                   fontSize: 12.0, fontWeight: FontWeight.w600,
+                          ))),
+                           ),
+                          
+                        ],
+                      ),
+                      SizedBox(height:6.0),
+                      Row(
+                        children: <Widget>[
+                           Flexible(
+                                child: Text(
+                                'Nombre/Empresa: $empresa', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                  fontSize: 12.0, fontWeight: FontWeight.w600,
+                          ))),
+                           ),
+                          
+                        ],
+                      ),
+                      SizedBox(height:6.0),
+                      Row(
+                        children: <Widget>[
+                           Flexible(
+                                child: Text(
+                                'Dirección: $direccion', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                  fontSize: 12.0, fontWeight: FontWeight.w600,
+                          ))),
+                           ),
+                          
+                        ],
+                      ),
+                      SizedBox(height:6.0),
+                      Row(
+                        children: <Widget>[
+                           Flexible(
+                                child: Text(
+                                'Comentarios: $comentarios', style: GoogleFonts.rubik(textStyle:TextStyle(color:Colors.black,
+                                  fontSize: 12.0, fontWeight: FontWeight.w400,
                           ))),
                            ),
                           
